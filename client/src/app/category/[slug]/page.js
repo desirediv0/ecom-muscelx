@@ -127,10 +127,10 @@ export default function CategoryPage() {
   // Loading state
   if (loading && !category) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+      <div className="min-h-screen bg-white">
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
-            <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </div>
@@ -140,10 +140,10 @@ export default function CategoryPage() {
   // Error state
   if (error && !category) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+      <div className="min-h-screen bg-white">
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-red-50 p-6 rounded-2xl border border-red-200 flex items-start max-w-2xl mx-auto">
-            <AlertCircle className="text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+          <div className="bg-red-50 p-6 rounded-2xl border border-red-200 flex items-start max-w-2xl mx-auto shadow-lg">
+            <AlertCircle className="text-red-600 mr-3 mt-0.5 flex-shrink-0" />
             <div>
               <h2 className="text-lg font-semibold text-red-700 mb-1">
                 Error Loading Category
@@ -157,7 +157,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
         {/* Category header */}
         {category && (
@@ -165,19 +165,19 @@ export default function CategoryPage() {
             <div className="flex items-center mb-4 text-sm text-gray-600">
               <Link
                 href="/"
-                className="hover:text-yellow-600 transition-colors"
+                className="hover:text-red-600 transition-colors"
               >
                 Home
               </Link>
               <span className="mx-2">•</span>
               <Link
                 href="/products"
-                className="hover:text-yellow-600 transition-colors"
+                className="hover:text-red-600 transition-colors"
               >
                 Products
               </Link>
               <span className="mx-2">•</span>
-              <span className="text-yellow-600 font-medium">
+              <span className="text-red-600 font-medium">
                 {category.name}
               </span>
             </div>
@@ -196,7 +196,7 @@ export default function CategoryPage() {
                 </div>
 
                 {category.image && (
-                  <div className="w-32 h-32 rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-50 to-yellow-100 flex-shrink-0">
+                  <div className="w-32 h-32 rounded-2xl overflow-hidden bg-gray-50 flex-shrink-0 shadow-md">
                     <Image
                       src={getImageUrl(category.image) || "/placeholder.svg"}
                       alt={category.name}
@@ -216,7 +216,7 @@ export default function CategoryPage() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-gray-600">
-                <Filter className="h-5 w-5 mr-2 text-yellow-500" />
+                <Filter className="h-5 w-5 mr-2 text-red-600" />
                 <span className="font-medium">
                   Showing {products.length} of {pagination.total} products
                 </span>
@@ -230,7 +230,7 @@ export default function CategoryPage() {
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded-md transition-colors ${
                     viewMode === "grid"
-                      ? "bg-white text-yellow-600 shadow-sm"
+                      ? "bg-white text-red-600 shadow-sm"
                       : "text-gray-500 hover:text-gray-700"
                   }`}
                 >
@@ -240,7 +240,7 @@ export default function CategoryPage() {
                   onClick={() => setViewMode("list")}
                   className={`p-2 rounded-md transition-colors ${
                     viewMode === "list"
-                      ? "bg-white text-yellow-600 shadow-sm"
+                      ? "bg-white text-red-600 shadow-sm"
                       : "text-gray-500 hover:text-gray-700"
                   }`}
                 >
@@ -249,121 +249,108 @@ export default function CategoryPage() {
               </div>
 
               {/* Sort Dropdown */}
-              <div className="flex items-center">
-                <label
-                  htmlFor="sort"
-                  className="text-sm mr-3 font-medium text-gray-700"
-                >
-                  Sort by:
-                </label>
+              <div className="flex items-center bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                <span className="px-4 py-2 text-sm font-medium text-gray-800">
+                  SORT BY
+                </span>
                 <select
-                  id="sort"
-                  name="sort"
-                  className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:ring-yellow-500 px-4 py-2 text-sm"
+                  className="border-l border-gray-200 px-4 py-2 focus:outline-none bg-white text-gray-800"
                   onChange={handleSortChange}
                   value={sortOption}
                 >
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="name-asc">Name: A-Z</option>
-                  <option value="name-desc">Name: Z-A</option>
+                  <option value="newest">Featured</option>
+                  <option value="price-low">Price, low to high</option>
+                  <option value="price-high">Price, high to low</option>
+                  <option value="name-asc">Alphabetically, A-Z</option>
+                  <option value="name-desc">Alphabetically, Z-A</option>
+                  <option value="oldest">Date, old to new</option>
                 </select>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Products Grid */}
-        {products.length === 0 ? (
-          <div className="bg-white p-12 rounded-2xl shadow-lg border border-gray-100 text-center max-w-md mx-auto">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-6">
-              <ShoppingBag className="h-8 w-8 text-yellow-600" />
+        {/* Products Grid/List */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-pulse"
+              >
+                <div className="h-64 bg-gray-200" />
+                <div className="p-6">
+                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-3" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-4" />
+                  <div className="h-10 bg-gray-200 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
+            <div className="text-gray-400 mb-6">
+              <ShoppingBag className="h-16 w-16 mx-auto" />
             </div>
-            <h2 className="text-2xl font-bold mb-3 text-gray-800">
-              No products found
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              No Products Found
             </h2>
-            <p className="text-gray-600 mb-8">
-              There are no products in this category yet.
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              We couldn&apos;t find any products in this category. Please check back later.
             </p>
             <Link href="/products">
-              <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-8 py-3 rounded-xl font-semibold">
+              <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
                 Browse All Products
               </Button>
             </Link>
           </div>
-        ) : (
-          <div
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-                : "space-y-6"
-            }
-          >
+        ) : viewMode === "grid" ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <div
                 key={product.id}
-                className={`bg-white overflow-hidden transition-all hover:shadow-xl shadow-lg border border-gray-100 group ${
-                  viewMode === "grid" ? "rounded-2xl" : "rounded-2xl flex"
-                }`}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
               >
-                <Link
-                  href={`/products/${product.slug}`}
-                  className={viewMode === "list" ? "flex-shrink-0" : "block"}
-                >
-                  <div
-                    className={`relative bg-gradient-to-br from-yellow-50 to-yellow-100 overflow-hidden ${
-                      viewMode === "grid" ? "h-64 w-full" : "h-32 w-32"
-                    }`}
-                  >
+                <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
+                  <Link href={`/products/${product.slug}`}>
                     <Image
-                      src={
-                        product.images[0]?.url
-                          ? getImageUrl(product.images[0].url)
-                          : "/placeholder.svg?height=300&width=400"
-                      }
+                      src={getImageUrl(product.image) || "/placeholder.svg"}
                       alt={product.name}
                       fill
                       className="object-contain p-4 transition-transform group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    {product.variants[0]?.salePrice && (
-                      <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        SALE
-                      </span>
-                    )}
+                  </Link>
 
-                    {viewMode === "grid" && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 backdrop-blur-[2px] flex justify-center py-3 translate-y-full group-hover:translate-y-0 transition-transform">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-white hover:text-white hover:bg-yellow-500/80 rounded-full p-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleQuickView(product);
-                          }}
-                        >
-                          <Eye className="h-5 w-5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-white hover:text-white hover:bg-yellow-500/80 rounded-full p-2 mx-2"
-                        >
-                          <Heart className="h-5 w-5" />
-                        </Button>
-                      </div>
-                    )}
+                  {product.hasSale && (
+                    <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                      SALE
+                    </span>
+                  )}
+
+                  <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
+                    >
+                      <Heart className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuickView(product);
+                      }}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
                   </div>
-                </Link>
+                </div>
 
-                <div
-                  className={`p-6 ${
-                    viewMode === "list" ? "flex-1" : "text-center"
-                  }`}
-                >
+                <div className="p-6">
                   <div className="flex items-center justify-center mb-3">
                     <div className="flex text-yellow-400">
                       {[...Array(5)].map((_, i) => (
@@ -371,7 +358,7 @@ export default function CategoryPage() {
                           key={i}
                           className="h-4 w-4"
                           fill={
-                            i < Math.round(product._count?.reviews / 2 || 0)
+                            i < Math.round(product.avgRating || 0)
                               ? "currentColor"
                               : "none"
                           }
@@ -379,64 +366,167 @@ export default function CategoryPage() {
                       ))}
                     </div>
                     <span className="text-xs text-gray-500 ml-2">
-                      ({product._count?.reviews || 0})
+                      ({product.reviewCount || 0})
                     </span>
                   </div>
 
                   <Link
                     href={`/products/${product.slug}`}
-                    className="hover:text-yellow-600 transition-colors"
+                    className="block hover:text-red-600 transition-colors"
                   >
-                    <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 text-lg">
+                    <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 text-center">
                       {product.name}
                     </h3>
                   </Link>
 
-                  <div className="flex items-center justify-center mb-3">
-                    {product.variants[0]?.salePrice ? (
-                      <div className="flex items-center">
-                        <span className="font-bold text-xl text-yellow-600">
-                          {formatCurrency(product.variants[0]?.salePrice)}
+                  <div className="text-center mb-4">
+                    {product.hasSale ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="font-bold text-xl text-red-600">
+                          {formatCurrency(product.basePrice)}
                         </span>
-                        <span className="text-gray-500 line-through text-sm ml-2">
-                          {formatCurrency(product.variants[0]?.price)}
+                        <span className="text-gray-500 line-through">
+                          {formatCurrency(product.regularPrice)}
                         </span>
                       </div>
                     ) : (
-                      <span className="font-bold text-xl text-yellow-600">
-                        {formatCurrency(
-                          product.basePrice || product.variants[0]?.price || 0
-                        )}
+                      <span className="font-bold text-xl text-gray-800">
+                        {formatCurrency(product.basePrice)}
                       </span>
                     )}
                   </div>
 
                   {product.flavors > 1 && (
-                    <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                    <p className="text-xs text-gray-500 text-center mb-4">
                       {product.flavors} variants
-                    </span>
+                    </p>
                   )}
 
-                  {viewMode === "list" && (
-                    <div className="flex items-center space-x-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                        onClick={() => handleQuickView(product)}
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        Quick View
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                      >
-                        <Heart className="h-4 w-4" />
-                      </Button>
+                  <Button
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleQuickView(product);
+                    }}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Quick View
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+              >
+                <div className="flex flex-col md:flex-row">
+                  <div className="relative w-full md:w-64 h-64 md:h-auto bg-gray-50 overflow-hidden">
+                    <Link href={`/products/${product.slug}`}>
+                      <Image
+                        src={getImageUrl(product.image) || "/placeholder.svg"}
+                        alt={product.name}
+                        fill
+                        className="object-contain p-4 transition-transform group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 256px"
+                      />
+                    </Link>
+
+                    {product.hasSale && (
+                      <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                        SALE
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex-1 p-6">
+                    <div className="flex flex-col h-full">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-3">
+                          <div className="flex text-yellow-400">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className="h-4 w-4"
+                                fill={
+                                  i < Math.round(product.avgRating || 0)
+                                    ? "currentColor"
+                                    : "none"
+                                }
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-gray-500 ml-2">
+                            ({product.reviewCount || 0})
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`/products/${product.slug}`}
+                          className="block hover:text-red-600 transition-colors"
+                        >
+                          <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                            {product.name}
+                          </h3>
+                        </Link>
+
+                        <p className="text-gray-600 mb-4 line-clamp-2">
+                          {product.description}
+                        </p>
+
+                        {product.flavors > 1 && (
+                          <p className="text-sm text-gray-500 mb-4">
+                            {product.flavors} variants available
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          {product.hasSale ? (
+                            <div className="flex items-center space-x-2">
+                              <span className="font-bold text-2xl text-red-600">
+                                {formatCurrency(product.basePrice)}
+                              </span>
+                              <span className="text-gray-500 line-through">
+                                {formatCurrency(product.regularPrice)}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="font-bold text-2xl text-gray-800">
+                              {formatCurrency(product.basePrice)}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center space-x-3">
+                          <Button
+                            variant="outline"
+                            className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleQuickView(product);
+                            }}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            Quick View
+                          </Button>
+                          <Button
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleQuickView(product);
+                            }}
+                          >
+                            Add to Cart
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -446,76 +536,69 @@ export default function CategoryPage() {
         {/* Pagination */}
         {pagination.pages > 1 && (
           <div className="flex justify-center items-center mt-12">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handlePageChange(pagination.page - 1)}
-                  disabled={pagination.page === 1}
-                  className="border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                >
-                  <ChevronUp className="h-4 w-4 rotate-90" />
-                </Button>
+            <div className="flex items-center bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={pagination.page === 1 || loading}
+                className="rounded-none border-0 hover:bg-red-600 hover:text-white px-4 py-3"
+              >
+                <ChevronUp className="h-4 w-4 rotate-90" />
+              </Button>
 
-                {[...Array(pagination.pages)].map((_, i) => {
-                  const page = i + 1;
-                  // Show first page, last page, and pages around the current page
-                  if (
-                    page === 1 ||
-                    page === pagination.pages ||
-                    (page >= pagination.page - 1 && page <= pagination.page + 1)
-                  ) {
-                    return (
-                      <Button
-                        key={page}
-                        variant={
-                          pagination.page === page ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => handlePageChange(page)}
-                        className={`w-10 h-10 p-0 ${
-                          pagination.page === page
-                            ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white"
-                            : "border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                        }`}
-                      >
-                        {page}
-                      </Button>
-                    );
-                  }
+              {[...Array(pagination.pages)].map((_, i) => {
+                const page = i + 1;
+                if (
+                  page === 1 ||
+                  page === pagination.pages ||
+                  (page >= pagination.page - 1 && page <= pagination.page + 1)
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      disabled={loading}
+                      className={`px-4 py-3 font-medium transition-colors ${
+                        pagination.page === page
+                          ? "bg-red-600 text-white"
+                          : "hover:bg-gray-50 text-gray-800"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                }
 
-                  // Show ellipsis for skipped pages
-                  if (
-                    (page === 2 && pagination.page > 3) ||
-                    (page === pagination.pages - 1 &&
-                      pagination.page < pagination.pages - 2)
-                  ) {
-                    return (
-                      <span key={page} className="px-2 text-gray-500">
-                        ...
-                      </span>
-                    );
-                  }
+                if (
+                  (page === 2 && pagination.page > 3) ||
+                  (page === pagination.pages - 1 &&
+                    pagination.page < pagination.pages - 2)
+                ) {
+                  return (
+                    <span key={page} className="px-4 py-3 text-gray-400">
+                      ...
+                    </span>
+                  );
+                }
 
-                  return null;
-                })}
+                return null;
+              })}
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handlePageChange(pagination.page + 1)}
-                  disabled={pagination.page === pagination.pages}
-                  className="border-yellow-200 text-yellow-600 hover:bg-yellow-50"
-                >
-                  <ChevronDown className="h-4 w-4 rotate-90" />
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={pagination.page === pagination.pages || loading}
+                className="rounded-none border-0 hover:bg-red-600 hover:text-white px-4 py-3"
+              >
+                <ChevronDown className="h-4 w-4 rotate-90" />
+              </Button>
             </div>
           </div>
         )}
 
-        {/* Product Quick View */}
+        {/* Quick View Dialog */}
         <ProductQuickView
           product={quickViewProduct}
           open={quickViewOpen}

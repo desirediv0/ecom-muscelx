@@ -98,22 +98,10 @@ export default function AddressesPage() {
   // Loading state
   if (loading && addresses.length === 0) {
     return (
-      <div className="space-y-8">
-        {/* Page Header */}
-        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl p-8 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">My Addresses</h1>
-              <p className="text-yellow-100">Manage your delivery addresses</p>
-            </div>
-            <div className="bg-white/20 p-4 rounded-xl">
-              <MapPin className="h-8 w-8" />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center h-64">
-          <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h1 className="text-2xl font-semibold text-gray-700">Loading Addresses...</h1>
         </div>
       </div>
     );
@@ -122,16 +110,14 @@ export default function AddressesPage() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl p-8 text-white">
+      <div className="bg-gradient-to-r from-red-600 to-red-500 rounded-2xl p-10 text-white shadow-xl border-2 border-red-200">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2">My Addresses</h1>
-            <p className="text-yellow-100">
-              Manage your delivery addresses for faster checkout
-            </p>
+            <h1 className="text-4xl font-extrabold mb-2 tracking-tight">My Addresses</h1>
+            <p className="text-red-100 text-lg">Manage your delivery addresses for faster checkout</p>
           </div>
-          <div className="bg-white/20 p-4 rounded-xl">
-            <MapPin className="h-8 w-8" />
+          <div className="bg-white/30 p-4 rounded-xl shadow-lg">
+            <MapPin className="h-10 w-10 text-red-600" />
           </div>
         </div>
       </div>
@@ -141,7 +127,7 @@ export default function AddressesPage() {
         <div className="flex justify-end">
           <Button
             onClick={() => setShowAddForm(true)}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
+            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white px-8 py-4 rounded-xl font-bold shadow-lg border-2 border-red-600 transition-all duration-200 transform hover:scale-105"
           >
             <Plus className="h-5 w-5 mr-3" />
             Add New Address
@@ -151,19 +137,15 @@ export default function AddressesPage() {
 
       {/* Add/Edit Form */}
       {showAddForm && (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 px-8 py-6 border-b border-yellow-200">
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-red-100 overflow-hidden">
+          <div className="bg-gradient-to-r from-red-100 to-white px-8 py-6 border-b-2 border-red-600">
             <div className="flex items-center">
-              <div className="bg-yellow-500 p-3 rounded-xl mr-4">
+              <div className="bg-red-600 p-3 rounded-xl mr-4">
                 <Plus className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Add New Address
-                </h2>
-                <p className="text-gray-600">
-                  Fill in the details for your new address
-                </p>
+                <h2 className="text-2xl font-bold text-red-600">Add New Address</h2>
+                <p className="text-red-500">Fill in the details for your new address</p>
               </div>
             </div>
           </div>
@@ -177,17 +159,15 @@ export default function AddressesPage() {
       )}
 
       {editingAddress && (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 px-8 py-6 border-b border-yellow-200">
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-red-100 overflow-hidden">
+          <div className="bg-gradient-to-r from-red-100 to-white px-8 py-6 border-b-2 border-red-600">
             <div className="flex items-center">
-              <div className="bg-yellow-500 p-3 rounded-xl mr-4">
+              <div className="bg-red-600 p-3 rounded-xl mr-4">
                 <Edit className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Edit Address
-                </h2>
-                <p className="text-gray-600">Update your address information</p>
+                <h2 className="text-2xl font-bold text-red-600">Edit Address</h2>
+                <p className="text-red-500">Update your address information</p>
               </div>
             </div>
           </div>
@@ -203,45 +183,44 @@ export default function AddressesPage() {
 
       {/* Address List */}
       {addresses.length === 0 && !showAddForm && !editingAddress ? (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
-          <div className="bg-yellow-100 p-8 rounded-full w-32 h-32 mx-auto mb-8 flex items-center justify-center">
-            <MapPin className="h-16 w-16 text-yellow-500" />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-10 text-center">
+            <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="h-12 w-12 text-gray-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">No Addresses Found</h1>
+            <p className="text-gray-600 mb-8">
+              Add an address to make checkout faster and easier.
+            </p>
+            <Button 
+              onClick={() => setShowAddForm(true)}
+              className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors"
+            >
+              <Plus className="mr-2 h-5 w-5" />
+              Add Address
+            </Button>
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
-            No Addresses Found
-          </h2>
-          <p className="text-gray-600 mb-8 text-lg">
-            You haven&apos;t added any addresses yet. Add one to make checkout
-            faster and easier.
-          </p>
-          <Button
-            onClick={() => setShowAddForm(true)}
-            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
-          >
-            <Plus className="h-5 w-5 mr-3" />
-            Add Your First Address
-          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {addresses.map((address) => (
             <div
               key={address.id}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+              className="bg-white rounded-2xl shadow-lg border-2 border-red-100 overflow-hidden hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
             >
               {/* Address Header */}
-              <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+              <div className="bg-gradient-to-r from-red-100 to-white px-8 py-5 border-b-2 border-red-600">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="bg-yellow-500 p-2 rounded-lg mr-3">
+                    <div className="bg-red-600 p-2 rounded-lg mr-3">
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-800">
+                      <h3 className="font-bold text-red-600 text-lg">
                         {address.name}
                       </h3>
                       {address.isDefault && (
-                        <span className="inline-flex items-center text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold">
+                        <span className="inline-flex items-center text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold ml-2">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Default Address
                         </span>
@@ -252,24 +231,24 @@ export default function AddressesPage() {
               </div>
 
               {/* Address Details */}
-              <div className="p-6">
+              <div className="p-8">
                 <div className="space-y-3 mb-6">
                   <div className="flex items-start">
-                    <Home className="h-4 w-4 text-yellow-500 mr-3 mt-1 flex-shrink-0" />
+                    <Home className="h-4 w-4 text-red-600 mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-gray-700 font-medium">
+                      <p className="text-red-600 font-bold">
                         {address.street}
                       </p>
-                      <p className="text-gray-600">
+                      <p className="text-red-500">
                         {address.city}, {address.state} {address.postalCode}
                       </p>
-                      <p className="text-gray-600">{address.country}</p>
+                      <p className="text-red-500">{address.country}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center">
-                    <Phone className="h-4 w-4 text-yellow-500 mr-3" />
-                    <p className="text-gray-700 font-medium">{address.phone}</p>
+                    <Phone className="h-4 w-4 text-red-600 mr-3" />
+                    <p className="text-red-600 font-bold">{address.phone}</p>
                   </div>
                 </div>
 
@@ -278,7 +257,7 @@ export default function AddressesPage() {
                   {!address.isDefault && (
                     <Button
                       onClick={() => handleSetDefaultAddress(address.id)}
-                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition-all duration-200 text-sm"
                     >
                       <Home className="h-4 w-4 mr-2" />
                       Set as Default
@@ -288,7 +267,7 @@ export default function AddressesPage() {
                   <Button
                     onClick={() => setEditingAddress(address)}
                     variant="outline"
-                    className="border-2 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 px-4 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                    className="border-2 border-red-600 text-red-600 hover:bg-red-100 hover:border-red-500 px-4 py-2 rounded-lg font-bold transition-all duration-200 text-sm"
                   >
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
@@ -297,7 +276,7 @@ export default function AddressesPage() {
                   <Button
                     onClick={() => handleDeleteAddress(address.id)}
                     disabled={deletingId === address.id}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                    className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold transition-all duration-200 text-sm border-2 border-red-600"
                   >
                     {deletingId === address.id ? (
                       <>

@@ -201,7 +201,7 @@ export default function ProductCarousel({
                   >
                     <div className="relative w-24 h-24">
                       <Image
-                        src={image.url || "/product-placeholder.jpg"}
+                        src={image.url}
                         alt={`${productName} - Thumbnail ${index + 1}`}
                         fill
                         className="object-contain p-2"

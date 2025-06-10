@@ -329,7 +329,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
         );
       }
       return (
-        <span className="text-3xl font-bold text-[#2C3E50]">
+        <span className="text-3xl font-bold text-red-500">
           {formatCurrency(selectedVariant.price || 0)}
         </span>
       );
@@ -350,7 +350,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
         );
       }
       return (
-        <span className="text-3xl font-bold text-[#2C3E50]">
+        <span className="text-3xl font-bold text-red-500">
           {formatCurrency(productDetails.basePrice || 0)}
         </span>
       );
@@ -371,7 +371,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
         );
       }
       return (
-        <span className="text-3xl font-bold text-[#2C3E50]">
+        <span className="text-3xl font-bold text-red-500">
           {formatCurrency(product.basePrice || 0)}
         </span>
       );
@@ -387,27 +387,27 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto p-0 bg-white">
+      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto p-0 bg-white border-2 border-red-100 shadow-2xl rounded-2xl">
         {/* Header */}
-        <DialogHeader className="px-6 py-4 border-b border-gray-100">
+        <DialogHeader className="px-8 py-6 border-b-2 border-red-100 bg-gradient-to-r from-red-50 to-white rounded-t-2xl">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-[#2C3E50] pr-8">
+            <DialogTitle className="text-3xl font-extrabold text-[#F44336] pr-8 tracking-tight">
               {displayProduct.name}
             </DialogTitle>
             <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-10 h-10 p-0 hover:bg-gray-100 rounded-full"
+                className="w-10 h-10 p-0 hover:bg-red-100 rounded-full border border-red-200"
               >
-                <Heart className="h-5 w-5 text-gray-600" />
+                <Heart className="h-5 w-5 text-[#F44336]" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-10 h-10 p-0 hover:bg-gray-100 rounded-full"
+                className="w-10 h-10 p-0 hover:bg-red-100 rounded-full border border-red-200"
               >
-                <Share2 className="h-5 w-5 text-gray-600" />
+                <Share2 className="h-5 w-5 text-[#F44336]" />
               </Button>
             </div>
           </div>
@@ -415,13 +415,13 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
         {loading && !productDetails ? (
           <div className="py-16 flex justify-center">
-            <div className="w-12 h-12 border-4 border-[#F47C20] border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#F44336] border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-8 bg-white rounded-b-2xl">
             {/* Product Image */}
             <div className="relative">
-              <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden bg-gray-50 shadow-sm">
+              <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden bg-red-50 shadow-lg border-2 border-red-100">
                 <Image
                   src={imgSrc || "/placeholder.svg"}
                   alt={displayProduct.name}
@@ -431,7 +431,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                   onError={() => setImgSrc("/product-placeholder.jpg")}
                 />
                 {displayProduct.hasSale && (
-                  <div className="absolute top-4 left-4 bg-[#F47C20] text-white text-sm font-bold px-3 py-2 rounded-lg shadow-lg">
+                  <div className="absolute top-4 left-4 bg-[#F44336] text-white text-sm font-bold px-4 py-2 rounded-lg shadow-lg">
                     SALE
                   </div>
                 )}
@@ -439,12 +439,12 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
             </div>
 
             {/* Product Info */}
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-8">
               {/* Success Message */}
               {success && (
-                <div className="p-4 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg flex items-center">
+                <div className="p-4 bg-green-50 border border-green-200 text-green-700 text-base rounded-lg flex items-center">
                   <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                  <span className="font-medium">
+                  <span className="font-semibold">
                     Item added to cart successfully!
                   </span>
                 </div>
@@ -452,14 +452,14 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
               {/* Error message */}
               {error && (
-                <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center">
+                <div className="p-4 bg-red-50 border border-red-200 text-[#F44336] text-base rounded-lg flex items-center">
                   <AlertCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                  <span className="font-medium">{error}</span>
+                  <span className="font-semibold">{error}</span>
                 </div>
               )}
 
               {/* Price */}
-              <div className="border-b border-gray-100 pb-4">
+              <div className="border-b-2 border-red-100 pb-4">
                 {getPriceDisplay()}
               </div>
 
@@ -473,7 +473,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                         className={`h-5 w-5 ${
                           star <= Math.round(displayProduct.avgRating || 0)
                             ? "text-yellow-400 fill-yellow-400"
-                            : "text-gray-300"
+                            : "text-red-100"
                         }`}
                       />
                     ))}
@@ -489,10 +489,10 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
               {productDetails?.flavorOptions &&
                 productDetails.flavorOptions.length > 0 && (
                   <div>
-                    <label className="block text-sm font-semibold text-[#2C3E50] mb-3">
+                    <label className="block text-sm font-bold text-[#F44336] mb-3">
                       Choose Flavor
                     </label>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {productDetails.flavorOptions.map((flavor) => {
                         const availableWeightIds = getAvailableWeightsForFlavor(
                           flavor.id
@@ -505,12 +505,12 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                             type="button"
                             onClick={() => handleFlavorChange(flavor)}
                             disabled={!isAvailable}
-                            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                            className={`px-5 py-2 rounded-lg border-2 text-base font-semibold transition-all shadow-sm ${
                               selectedFlavor?.id === flavor.id
-                                ? "border-[#F47C20] bg-[#F47C20] text-white shadow-md"
+                                ? "border-[#F44336] bg-[#F44336] text-white shadow-md"
                                 : isAvailable
-                                ? "border-gray-300 hover:border-[#F47C20] hover:text-[#F47C20]"
-                                : "border-gray-200 text-gray-400 cursor-not-allowed"
+                                ? "border-red-200 hover:border-[#F44336] hover:text-[#F44336] bg-white"
+                                : "border-red-100 text-red-200 bg-red-50 cursor-not-allowed"
                             }`}
                           >
                             {flavor.name}
@@ -525,10 +525,10 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
               {productDetails?.weightOptions &&
                 productDetails.weightOptions.length > 0 && (
                   <div>
-                    <label className="block text-sm font-semibold text-[#2C3E50] mb-3">
+                    <label className="block text-sm font-bold text-[#F44336] mb-3">
                       Choose Weight
                     </label>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {productDetails.weightOptions.map((weight) => {
                         const availableFlavorIds = getAvailableFlavorsForWeight(
                           weight.id
@@ -547,12 +547,12 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                             type="button"
                             onClick={() => handleWeightChange(weight)}
                             disabled={!isAvailable}
-                            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                            className={`px-5 py-2 rounded-lg border-2 text-base font-semibold transition-all shadow-sm ${
                               selectedWeight?.id === weight.id
-                                ? "border-[#F47C20] bg-[#F47C20] text-white shadow-md"
+                                ? "border-[#F44336] bg-[#F44336] text-white shadow-md"
                                 : isAvailable
-                                ? "border-gray-300 hover:border-[#F47C20] hover:text-[#F47C20]"
-                                : "border-gray-200 text-gray-400 cursor-not-allowed"
+                                ? "border-red-200 hover:border-[#F44336] hover:text-[#F44336] bg-white"
+                                : "border-red-100 text-red-200 bg-red-50 cursor-not-allowed"
                             }`}
                           >
                             {weight.value} {weight.unit}
@@ -565,12 +565,12 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
               {/* Stock Availability */}
               {selectedVariant && (
-                <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="bg-red-50 p-3 rounded-lg border border-red-100">
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-base font-semibold ${
                       selectedVariant.quantity > 0
                         ? "text-green-600"
-                        : "text-red-600"
+                        : "text-[#F44336]"
                     }`}
                   >
                     {selectedVariant.quantity > 0
@@ -582,24 +582,24 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
               {/* Quantity */}
               <div>
-                <label className="block text-sm font-semibold text-[#2C3E50] mb-3">
+                <label className="block text-sm font-bold text-[#F44336] mb-3">
                   Quantity
                 </label>
                 <div className="flex items-center space-x-4">
-                  <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
+                  <div className="flex items-center border-2 border-red-200 rounded-lg overflow-hidden bg-white">
                     <button
                       onClick={() => handleQuantityChange(-1)}
-                      className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-3 bg-red-50 hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={quantity <= 1 || loading}
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-4 w-4 text-[#F44336]" />
                     </button>
-                    <span className="px-6 py-3 bg-white font-semibold text-[#2C3E50] min-w-[4rem] text-center">
+                    <span className="px-6 py-3 bg-white font-bold text-[#F44336] min-w-[4rem] text-center">
                       {quantity}
                     </span>
                     <button
                       onClick={() => handleQuantityChange(1)}
-                      className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-3 bg-red-50 hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={
                         loading ||
                         (selectedVariant &&
@@ -607,17 +607,17 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                           quantity >= selectedVariant.quantity)
                       }
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-4 w-4 text-[#F44336]" />
                     </button>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex space-x-3 pt-4">
+              <div className="flex space-x-4 pt-6">
                 <Button
                   onClick={handleAddToCart}
-                  className="flex-1 py-4 bg-[#F47C20] hover:bg-[#E06A1A] text-white font-semibold text-lg rounded-lg shadow-lg hover:shadow-xl transition-all"
+                  className="flex-1 py-4 bg-[#F44336] hover:bg-[#E53935] text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-xl transition-all border-2 border-red-200"
                   disabled={
                     loading ||
                     addingToCart ||
@@ -646,7 +646,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                 >
                   <Button
                     variant="outline"
-                    className="w-full py-4 border-2 border-[#2C3E50] text-[#2C3E50] hover:bg-[#2C3E50] hover:text-white font-semibold text-lg rounded-lg transition-all"
+                    className="w-full py-4 border-2 border-[#F44336] text-[#F44336] hover:bg-[#F44336] hover:text-white font-bold text-lg rounded-lg transition-all"
                   >
                     View Full Details
                   </Button>

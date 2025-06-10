@@ -26,13 +26,13 @@ const CategoryCard = ({ category, index }) => {
     >
       <div className="relative">
         <motion.div
-          className="relative w-full h-[420px] rounded-[30px] overflow-hidden bg-gradient-to-br from-white to-gray-50 shadow-2xl"
+          className="relative w-full h-[420px] rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
           whileHover={{ y: -10 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           {/* Main Image Container with Overlay */}
           <div className="relative h-[250px] overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 to-transparent z-10" />
             <Image
               src={getImageUrl(category.image)}
               alt={category.name}
@@ -48,8 +48,8 @@ const CategoryCard = ({ category, index }) => {
               whileHover={{ scale: 1.1 }}
             >
               <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm font-semibold bg-gradient-to-r from-yellow-500 to-[#ce801f] bg-clip-text text-transparent">
+                <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
+                <span className="text-sm font-semibold text-red-600">
                   {category._count?.products || 0} Products
                 </span>
               </div>
@@ -58,8 +58,8 @@ const CategoryCard = ({ category, index }) => {
 
           {/* Content Section */}
           <div className="p-6 relative">
-            {/* Category Name with Gradient */}
-            <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            {/* Category Name */}
+            <h3 className="text-2xl font-bold mb-3 text-gray-800">
               {category.name}
             </h3>
 
@@ -71,7 +71,7 @@ const CategoryCard = ({ category, index }) => {
             {/* Interactive Footer */}
             <div className="absolute bottom-6 left-6 right-6">
               <motion.button
-                className="w-full bg-gradient-to-r from-yellow-500 via-yellow-400 to-[#ce801f] text-white py-3 rounded-2xl flex items-center justify-center group relative overflow-hidden shadow-xl"
+                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -95,10 +95,6 @@ const CategoryCard = ({ category, index }) => {
               </motion.button>
             </div>
           </div>
-
-          {/* Decorative Elements */}
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-yellow-500/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl" />
         </motion.div>
       </div>
     </motion.div>
@@ -147,7 +143,7 @@ export default function CategoriesPage() {
   }, []);
 
   return (
-    <section className="min-h-screen py-24 bg-gradient-to-b from-yellow-50 via-white to-pink-50 overflow-hidden">
+    <section className="min-h-screen py-24 bg-white">
       <div className="container mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-16 relative">
@@ -157,36 +153,33 @@ export default function CategoriesPage() {
             transition={{ duration: 0.6 }}
             className="relative z-10"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-500 to-[#ce801f] rounded-full mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-full mb-8 shadow-lg">
               <ShoppingBag className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
               All Categories
             </h1>
             <div className="flex items-center justify-center text-sm text-gray-600 mb-6">
-              <Link href="/" className="hover:text-yellow-600 transition-colors">
+              <Link href="/" className="hover:text-red-600 transition-colors">
                 Home
               </Link>
               <span className="mx-2">•</span>
-              <span className="text-yellow-600 font-medium">Categories</span>
+              <span className="text-red-600 font-medium">Categories</span>
             </div>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Discover our complete range of premium fitness supplements and
               equipment
             </p>
           </motion.div>
-
-          {/* Decorative Background Elements */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-yellow-300/20 to-pink-300/20 rounded-full blur-3xl -z-10" />
         </div>
 
         {error && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-50/50 backdrop-blur-sm border border-red-200 p-8 rounded-[30px] mb-12 flex items-start max-w-2xl mx-auto shadow-lg"
+            className="bg-red-50 border border-red-200 p-8 rounded-2xl mb-12 flex items-start max-w-2xl mx-auto shadow-lg"
           >
-            <AlertCircle className="text-red-500 mr-4 mt-0.5 flex-shrink-0 h-6 w-6" />
+            <AlertCircle className="text-red-600 mr-4 mt-0.5 flex-shrink-0 h-6 w-6" />
             <div>
               <h3 className="font-semibold text-red-800 mb-1">
                 Error Loading Categories
@@ -197,10 +190,6 @@ export default function CategoriesPage() {
         )}
 
         <div className="relative">
-          {/* Background Decorations */}
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-300/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-pink-300/10 rounded-full blur-3xl" />
-
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, index) => (
@@ -211,12 +200,12 @@ export default function CategoriesPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-[30px] shadow-xl border border-white/20 max-w-md mx-auto"
+              className="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100 max-w-md mx-auto"
             >
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-500 to-pink-500 rounded-full mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-full mb-8 shadow-lg">
                 <ShoppingBag className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">
                 No Categories Found
               </h2>
               <p className="text-gray-600 mb-8">
@@ -224,12 +213,11 @@ export default function CategoriesPage() {
               </p>
               <Link href="/products">
                 <motion.button
-                  className="bg-gradient-to-r from-yellow-500 via-yellow-400 to-pink-500 text-white px-8 py-3 rounded-full font-medium hover:shadow-lg transition-shadow relative overflow-hidden group"
+                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span className="absolute inset-0 bg-white/30 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  <span className="relative">Browse All Products</span>
+                  Browse All Products
                 </motion.button>
               </Link>
             </motion.div>

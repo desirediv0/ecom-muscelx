@@ -382,7 +382,7 @@ export default function OrdersPage() {
                           {order.items.length === 1 ? "item" : "items"}
                         </p>
                         <Button
-                          className="bg-yellow-600 hover:bg-yellow-700"
+                          className="bg-red-600 hover:bg-red-700"
                           onClick={(e) => {
                             e.stopPropagation();
                             router.push(`/account/orders/${order.id}`);

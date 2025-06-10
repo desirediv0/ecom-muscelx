@@ -21,7 +21,7 @@ export default function GymSupplementBanner() {
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-[#F5F5DC] to-[#EDEBD7] text-[#3E2723] overflow-hidden">
+    <div className="w-full bg-gradient-to-b from-white to-[#FFEBEE] text-[#F44336] overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="flex flex-col md:flex-row"
@@ -31,7 +31,7 @@ export default function GymSupplementBanner() {
         >
           {/* Left Side - Text Content */}
           <motion.div
-            className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center"
+            className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center bg-white/80 rounded-2xl shadow-xl my-8 md:my-16 mx-2 md:mx-8 border-2 border-[#FFCDD2]"
             initial={{ opacity: 0, x: -30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -51,17 +51,17 @@ export default function GymSupplementBanner() {
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4 }}
             >
-              <h2 className="text-lg font-bold text-[#5D4037] tracking-widest uppercase">
+              <h2 className="text-lg font-bold text-[#F44336] tracking-widest uppercase">
                 Premium Collection
               </h2>
-              <h1 className="text-4xl md:text-5xl font-extrabold mt-2 tracking-tight">
-                PURE <span className="text-[#ce801f]">NATURE</span>
+              <h1 className="text-4xl md:text-5xl font-extrabold mt-2 tracking-tight text-[#F44336]">
+                PURE <span className="text-[#E53935]">NATURE</span>
               </h1>
-              <div className="h-1 w-16 bg-[#ce801f] mt-4 mb-6"></div>
+              <div className="h-1 w-16 bg-[#F44336] mt-4 mb-6 rounded-full"></div>
             </motion.div>
 
             <motion.p
-              className="text-[#5D4037] leading-relaxed max-w-lg mb-6"
+              className="text-[#E53935] leading-relaxed max-w-lg mb-6 text-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6 }}
@@ -86,7 +86,7 @@ export default function GymSupplementBanner() {
               ].map((feature, index) => (
                 <div
                   key={index}
-                  className="border border-[#5D4037]/30 bg-[#5D4037]/10 px-4 py-2 rounded-md text-sm font-medium text-[#3E2723]"
+                  className="border-2 border-[#F44336]/30 bg-[#FFCDD2]/60 px-4 py-2 rounded-md text-base font-semibold text-[#F44336] shadow-sm"
                 >
                   {feature}
                 </div>
@@ -100,7 +100,7 @@ export default function GymSupplementBanner() {
               transition={{ delay: 0.8 }}
             >
               <motion.button
-                className="bg-[#D68C16] text-white hover:bg-[#D68C16]/80 font-bold py-3 px-8 rounded-md shadow-lg"
+                className="bg-[#F44336] text-white hover:bg-[#E53935] font-bold py-3 px-8 rounded-lg shadow-lg border-2 border-[#F44336] transition-all text-lg"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -108,7 +108,7 @@ export default function GymSupplementBanner() {
               </motion.button>
 
               <motion.button
-                className="bg-transparent border border-[#5D4037] hover:bg-[#5D4037]/10 text-[#5D4037] font-bold py-3 px-8 rounded-md shadow-lg"
+                className="bg-white border-2 border-[#F44336] hover:bg-[#F44336]/10 text-[#F44336] font-bold py-3 px-8 rounded-lg shadow-lg transition-all text-lg"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -119,15 +119,15 @@ export default function GymSupplementBanner() {
 
           {/* Right Side - Product Image with Effects */}
           <motion.div
-            className="w-full md:w-1/2 relative"
+            className="w-full md:w-1/2 relative flex items-center justify-center"
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.3 }}
           >
-            <div className="h-full min-h-[400px] md:min-h-[500px] relative overflow-hidden bg-gradient-to-b from-[#F5F5DC] to-[#EDEBD7]">
+            <div className="h-full min-h-[400px] md:min-h-[500px] relative overflow-hidden bg-gradient-to-b from-white to-[#FFEBEE] rounded-2xl shadow-xl border-2 border-[#FFCDD2] w-full flex items-center justify-center">
               {/* Mountain-inspired Shapes */}
               <motion.div
-                className="absolute top-1/4 left-1/4 w-32 h-32 border border-[#5D4037]/20 rotate-45"
+                className="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-[#F44336]/10 rotate-45"
                 animate={{
                   rotate: [45, 90, 45],
                   scale: [1, 1.1, 1],
@@ -140,7 +140,7 @@ export default function GymSupplementBanner() {
               />
 
               <motion.div
-                className="absolute bottom-1/3 right-1/3 w-40 h-40 border border-[#D68C16]/20 rounded-full"
+                className="absolute bottom-1/3 right-1/3 w-40 h-40 border-2 border-[#F44336]/10 rounded-full"
                 animate={{
                   scale: [1, 1.2, 1],
                 }}
@@ -158,7 +158,7 @@ export default function GymSupplementBanner() {
                 animate={isVisible ? { y: 0, opacity: 1 } : {}}
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
-                <div className="relative w-[280px] h-[400px] md:w-[350px] md:h-[500px]">
+                <div className="relative w-[280px] h-[400px] md:w-[350px] md:h-[500px] drop-shadow-2xl">
                   <Image
                     src="/c3.jpg"
                     alt="Natural Protein Supplement"
@@ -182,7 +182,7 @@ export default function GymSupplementBanner() {
                 >
                   <path
                     d="M0,200 L200,100 L300,150 L400,50 L500,120 L600,20 L700,80 L800,30 L900,90 L1000,40 L1100,70 L1200,10 L1200,200 Z"
-                    fill="#5D4037"
+                    fill="#F44336"
                   />
                 </svg>
               </motion.div>

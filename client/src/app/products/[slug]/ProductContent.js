@@ -333,7 +333,7 @@ export default function ProductContent({ slug }) {
               key={index}
               className={`relative aspect-square w-full bg-gray-50 rounded-lg overflow-hidden cursor-pointer border-3 transition-all hover:shadow-md ${
                 mainImage?.url === image.url
-                  ? "border-[#F47C20] shadow-lg"
+                  ? "border-red-500 shadow-lg"
                   : "border-transparent hover:border-gray-300"
               }`}
               onClick={() => setMainImage(image)}
@@ -368,7 +368,7 @@ export default function ProductContent({ slug }) {
       if (selectedVariant.salePrice && selectedVariant.salePrice > 0) {
         return (
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-[#F47C20]">
+            <span className="text-4xl font-bold text-red-500">
               {formatCurrency(selectedVariant.salePrice)}
             </span>
             <span className="text-2xl text-gray-500 line-through">
@@ -389,7 +389,7 @@ export default function ProductContent({ slug }) {
       if (product.hasSale && product.basePrice > 0) {
         return (
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-[#F47C20]">
+            <span className="text-4xl font-bold text-red-500">
               {formatCurrency(product.basePrice)}
             </span>
             <span className="text-2xl text-gray-500 line-through">
@@ -456,7 +456,7 @@ export default function ProductContent({ slug }) {
       <div className="bg-gray-50 min-h-screen">
         <div className="container mx-auto px-4 py-12">
           <div className="flex flex-col items-center justify-center h-64">
-            <div className="w-16 h-16 border-4 border-[#F47C20] border-t-transparent rounded-full animate-spin mb-6"></div>
+            <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-6"></div>
             <p className="text-[#2C3E50] text-lg font-medium">
               Loading product details...
             </p>
@@ -477,7 +477,7 @@ export default function ProductContent({ slug }) {
             </h2>
             <p className="text-red-600 mb-8">{error}</p>
             <Link href="/products">
-              <Button className="bg-[#F47C20] hover:bg-[#E06A1A] text-white px-8 py-3 rounded-lg font-semibold">
+              <Button className="bg-red-500 hover:bg-[#E06A1A] text-white px-8 py-3 rounded-lg font-semibold">
                 <ChevronRight className="mr-2 h-4 w-4" /> Browse Other Products
               </Button>
             </Link>
@@ -491,17 +491,17 @@ export default function ProductContent({ slug }) {
     return (
       <div className="bg-gray-50 min-h-screen">
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-yellow-200 flex flex-col items-center text-center max-w-md mx-auto">
-            <AlertCircle className="text-yellow-500 h-16 w-16 mb-6" />
-            <h2 className="text-2xl font-bold text-yellow-700 mb-4">
+          <div className="bg-white p-8 rounded-xl shadow-sm border border-red-200 flex flex-col items-center text-center max-w-md mx-auto">
+            <AlertCircle className="text-red-500 h-16 w-16 mb-6" />
+            <h2 className="text-2xl font-bold text-red-700 mb-4">
               Product Not Found
             </h2>
-            <p className="text-yellow-600 mb-8">
+            <p className="text-red-600 mb-8">
               The product you are looking for does not exist or has been
               removed.
             </p>
             <Link href="/products">
-              <Button className="bg-[#F47C20] hover:bg-[#E06A1A] text-white px-8 py-3 rounded-lg font-semibold">
+              <Button className="bg-red-500 hover:bg-[#E06A1A] text-white px-8 py-3 rounded-lg font-semibold">
                 <ChevronRight className="mr-2 h-4 w-4" /> Browse Products
               </Button>
             </Link>
@@ -518,14 +518,14 @@ export default function ProductContent({ slug }) {
         <div className="flex items-center text-sm mb-8 bg-white p-4 rounded-lg shadow-sm">
           <Link
             href="/"
-            className="text-gray-500 hover:text-[#F47C20] transition-colors"
+            className="text-gray-500 hover:text-red-500 transition-colors"
           >
             Home
           </Link>
           <ChevronRight className="h-4 w-4 mx-2 text-gray-400" />
           <Link
             href="/products"
-            className="text-gray-500 hover:text-[#F47C20] transition-colors"
+            className="text-gray-500 hover:text-red-500 transition-colors"
           >
             Products
           </Link>
@@ -534,14 +534,14 @@ export default function ProductContent({ slug }) {
               <ChevronRight className="h-4 w-4 mx-2 text-gray-400" />
               <Link
                 href={`/category/${product.categories[0].slug}`}
-                className="text-gray-500 hover:text-[#F47C20] transition-colors"
+                className="text-gray-500 hover:text-red-500 transition-colors"
               >
                 {product.categories[0].name}
               </Link>
             </>
           )}
           <ChevronRight className="h-4 w-4 mx-2 text-gray-400" />
-          <span className="text-[#F47C20] font-medium">{product?.name}</span>
+          <span className="text-red-500 font-medium">{product?.name}</span>
         </div>
 
         {/* Product Info */}
@@ -566,7 +566,7 @@ export default function ProductContent({ slug }) {
           <div className="flex flex-col bg-white p-8 rounded-xl shadow-sm border border-gray-200">
             {/* Brand name if available */}
             {product.brand && (
-              <div className="text-[#F47C20] text-sm font-medium mb-2">
+              <div className="text-red-500 text-sm font-medium mb-2">
                 {product.brand}
               </div>
             )}
@@ -578,7 +578,7 @@ export default function ProductContent({ slug }) {
 
             {/* Rating */}
             <div className="flex items-center mb-6">
-              <div className="flex text-yellow-400 mr-3">
+              <div className="flex text-red-400 mr-3">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
@@ -630,9 +630,9 @@ export default function ProductContent({ slug }) {
                         key={flavor.id}
                         className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
                           selectedFlavor?.id === flavor.id
-                            ? "border-[#F47C20] bg-[#F47C20] text-white shadow-lg"
+                            ? "border-red-500 bg-red-500 text-white shadow-lg"
                             : isAvailable
-                            ? "border-gray-300 hover:border-[#F47C20] hover:text-[#F47C20]"
+                            ? "border-gray-300 hover:border-red-500 hover:text-red-500"
                             : "border-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                         onClick={() => handleFlavorChange(flavor)}
@@ -670,9 +670,9 @@ export default function ProductContent({ slug }) {
                         key={weight.id}
                         className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
                           selectedWeight?.id === weight.id
-                            ? "border-[#F47C20] bg-[#F47C20] text-white shadow-lg"
+                            ? "border-red-500 bg-red-500 text-white shadow-lg"
                             : isAvailable
-                            ? "border-gray-300 hover:border-[#F47C20] hover:text-[#F47C20]"
+                            ? "border-gray-300 hover:border-red-500 hover:text-red-500"
                             : "border-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                         onClick={() => handleWeightChange(weight)}
@@ -748,7 +748,7 @@ export default function ProductContent({ slug }) {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Button
-                className="flex-1 flex items-center justify-center gap-3 py-4 text-lg bg-[#F47C20] hover:bg-[#E06A1A] rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                className="flex-1 flex items-center justify-center gap-3 py-4 text-lg bg-red-500 hover:bg-[#E06A1A] rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all"
                 size="lg"
                 onClick={handleAddToCart}
                 disabled={
@@ -793,15 +793,15 @@ export default function ProductContent({ slug }) {
             {/* Product Features */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-gray-200">
               <div className="flex items-center text-sm text-gray-600">
-                <Shield className="h-5 w-5 text-[#F47C20] mr-2" />
+                <Shield className="h-5 w-5 text-red-500 mr-2" />
                 <span>Quality Assured</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Truck className="h-5 w-5 text-[#F47C20] mr-2" />
+                <Truck className="h-5 w-5 text-red-500 mr-2" />
                 <span>Fast Delivery</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
-                <Award className="h-5 w-5 text-[#F47C20] mr-2" />
+                <Award className="h-5 w-5 text-red-500 mr-2" />
                 <span>Lab Tested</span>
               </div>
             </div>
@@ -824,7 +824,7 @@ export default function ProductContent({ slug }) {
                   </span>
                   <Link
                     href={`/category/${product.category?.slug}`}
-                    className="text-[#F47C20] hover:underline font-medium"
+                    className="text-red-500 hover:underline font-medium"
                   >
                     {product.category?.name}
                   </Link>
@@ -841,7 +841,7 @@ export default function ProductContent({ slug }) {
                       <span key={index}>
                         <Link
                           href={`/products?tag=${tag}`}
-                          className="text-[#F47C20] hover:underline font-medium"
+                          className="text-red-500 hover:underline font-medium"
                         >
                           {tag}
                         </Link>
@@ -862,7 +862,7 @@ export default function ProductContent({ slug }) {
               <button
                 className={`px-8 py-4 font-semibold text-sm uppercase transition-colors ${
                   activeTab === "description"
-                    ? "border-b-3 border-[#F47C20] text-[#F47C20] bg-[#F47C20]/5"
+                    ? "border-b-3 border-red-500 text-red-500 bg-red-500/5"
                     : "text-gray-500 hover:text-[#2C3E50]"
                 }`}
                 onClick={() => setActiveTab("description")}
@@ -872,7 +872,7 @@ export default function ProductContent({ slug }) {
               <button
                 className={`px-8 py-4 font-semibold text-sm uppercase transition-colors ${
                   activeTab === "reviews"
-                    ? "border-b-3 border-[#F47C20] text-[#F47C20] bg-[#F47C20]/5"
+                    ? "border-b-3 border-red-500 text-red-500 bg-red-500/5"
                     : "text-gray-500 hover:text-[#2C3E50]"
                 }`}
                 onClick={() => setActiveTab("reviews")}
@@ -882,7 +882,7 @@ export default function ProductContent({ slug }) {
               <button
                 className={`px-8 py-4 font-semibold text-sm uppercase transition-colors ${
                   activeTab === "shipping"
-                    ? "border-b-3 border-[#F47C20] text-[#F47C20] bg-[#F47C20]/5"
+                    ? "border-b-3 border-red-500 text-red-500 bg-red-500/5"
                     : "text-gray-500 hover:text-[#2C3E50]"
                 }`}
                 onClick={() => setActiveTab("shipping")}
@@ -902,9 +902,9 @@ export default function ProductContent({ slug }) {
 
                   {product.isSupplement && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                      <div className="bg-[#F47C20]/5 p-6 rounded-xl border border-[#F47C20]/20">
+                      <div className="bg-red-500/5 p-6 rounded-xl border border-red-500/20">
                         <div className="flex items-center mb-4">
-                          <div className="w-12 h-12 rounded-full bg-[#F47C20] text-white flex items-center justify-center flex-shrink-0 mr-4">
+                          <div className="w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 mr-4">
                             <CheckCircle className="h-6 w-6" />
                           </div>
                           <h3 className="text-xl font-bold text-[#2C3E50]">
@@ -917,9 +917,9 @@ export default function ProductContent({ slug }) {
                         </p>
                       </div>
 
-                      <div className="bg-[#F47C20]/5 p-6 rounded-xl border border-[#F47C20]/20">
+                      <div className="bg-red-500/5 p-6 rounded-xl border border-red-500/20">
                         <div className="flex items-center mb-4">
-                          <div className="w-12 h-12 rounded-full bg-[#F47C20] text-white flex items-center justify-center flex-shrink-0 mr-4">
+                          <div className="w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 mr-4">
                             <Shield className="h-6 w-6" />
                           </div>
                           <h3 className="text-xl font-bold text-[#2C3E50]">
@@ -932,9 +932,9 @@ export default function ProductContent({ slug }) {
                         </p>
                       </div>
 
-                      <div className="bg-[#F47C20]/5 p-6 rounded-xl border border-[#F47C20]/20">
+                      <div className="bg-red-500/5 p-6 rounded-xl border border-red-500/20">
                         <div className="flex items-center mb-4">
-                          <div className="w-12 h-12 rounded-full bg-[#F47C20] text-white flex items-center justify-center flex-shrink-0 mr-4">
+                          <div className="w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 mr-4">
                             <Award className="h-6 w-6" />
                           </div>
                           <h3 className="text-xl font-bold text-[#2C3E50]">
@@ -1040,7 +1040,7 @@ export default function ProductContent({ slug }) {
         {relatedProducts && relatedProducts.length > 0 && (
           <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
             <h2 className="text-3xl font-bold mb-8 text-[#2C3E50] relative">
-              <span className="bg-[#F47C20] h-1 w-16 absolute -bottom-2 left-0 rounded-full"></span>
+              <span className="bg-red-500 h-1 w-16 absolute -bottom-2 left-0 rounded-full"></span>
               RELATED PRODUCTS
             </h2>
 
@@ -1060,7 +1060,7 @@ export default function ProductContent({ slug }) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     />
                     {product.hasSale && (
-                      <span className="absolute top-3 left-3 bg-[#F47C20] text-white text-xs font-bold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
                         SALE
                       </span>
                     )}
@@ -1068,7 +1068,7 @@ export default function ProductContent({ slug }) {
 
                   <div className="p-6">
                     <div className="flex items-center justify-center mb-3">
-                      <div className="flex text-yellow-400">
+                      <div className="flex text-red-400">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
@@ -1086,14 +1086,14 @@ export default function ProductContent({ slug }) {
                       </span>
                     </div>
 
-                    <h3 className="font-bold mb-3 line-clamp-2 hover:text-[#F47C20] transition-colors text-center text-[#2C3E50]">
+                    <h3 className="font-bold mb-3 line-clamp-2 hover:text-red-500 transition-colors text-center text-[#2C3E50]">
                       {product.name}
                     </h3>
 
                     <div className="text-center">
                       {product.hasSale ? (
                         <div className="flex items-center justify-center space-x-2">
-                          <span className="font-bold text-[#F47C20] text-lg">
+                          <span className="font-bold text-red-500 text-lg">
                             {formatCurrency(product.basePrice)}
                           </span>
                           <span className="text-gray-500 line-through text-sm">

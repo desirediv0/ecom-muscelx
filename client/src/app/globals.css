@@ -20,30 +20,30 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 20%;
+    --foreground: 0 0% 13%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
-    --primary: 24 95% 53%;
+    --popover-foreground: 0 0% 13%;
+    --primary: 0 90% 60%; /* Strong red */
     --primary-foreground: 0 0% 100%;
     --secondary: 24 95% 53%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 24 95% 53%;
+    --accent: 0 90% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 24 95% 53%;
-    --chart-1: 24 95% 53%;
+    --ring: 0 90% 60%;
+    --chart-1: 0 90% 60%;
     --chart-2: 24 95% 53%;
-    --chart-3: 24 95% 53%;
-    --chart-4: 24 95% 53%;
-    --chart-5: 24 95% 53%;
-    --radius: 0.5rem;
+    --chart-3: 0 0% 13%;
+    --chart-4: 0 0% 96.1%;
+    --chart-5: 0 84.2% 60.2%;
+    --radius: 0.75rem;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -71,14 +71,23 @@
     --chart-4: 24 95% 53%;
     --chart-5: 24 95% 53%;
   }
+  body {
+    @apply bg-white text-gray-900 font-jost antialiased;
+  }
+  a {
+    @apply text-primary hover:text-secondary transition-colors underline-offset-2;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-gray-900;
+  }
+  button, .btn, .Button {
+    @apply bg-primary text-white font-semibold rounded-lg shadow hover:bg-secondary transition-all;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-jost;
   }
   p,
   .description,

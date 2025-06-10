@@ -142,11 +142,11 @@ export default function AccountPage() {
         >
           {/* Welcome Banner */}
           <motion.div
-            className="relative overflow-hidden bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-3xl shadow-lg"
+            className="relative overflow-hidden bg-gradient-to-r from-red-500 to-red-600 rounded-3xl shadow-lg"
             variants={itemVariants}
           >
-            <div className="absolute right-0 top-0 w-64 h-64 bg-yellow-400 rounded-full -translate-y-1/2 translate-x-1/3 opacity-30"></div>
-            <div className="absolute left-0 bottom-0 w-40 h-40 bg-yellow-400 rounded-full translate-y-1/2 -translate-x-1/3 opacity-30"></div>
+            <div className="absolute right-0 top-0 w-64 h-64 bg-red-400 rounded-full -translate-y-1/2 translate-x-1/3 opacity-30"></div>
+            <div className="absolute left-0 bottom-0 w-40 h-40 bg-red-400 rounded-full translate-y-1/2 -translate-x-1/3 opacity-30"></div>
 
             <div className="relative p-8 md:p-10">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -154,7 +154,7 @@ export default function AccountPage() {
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                     Welcome back, {user?.name || "User"}!
                   </h1>
-                  <p className="text-yellow-100 text-lg">
+                  <p className="text-red-100 text-lg">
                     Manage your profile, orders, and preferences
                   </p>
                 </div>
@@ -194,8 +194,8 @@ export default function AccountPage() {
           >
             <div className="flex justify-between items-center p-6 border-b border-gray-100">
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
-                  <User className="h-5 w-5 text-yellow-600" />
+                <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                  <User className="h-5 w-5 text-red-600" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-800">
@@ -210,7 +210,7 @@ export default function AccountPage() {
                 <Button
                   onClick={() => setIsEditing(true)}
                   variant="outline"
-                  className="border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:text-yellow-700"
+                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
                   <Edit className="mr-2 h-4 w-4" />
                   Edit
@@ -281,7 +281,7 @@ export default function AccountPage() {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-2 h-11 bg-yellow-600 hover:bg-yellow-700"
+                      className="px-6 py-2 h-11 bg-red-600 hover:bg-red-700"
                     >
                       {isSubmitting ? (
                         <>

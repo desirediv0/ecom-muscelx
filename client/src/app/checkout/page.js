@@ -322,11 +322,32 @@ export default function CheckoutPage() {
 
   if (!isAuthenticated || loadingAddresses) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
-        <div className="container mx-auto px-4 py-10">
-          <div className="flex justify-center items-center h-64">
-            <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h1 className="text-2xl font-semibold text-gray-700">Loading Checkout...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (cart.items?.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-10 text-center">
+          <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+            <ShoppingBag className="h-12 w-12 text-gray-600" />
           </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Cart is Empty</h1>
+          <p className="text-gray-600 mb-8">
+            Add items to your cart before proceeding to checkout.
+          </p>
+          <Link href="/products">
+            <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
+              <ShoppingBag className="mr-2 h-5 w-5" />
+              Browse Products
+            </Button>
+          </Link>
         </div>
       </div>
     );
@@ -335,85 +356,56 @@ export default function CheckoutPage() {
   // If order created successfully
   if (orderCreated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden">
-            {/* Background pattern for festive feel */}
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent z-0"></div>
-
-            {/* Celebration animation */}
-            <div className="relative z-10">
-              <div className="relative flex justify-center">
-                <div className="h-36 w-36 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
-                  <PartyPopper
-                    className={`h-20 w-20 text-yellow-600 ${
-                      confettiCannon ? "animate-pulse" : ""
-                    }`}
-                  />
-                </div>
-
-                {/* Radiating circles animation */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="animate-ping absolute h-40 w-40 rounded-full bg-yellow-500 opacity-20"></div>
-                  <div className="animate-ping absolute h-32 w-32 rounded-full bg-green-500 opacity-10 delay-150"></div>
-                  <div className="animate-ping absolute h-24 w-24 rounded-full bg-yellow-500 opacity-10 delay-300"></div>
-                </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-lg w-full bg-white shadow-xl rounded-lg p-10 text-center relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent z-0"></div>
+          
+          <div className="relative z-10">
+            <div className="flex justify-center mb-6">
+              <div className="h-36 w-36 bg-gray-100 rounded-full flex items-center justify-center animate-bounce">
+                <PartyPopper 
+                  className={`h-20 w-20 text-gray-600 ${
+                    confettiCannon ? "animate-pulse" : ""
+                  }`} 
+                />
               </div>
+            </div>
 
-              <div className="text-center">
-                <h1 className="text-4xl font-bold mb-2 text-gray-800 animate-pulse">
-                  Woohoo!
-                </h1>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-ping absolute h-40 w-40 rounded-full bg-gray-300 opacity-20"></div>
+              <div className="animate-ping absolute h-32 w-32 rounded-full bg-green-300 opacity-10 delay-150"></div>
+              <div className="animate-ping absolute h-24 w-24 rounded-full bg-gray-300 opacity-10 delay-300"></div>
+            </div>
 
-                <h2 className="text-2xl font-bold mb-2 text-gray-800">
-                  Order Confirmed!
-                </h2>
-
-                {orderNumber && (
-                  <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 py-3 px-6 rounded-full inline-block mb-4">
-                    <p className="text-lg font-semibold text-yellow-700">
-                      Order #{orderNumber}
-                    </p>
-                  </div>
-                )}
-
-                <div className="my-6 flex items-center justify-center bg-green-50 p-4 rounded-xl border border-green-200">
-                  <CheckCircle className="h-8 w-8 text-green-500 mr-2" />
-                  <p className="text-xl text-green-600 font-medium">
-                    Payment Successful
-                  </p>
-                </div>
-
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  Thank you for your purchase! Your order has been successfully
-                  placed and you&apos;ll receive an email confirmation shortly.
+            {orderNumber && (
+              <div className="bg-gray-100 py-3 px-6 rounded-full inline-block mb-4">
+                <p className="text-lg font-semibold text-gray-700">
+                  Order #{orderNumber}
                 </p>
-
-                <div className="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center justify-center space-x-2">
-                  <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
-                  <p className="text-blue-700">
-                    Redirecting to orders page in {redirectCountdown} seconds...
-                  </p>
-                </div>
-
-                <div className="flex justify-center gap-4">
-                  <Link href="/account/orders">
-                    <Button className="gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 rounded-xl">
-                      <ShoppingBag size={16} />
-                      My Orders
-                    </Button>
-                  </Link>
-                  <Link href="/products">
-                    <Button
-                      variant="outline"
-                      className="gap-2 border-yellow-200 text-yellow-600 hover:bg-yellow-50 rounded-xl"
-                    >
-                      <Gift size={16} />
-                      Continue Shopping
-                    </Button>
-                  </Link>
-                </div>
               </div>
+            )}
+
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+              Order Placed Successfully!
+            </h1>
+            <p className="text-gray-600 mb-8">
+              Thank you for your purchase. Your order will be processed shortly.
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <Link href="/account/orders">
+                <Button className="gap-2 bg-gray-800 hover:bg-gray-700 rounded-lg">
+                  <ShoppingBag size={16} />
+                  My Orders
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                className="gap-2 border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg"
+              >
+                <Gift size={16} />
+                Continue Shopping
+              </Button>
             </div>
           </div>
         </div>
@@ -422,7 +414,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Secure Checkout</h1>
@@ -455,13 +447,13 @@ export default function CheckoutPage() {
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold flex items-center text-gray-800">
-                  <MapPin className="h-6 w-6 mr-3 text-yellow-500" />
+                  <MapPin className="h-6 w-6 mr-3 text-red-500" />
                   Shipping Address
                 </h2>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-yellow-600 hover:bg-yellow-50 rounded-xl"
+                  className="text-red-600 hover:bg-red-50 rounded-xl"
                   onClick={() => setShowAddressForm(!showAddressForm)}
                 >
                   <Plus className="h-4 w-4 mr-1" />
@@ -480,11 +472,11 @@ export default function CheckoutPage() {
               )}
 
               {addresses.length === 0 && !showAddressForm ? (
-                <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
-                  <span className="text-yellow-700">
+                <div className="bg-red-50 p-4 rounded-xl border border-red-200">
+                  <span className="text-red-700">
                     You don&apos;t have any saved addresses.{" "}
                     <button
-                      className="font-medium underline hover:text-yellow-800"
+                      className="font-medium underline hover:text-red-800"
                       onClick={() => setShowAddressForm(true)}
                     >
                       Add an address
@@ -503,7 +495,7 @@ export default function CheckoutPage() {
                       key={address.id}
                       className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
                         selectedAddressId === address.id
-                          ? "border-yellow-500 bg-yellow-50"
+                          ? "border-red-500 bg-red-50"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                       onClick={() => handleAddressSelect(address.id)}
@@ -513,7 +505,7 @@ export default function CheckoutPage() {
                           {address.name}
                         </span>
                         {address.isDefault && (
-                          <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">
+                          <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
                             Default
                           </span>
                         )}
@@ -534,7 +526,7 @@ export default function CheckoutPage() {
                           name="addressSelection"
                           checked={selectedAddressId === address.id}
                           onChange={() => handleAddressSelect(address.id)}
-                          className="h-4 w-4 text-yellow-500 border-gray-300 focus:ring-yellow-500"
+                          className="h-4 w-4 text-red-500 border-gray-300 focus:ring-red-500"
                         />
                         <label className="ml-2 text-sm font-medium text-gray-700">
                           Ship to this address
@@ -549,7 +541,7 @@ export default function CheckoutPage() {
             {/* Payment Method */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
               <h2 className="text-xl font-bold flex items-center mb-6 text-gray-800">
-                <CreditCard className="h-6 w-6 mr-3 text-yellow-500" />
+                <CreditCard className="h-6 w-6 mr-3 text-red-500" />
                 Payment Method
               </h2>
 
@@ -557,7 +549,7 @@ export default function CheckoutPage() {
                 <div
                   className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
                     paymentMethod === "RAZORPAY"
-                      ? "border-yellow-500 bg-yellow-50"
+                      ? "border-red-500 bg-red-50"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                   onClick={() => handlePaymentMethodSelect("RAZORPAY")}
@@ -569,7 +561,7 @@ export default function CheckoutPage() {
                       name="paymentMethod"
                       checked={paymentMethod === "RAZORPAY"}
                       onChange={() => handlePaymentMethodSelect("RAZORPAY")}
-                      className="h-4 w-4 text-yellow-500 border-gray-300 focus:ring-yellow-500"
+                      className="h-4 w-4 text-red-500 border-gray-300 focus:ring-red-500"
                     />
                     <label
                       htmlFor="razorpay"
@@ -583,7 +575,7 @@ export default function CheckoutPage() {
                       </span>
                     </label>
                     <span className="flex items-center">
-                      <IndianRupee className="h-5 w-5 text-yellow-500" />
+                      <IndianRupee className="h-5 w-5 text-red-500" />
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mt-2 ml-7">
@@ -609,7 +601,7 @@ export default function CheckoutPage() {
                   <div className="max-h-52 overflow-y-auto space-y-3">
                     {cart.items?.map((item) => (
                       <div key={item.id} className="flex items-center gap-3">
-                        <div className="h-12 w-12 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg flex-shrink-0 relative">
+                        <div className="h-12 w-12 bg-gradient-to-br from-red-50 to-red-100 rounded-lg flex-shrink-0 relative">
                           {item.product.image && (
                             <Image
                               src={item.product.image || "/placeholder.svg"}
@@ -664,7 +656,7 @@ export default function CheckoutPage() {
                 <div className="pt-4">
                   <div className="flex justify-between font-bold text-xl">
                     <span className="text-gray-800">Total</span>
-                    <span className="text-yellow-600">
+                    <span className="text-red-600">
                       {formatCurrency(totals.subtotal - totals.discount)}
                     </span>
                   </div>
@@ -672,7 +664,7 @@ export default function CheckoutPage() {
               </div>
 
               <Button
-                className="w-full mt-6 h-14 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full mt-6 h-14 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
                 onClick={handleCheckout}
                 disabled={
                   processing ||
@@ -712,7 +704,7 @@ export default function CheckoutPage() {
                     <span className="text-xs text-gray-600">Free Shipping</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <Clock className="h-6 w-6 text-yellow-500 mb-1" />
+                    <Clock className="h-6 w-6 text-red-500 mb-1" />
                     <span className="text-xs text-gray-600">Fast Delivery</span>
                   </div>
                 </div>

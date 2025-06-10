@@ -97,27 +97,28 @@ export default function WishlistPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
-        <div className="container mx-auto py-10 flex justify-center">
-          <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h1 className="text-2xl font-semibold text-gray-700">Loading Wishlist...</h1>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       <ClientOnly>
         <div className="container mx-auto py-12 px-4">
           {/* Header Section */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full mb-6">
               <Heart className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-red-800 mb-4">
               My Wishlist
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-red-600 max-w-2xl mx-auto">
               Your saved favorites - ready when you are
             </p>
           </div>
@@ -147,25 +148,25 @@ export default function WishlistPage() {
 
           {loadingItems ? (
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 flex justify-center">
-              <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : wishlistItems.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center max-w-md mx-auto">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-6">
-                <Heart className="h-8 w-8 text-yellow-600" />
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-10 text-center">
+                <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                  <Heart className="h-12 w-12 text-gray-600" />
+                </div>
+                <h1 className="text-3xl font-bold text-gray-800 mb-4">Wishlist is Empty</h1>
+                <p className="text-gray-600 mb-8">
+                  Save your favorite items to your wishlist for easy access later.
+                </p>
+                <Link href="/products">
+                  <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
+                    <ShoppingBag className="mr-2 h-5 w-5" />
+                    Browse Products
+                  </Button>
+                </Link>
               </div>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                Your Wishlist is Empty
-              </h2>
-              <p className="text-gray-600 mb-8">
-                Save your favorite items to your wishlist for easy access later.
-              </p>
-              <Link href="/products">
-                <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  Explore Products
-                </Button>
-              </Link>
             </div>
           ) : (
             <>
@@ -184,7 +185,7 @@ export default function WishlistPage() {
                   <Link href="/products">
                     <Button
                       variant="outline"
-                      className="border-yellow-200 text-yellow-600 hover:bg-yellow-50"
+                      className="border-red-200 text-red-600 hover:bg-red-50"
                     >
                       <ShoppingBag className="h-4 w-4 mr-2" />
                       Continue Shopping
@@ -201,7 +202,7 @@ export default function WishlistPage() {
                     className="bg-white overflow-hidden transition-all hover:shadow-xl shadow-lg rounded-2xl border border-gray-100 group"
                   >
                     <Link href={`/products/${product.slug}`}>
-                      <div className="relative h-64 w-full bg-gradient-to-br from-yellow-50 to-yellow-100 overflow-hidden">
+                      <div className="relative h-64 w-full bg-gradient-to-br from-red-50 to-red-100 overflow-hidden">
                         <Image
                           src={
                             product.images[0] ||
@@ -217,7 +218,7 @@ export default function WishlistPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:text-white hover:bg-yellow-500/80 rounded-full p-2"
+                            className="text-white hover:text-white hover:bg-red-500/80 rounded-full p-2"
                             onClick={(e) => {
                               e.preventDefault();
                               handleQuickView(product);
@@ -263,7 +264,7 @@ export default function WishlistPage() {
 
                     <div className="p-6 text-center">
                       <div className="flex items-center justify-center mb-3">
-                        <div className="flex text-yellow-400">
+                        <div className="flex text-red-400">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
@@ -283,7 +284,7 @@ export default function WishlistPage() {
 
                       <Link
                         href={`/products/${product.slug}`}
-                        className="hover:text-yellow-600 transition-colors"
+                        className="hover:text-red-600 transition-colors"
                       >
                         <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 text-lg">
                           {product.name}
@@ -301,7 +302,7 @@ export default function WishlistPage() {
                           href={`/products/${product.slug}`}
                           className="flex-1"
                         >
-                          <Button className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white rounded-xl font-semibold transition-all duration-200">
+                          <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-semibold transition-all duration-200">
                             View Product
                             <ArrowRight className="h-4 w-4 ml-2" />
                           </Button>

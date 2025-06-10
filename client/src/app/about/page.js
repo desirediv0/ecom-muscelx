@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/utils";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Building2, Users, Award, Beaker } from "lucide-react";
+import Link from "next/link";
 
 export default function AboutPage() {
   const [content, setContent] = useState(null);
@@ -39,233 +41,150 @@ export default function AboutPage() {
     );
   }
 
-  return (
-    <main>
-      {/* Hero section */}
-      <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6">
-            About Natural supp
+  return ( 
+    <div className="min-h-screen bg-white">
+      <div className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-16"> 
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-full mb-8 shadow-lg">
+            <Building2 className="h-10 w-10 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
+            About MuscelX
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">
-            Your trusted partner for high-quality nutritional supplements and
-            fitness products.
+          <div className="flex items-center justify-center text-sm text-gray-600 mb-6">
+            <Link href="/" className="hover:text-red-600 transition-colors">
+              Home
+            </Link>
+            <span className="mx-2">•</span>
+            <span className="text-red-600 font-medium">About Us</span>
+          </div>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Your trusted partner in fitness and nutrition since 2010
           </p>
         </div>
-      </section>
 
-      {/* Our story section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-6">
-                  Our Story
-                </h2>
-                <div className="prose prose-lg max-w-none">
-                  <p>
-                    Founded in 2015, GenuineNutrition started with a simple
-                    mission: to provide high-quality nutritional supplements
-                    that actually work, backed by science and free from harmful
-                    additives.
-                  </p>
-                  <p>
-                    Our founder, Rahul Sharma, was frustrated with the lack of
-                    transparency in the supplements industry. After struggling
-                    to find products he could trust, he decided to create his
-                    own solution.
-                  </p>
-                  <p>
-                    Today, we&apos;ve grown into one of India&apos;s most
-                    trusted supplement brands, with a commitment to quality,
-                    transparency, and customer satisfaction that remains as
-                    strong as ever.
-                  </p>
-                </div>
-              </div>
-              <div className="relative h-[400px] rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src="/images/about-story.jpg"
-                  alt="Our founder in our first store"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className="object-cover"
-                />
+        {/* Story Section */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 md:p-12 mb-16">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="relative h-[400px] rounded-2xl overflow-hidden">
+              <Image
+                src="/about-story.jpg"
+                alt="Our Story"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-gray-800">
+                Our Story
+              </h2>
+              <div className="prose prose-lg max-w-none text-gray-600">
+                <p>
+                  Founded in 2010, MuscelX has grown from a small supplement store to one of India's leading fitness nutrition brands. Our journey began with a simple mission: to provide high-quality, scientifically-backed supplements that help people achieve their fitness goals.
+                </p>
+                <p className="mt-4">
+                  Today, we're proud to serve thousands of fitness enthusiasts across the country, offering a wide range of products that meet the highest standards of quality and efficacy.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Our values section */}
-      <section className="bg-gray-50 py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">
-              Our Values
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
+        {/* Values Section */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+            Our Values
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Award className="h-8 w-8" />,
+                title: "Quality First",
+                description: "We never compromise on the quality of our products, ensuring each supplement meets the highest standards."
+              },
+              {
+                icon: <Users className="h-8 w-8" />,
+                title: "Customer Focus",
+                description: "Your success is our success. We're committed to providing exceptional service and support."
+              },
+              {
+                icon: <Beaker className="h-8 w-8" />,
+                title: "Scientific Approach",
+                description: "Our products are backed by scientific research and formulated for maximum effectiveness."
+              }
+            ].map((value, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center hover:shadow-xl transition-all duration-300"
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-red-600 rounded-full mb-6 text-white">
+                  {value.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-center">Quality</h3>
-                <p className="text-gray-600 text-center">
-                  We never compromise on quality. Every product is rigorously
-                  tested to ensure it meets our high standards.
-                </p>
-              </div>
-
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-center">
-                  Transparency
+                <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                  {value.title}
                 </h3>
-                <p className="text-gray-600 text-center">
-                  We believe in complete transparency about what goes into our
-                  products and how they&apos;re made.
+                <p className="text-gray-600">
+                  {value.description}
                 </p>
               </div>
-
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-center">
-                  Customer First
-                </h3>
-                <p className="text-gray-600 text-center">
-                  Our customers are at the heart of everything we do. Your
-                  satisfaction is our top priority.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </section>
 
-      {/* Team section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center">
-              Meet Our Team
-            </h2>
-
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="relative w-48 h-48 mx-auto mb-5 rounded-full overflow-hidden">
+        {/* Team Section */}
+        <div>
+          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+            Our Team
+          </h2>
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              {
+                name: "John Doe",
+                role: "Founder & CEO",
+                image: "/team/john-doe.jpg"
+              },
+              {
+                name: "Jane Smith",
+                role: "Head of Product Development",
+                image: "/team/jane-smith.jpg"
+              },
+              {
+                name: "Mike Johnson",
+                role: "Fitness Expert",
+                image: "/team/mike-johnson.jpg"
+              },
+              {
+                name: "Sarah Wilson",
+                role: "Customer Success",
+                image: "/team/sarah-wilson.jpg"
+              }
+            ].map((member, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative h-64">
                   <Image
-                    src="/images/team-1.jpg"
-                    alt="Rahul Sharma - Founder & CEO"
+                    src={member.image}
+                    alt={member.name}
                     fill
-                    sizes="192px"
                     className="object-cover"
                   />
                 </div>
-                <h3 className="text-xl font-bold">Rahul Sharma</h3>
-                <p className="text-primary font-medium">Founder & CEO</p>
-              </div>
-
-              <div className="text-center">
-                <div className="relative w-48 h-48 mx-auto mb-5 rounded-full overflow-hidden">
-                  <Image
-                    src="/images/team-2.jpg"
-                    alt="Priya Patel - Chief Nutritionist"
-                    fill
-                    sizes="192px"
-                    className="object-cover"
-                  />
+                <div className="p-6 text-center">
+                  <h3 className="text-lg font-semibold mb-1 text-gray-800">
+                    {member.name}
+                  </h3>
+                  <p className="text-red-600 font-medium">
+                    {member.role}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold">Priya Patel</h3>
-                <p className="text-primary font-medium">Chief Nutritionist</p>
               </div>
-
-              <div className="text-center">
-                <div className="relative w-48 h-48 mx-auto mb-5 rounded-full overflow-hidden">
-                  <Image
-                    src="/images/team-3.jpg"
-                    alt="Arjun Kapoor - Head of Product"
-                    fill
-                    sizes="192px"
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold">Arjun Kapoor</h3>
-                <p className="text-primary font-medium">Head of Product</p>
-              </div>
-
-              <div className="text-center">
-                <div className="relative w-48 h-48 mx-auto mb-5 rounded-full overflow-hidden">
-                  <Image
-                    src="/images/team-4.jpg"
-                    alt="Meera Singh - Customer Experience"
-                    fill
-                    sizes="192px"
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold">Meera Singh</h3>
-                <p className="text-primary font-medium">Customer Experience</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      {/* Custom content from CMS if available */}
-      {content && content.content && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto prose prose-lg">
-              <div dangerouslySetInnerHTML={{ __html: content.content }} />
-            </div>
-          </div>
-        </section>
-      )}
-    </main>
+      </div>
+    </div>
   );
 }

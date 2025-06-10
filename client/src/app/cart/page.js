@@ -231,12 +231,10 @@ export default function CartPage() {
 
   if (loading && !cart.items.length) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Cart</h1>
-          <div className="flex justify-center items-center h-64">
-            <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h1 className="text-2xl font-semibold text-gray-700">Loading Cart...</h1>
         </div>
       </div>
     );
@@ -244,25 +242,21 @@ export default function CartPage() {
 
   if ((!cart.items || cart.items.length === 0) && !error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
-        <div className="container mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Cart</h1>
-          <div className="bg-white p-12 rounded-2xl shadow-lg text-center border border-gray-100 max-w-md mx-auto">
-            <div className="inline-flex justify-center items-center bg-yellow-100 p-6 rounded-full mb-6">
-              <ShoppingBag className="h-12 w-12 text-yellow-500" />
-            </div>
-            <h2 className="text-2xl font-bold mb-3 text-gray-800">
-              Your cart is empty
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Looks like you haven&apos;t added any products to your cart yet.
-            </p>
-            <Link href="/products">
-              <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
-                Start Shopping
-              </Button>
-            </Link>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-10 text-center">
+          <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+            <ShoppingBag className="h-12 w-12 text-gray-600" />
           </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Your Cart is Empty</h1>
+          <p className="text-gray-600 mb-8">
+            Explore our products and add some items to get started.
+          </p>
+          <Link href="/products">
+            <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
+              <ShoppingBag className="mr-2 h-5 w-5" />
+              Browse Products
+            </Button>
+          </Link>
         </div>
       </div>
     );

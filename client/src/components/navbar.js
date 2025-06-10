@@ -340,11 +340,11 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm" ref={navbarRef}>
+    <header className="sticky top-0 z-50 bg-white shadow-md" ref={navbarRef}>
       <Toaster position="top-center" />
 
       {/* Top bar */}
-      <div className="bg-gradient-to-r from-[#ce801f] to-[#ce801f] text-white py-2 md:py-1.5 text-center text-xs md:text-sm font-medium">
+      <div className="bg-primary text-white py-2 text-center text-xs md:text-sm font-semibold tracking-wide">
         Free shipping on all orders over ₹999
       </div>
 
@@ -355,7 +355,7 @@ export function Navbar() {
             {/* Menu toggle for mobile */}
             <div className="flex items-center md:hidden gap-2">
               <button
-                className="p-2 text-gray-600 hover:text-yellow-500 transition-colors focus:outline-none"
+                className="p-2 text-primary hover:text-secondary transition-colors focus:outline-none"
                 onClick={() => setIsMenuOpen(true)}
                 aria-label="Open menu"
               >
@@ -365,322 +365,39 @@ export function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <Image src="/logo (2).png" width={64} height={64} alt="Logo" className="h-16" />
+              <div className="bg-primary px-5 py-2 rounded-xl shadow-lg">
+                <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-white uppercase">muscelx</span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link
-                href="/products"
-                className="font-medium text-gray-700 hover:text-yellow-500 transition-colors"
-              >
-                All Products
-              </Link>
-
-              {/* Categories dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => handleDropdownHover("categories")}
-                onMouseLeave={handleDropdownLeave}
-              >
-                <button
-                  className={`font-medium ${
-                    activeDropdown === "categories"
-                      ? "text-yellow-500"
-                      : "text-gray-700"
-                  } hover:text-yellow-500 transition-all duration-200 flex items-center focus:outline-none group`}
-                  onClick={() => toggleDropdown("categories")}
-                  aria-expanded={activeDropdown === "categories"}
-                >
-                  Categories
-                  <ChevronDown
-                    className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                      activeDropdown === "categories" ? "rotate-180" : ""
-                    } group-hover:rotate-180`}
-                  />
-                </button>
-                <div
-                  className={`absolute left-0 top-full mt-1 w-64 bg-white shadow-lg rounded-xl py-2 border border-gray-100 z-50 transition-all duration-300 ease-in-out transform origin-top ${
-                    activeDropdown === "categories"
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                  }`}
-                >
-                  {categories.map((category) => (
-                    <div key={category.id}>
-                      <Link
-                        href={`/category/${category.slug}`}
-                        className="block px-4 py-2.5 hover:bg-yellow-50 hover:text-yellow-500 transition-all duration-200"
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {category.name}
-                      </Link>
-                    </div>
-                  ))}
-                  <div className="pt-2 mt-2 border-t border-gray-100">
-                    <Link
-                      href="/categories"
-                      className="block px-4 py-2.5 text-yellow-500 font-medium hover:bg-yellow-50 transition-all duration-200"
-                      onClick={() => setActiveDropdown(null)}
-                    >
-                      View All Categories
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {[
-                { href: "/blog", label: "Blog" },
-                { href: "/about", label: "About Us" },
-                { href: "/contact", label: "Contact" },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="font-medium text-gray-700 hover:text-yellow-500 transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <nav className="hidden md:flex items-center gap-8 text-base font-semibold">
+              <Link href="/products" className="hover:text-primary transition-colors">Products</Link>
+              <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
+              <Link href="/about" className="hover:text-primary transition-colors">About</Link>
+              <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
+              <Link href="/category/cate1" className="hover:text-primary transition-colors">Categories</Link>
             </nav>
 
             {/* Search, Cart, Account */}
-            <div className="flex items-center space-x-1 md:space-x-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* Search button/form */}
-              <div className="relative">
-                {isSearchExpanded ? (
-                  <>
-                    <div
-                      className="fixed inset-0 bg-black/50 z-40"
-                      onClick={() => setIsSearchExpanded(false)}
-                    />
-                    <div className="fixed inset-x-0 top-0 z-50 w-full animate-in slide-in-from-top duration-300 p-2">
-                      <form
-                        onSubmit={handleSearch}
-                        className="relative bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden max-h-[90vh] md:max-w-[600px] mx-auto"
-                      >
-                        <div className="flex items-center px-4 py-4 border-b border-gray-100 bg-gradient-to-r from-yellow-500 to-yellow-600">
-                          <h3 className="text-lg font-semibold text-white">
-                            Search Products
-                          </h3>
-                          <button
-                            type="button"
-                            className="ml-auto p-2 rounded-full hover:bg-white/20 transition-all duration-200"
-                            onClick={() => setIsSearchExpanded(false)}
-                            aria-label="Close search"
-                          >
-                            <X className="h-6 w-6 text-white" />
-                          </button>
-                        </div>
-
-                        <div className="p-5">
-                          <div className="relative">
-                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <Input
-                              ref={searchInputRef}
-                              type="search"
-                              placeholder="Search for products..."
-                              className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 focus:border-yellow-500 focus:ring-yellow-500 rounded-xl text-base"
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              autoComplete="off"
-                            />
-                            {searchQuery && (
-                              <button
-                                type="button"
-                                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
-                                onClick={() => setSearchQuery("")}
-                                aria-label="Clear search"
-                              >
-                                <X className="h-5 w-5" />
-                              </button>
-                            )}
-                          </div>
-
-                          <div className="mt-4">
-                            <h4 className="text-sm font-medium text-gray-500 mb-2">
-                              Popular Searches
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {[
-                                "Protein Powder",
-                                "Dumbbells",
-                                "Resistance Bands",
-                                "Pre-Workout",
-                              ].map((term) => (
-                                <button
-                                  key={term}
-                                  type="button"
-                                  onClick={() => {
-                                    setSearchQuery(term);
-                                    handleSearch({ preventDefault: () => {} });
-                                  }}
-                                  className="px-3 py-1.5 text-sm bg-yellow-50 hover:bg-yellow-100 text-yellow-600 hover:text-yellow-700 rounded-full transition-all duration-200"
-                                >
-                                  {term}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 flex justify-between">
-                          <button
-                            type="button"
-                            onClick={() => setIsSearchExpanded(false)}
-                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium text-sm"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-200 flex items-center gap-2 font-medium text-sm"
-                          >
-                            <Search className="h-4 w-4" />
-                            Search
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => setIsSearchExpanded(true)}
-                    className="p-2 text-gray-600 hover:text-yellow-500 transition-all duration-200 focus:outline-none hover:scale-110"
-                    aria-label="Search"
-                  >
-                    <Search className="h-5 w-5" />
-                  </button>
+              <button
+                className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors"
+                onClick={() => setIsSearchExpanded(true)}
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+              <Link href="/cart" className="relative p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors">
+                <ShoppingCart className="h-5 w-5" />
+                {cart?.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full px-1.5 py-0.5 font-bold">{cart.length}</span>
                 )}
-              </div>
-
-              {/* Wishlist */}
-              <Link
-                href="/wishlist"
-                className="p-2 text-gray-600 hover:text-yellow-500 transition-colors relative"
-              >
-                <Heart className="h-5 w-5" />
               </Link>
-
-              {/* Cart */}
-              <ClientOnly>
-                <Link
-                  href="/cart"
-                  className="p-2 text-gray-600 hover:text-yellow-500 transition-colors relative"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  {cart && cart.items?.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-yellow-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                      {cart.items.reduce((acc, item) => acc + item.quantity, 0)}
-                    </span>
-                  )}
-                </Link>
-              </ClientOnly>
-
-              {/* Account dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => handleDropdownHover("account")}
-                onMouseLeave={handleDropdownLeave}
-              >
-                <ClientOnly>
-                  <button
-                    className={`p-2 ${
-                      activeDropdown === "account"
-                        ? "text-yellow-500"
-                        : "text-gray-600"
-                    } hover:text-yellow-500 transition-all duration-200 flex items-center focus:outline-none group`}
-                    onClick={() => toggleDropdown("account")}
-                    aria-expanded={activeDropdown === "account"}
-                  >
-                    {isAuthenticated ? (
-                      <User className="h-5 w-5" />
-                    ) : (
-                      <LogIn className="h-5 w-5" />
-                    )}
-                    <ChevronDown
-                      className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                        activeDropdown === "account" ? "rotate-180" : ""
-                      } group-hover:rotate-180`}
-                    />
-                  </button>
-
-                  <div
-                    className={`absolute right-0 top-full mt-1 w-64 bg-white shadow-lg rounded-xl py-2 border border-gray-100 z-50 transition-all duration-300 ease-in-out transform origin-top ${
-                      activeDropdown === "account"
-                        ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }`}
-                  >
-                    {isAuthenticated ? (
-                      <>
-                        <div className="px-4 py-3 border-b border-gray-100 mb-2 bg-yellow-50">
-                          <p className="font-medium text-gray-800">
-                            Hi, {user?.name || "User"}
-                          </p>
-                          <p className="text-xs text-gray-500 truncate">
-                            {user?.email}
-                          </p>
-                        </div>
-                        <Link
-                          href="/account"
-                          className="block px-4 py-2 hover:bg-yellow-50 hover:text-yellow-500 transition-all duration-200"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          My Account
-                        </Link>
-                        <Link
-                          href="/account/orders"
-                          className="block px-4 py-2 hover:bg-yellow-50 hover:text-yellow-500 transition-all duration-200"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          My Orders
-                        </Link>
-                        <Link
-                          href="/wishlist"
-                          className="block px-4 py-2 hover:bg-yellow-50 hover:text-yellow-500 transition-all duration-200"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          My Wishlist
-                        </Link>
-                        <button
-                          onClick={() => {
-                            handleLogout();
-                            setActiveDropdown(null);
-                          }}
-                          className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-all duration-200 mt-2 border-t border-gray-100"
-                        >
-                          Logout
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <div className="px-4 py-3">
-                          <Link
-                            href="/login"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <Button className="w-full mb-2 hover:scale-[1.02] transition-transform duration-200 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 rounded-xl">
-                              Login
-                            </Button>
-                          </Link>
-                          <Link
-                            href="/register"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <Button
-                              variant="outline"
-                              className="w-full hover:scale-[1.02] transition-transform duration-200 text-yellow-500 border-yellow-200 hover:bg-yellow-50 rounded-xl"
-                            >
-                              Register
-                            </Button>
-                          </Link>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </ClientOnly>
-              </div>
+              <Link href="/account" className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors">
+                <User className="h-5 w-5" />
+              </Link>
             </div>
           </div>
         </div>
