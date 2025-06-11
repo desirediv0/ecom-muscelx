@@ -113,8 +113,12 @@ export default function AddressesPage() {
       <div className="bg-gradient-to-r from-red-600 to-red-500 rounded-2xl p-10 text-white shadow-xl border-2 border-red-200">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-extrabold mb-2 tracking-tight">My Addresses</h1>
-            <p className="text-red-100 text-lg">Manage your delivery addresses for faster checkout</p>
+            <h1 className="text-4xl font-extrabold mb-2 tracking-tight">
+              My Addresses
+            </h1>
+            <p className="text-red-100 text-lg">
+              Manage your delivery addresses for faster checkout
+            </p>
           </div>
           <div className="bg-white/30 p-4 rounded-xl shadow-lg">
             <MapPin className="h-10 w-10 text-red-600" />
@@ -144,8 +148,12 @@ export default function AddressesPage() {
                 <Plus className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-red-600">Add New Address</h2>
-                <p className="text-red-500">Fill in the details for your new address</p>
+                <h2 className="text-2xl font-bold text-red-600">
+                  Add New Address
+                </h2>
+                <p className="text-red-500">
+                  Fill in the details for your new address
+                </p>
               </div>
             </div>
           </div>
@@ -166,7 +174,9 @@ export default function AddressesPage() {
                 <Edit className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-red-600">Edit Address</h2>
+                <h2 className="text-2xl font-bold text-red-600">
+                  Edit Address
+                </h2>
                 <p className="text-red-500">Update your address information</p>
               </div>
             </div>
@@ -188,11 +198,13 @@ export default function AddressesPage() {
             <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
               <MapPin className="h-12 w-12 text-gray-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">No Addresses Found</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+              No Addresses Found
+            </h1>
             <p className="text-gray-600 mb-8">
               Add an address to make checkout faster and easier.
             </p>
-            <Button 
+            <Button
               onClick={() => setShowAddForm(true)}
               className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors"
             >
@@ -216,7 +228,7 @@ export default function AddressesPage() {
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-red-600 text-lg">
+                      <h3 className="font-bold text-black text-lg">
                         {address.name}
                       </h3>
                       {address.isDefault && (
@@ -234,21 +246,19 @@ export default function AddressesPage() {
               <div className="p-8">
                 <div className="space-y-3 mb-6">
                   <div className="flex items-start">
-                    <Home className="h-4 w-4 text-red-600 mr-3 mt-1 flex-shrink-0" />
+                    <Home className="h-4 w-4 text-black mr-3 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-red-600 font-bold">
-                        {address.street}
-                      </p>
-                      <p className="text-red-500">
+                      <p className="text-black font-bold">{address.street}</p>
+                      <p className="text-black">
                         {address.city}, {address.state} {address.postalCode}
                       </p>
-                      <p className="text-red-500">{address.country}</p>
+                      <p className="text-black">{address.country}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center">
-                    <Phone className="h-4 w-4 text-red-600 mr-3" />
-                    <p className="text-red-600 font-bold">{address.phone}</p>
+                    <Phone className="h-4 w-4 text-black mr-3" />
+                    <p className="text-black font-bold">{address.phone}</p>
                   </div>
                 </div>
 

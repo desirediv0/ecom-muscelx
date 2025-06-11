@@ -168,7 +168,7 @@ export function Navbar() {
                   <ShoppingBag className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-xl font-bold text-white">
-                  Power Fitness
+                  muscelx
                 </span>
               </div>
             </Link>

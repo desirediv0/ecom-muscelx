@@ -87,7 +87,7 @@ export default function Home() {
                   </Button>
                 </Link>
                 <Link href="/categories">
-                  <Button variant="outline" className="w-full sm:w-auto border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 rounded-xl transition-all duration-300">
+                  <Button variant="outline" className="w-full sm:w-auto border-2 bg-white text-red-500 border-white  hover:bg-red-50/10 text-lg px-8 py-6 rounded-xl transition-all duration-300">
                     Explore Categories
                   </Button>
                 </Link>
@@ -100,7 +100,7 @@ export default function Home() {
               className="relative h-[400px] md:h-[500px]"
             >
               <Image
-                src="/c3.jpg"
+                src="/img.webp"
                 alt="Fitness Supplements"
                 fill
                 className="object-contain"

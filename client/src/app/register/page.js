@@ -112,7 +112,7 @@ export default function RegisterPage() {
                   <ShoppingBag className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold text-gray-800">
-                  Power Fitness
+                  muscelx
                 </span>
               </div>
             </Link>
@@ -129,7 +129,7 @@ export default function RegisterPage() {
                   <UserPlus className="h-8 w-8 text-white" />
                 </div>
                 <h1 className="text-2xl font-bold text-white mb-2">
-                  Join Power Fitness
+                  Join muscelx
                 </h1>
                 <p className="text-yellow-100">
                   Start your fitness journey today
