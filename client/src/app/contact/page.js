@@ -94,7 +94,7 @@ export default function ContactPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-full mb-8 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-full mb-8 shadow-lg">
             <MessageSquare className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
@@ -108,19 +108,20 @@ export default function ContactPage() {
             <span className="text-red-600 font-medium">Contact</span>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions? We're here to help. Get in touch with our team.
+            Have questions? We&apos;re here to help. Get in touch with our team.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          <div className="bg-white max-h-min rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
+            <h2 className="text-2xl font-bold mb-8 text-gray-800 flex items-center gap-2">
+              <Send className="h-6 w-6 text-primary" />
               Send us a Message
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="name" className="text-gray-700">
+                <Label htmlFor="name" className="text-base font-medium text-gray-700 mb-1 block">
                   Your Name
                 </Label>
                 <Input
@@ -128,13 +129,14 @@ export default function ContactPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="mt-1"
+                  className="w-full px-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors duration-200"
                   required
+                  placeholder="John Doe"
                 />
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-gray-700">
+                <Label htmlFor="email" className="text-base font-medium text-gray-700 mb-1 block">
                   Email Address
                 </Label>
                 <Input
@@ -143,13 +145,14 @@ export default function ContactPage() {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="mt-1"
+                  className="w-full px-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors duration-200"
                   required
+                  placeholder="johndoe@example.com"
                 />
               </div>
 
               <div>
-                <Label htmlFor="subject" className="text-gray-700">
+                <Label htmlFor="subject" className="text-base font-medium text-gray-700 mb-1 block">
                   Subject
                 </Label>
                 <Input
@@ -157,13 +160,14 @@ export default function ContactPage() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="mt-1"
+                  className="w-full px-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors duration-200"
                   required
+                  placeholder="How can we help you?"
                 />
               </div>
 
               <div>
-                <Label htmlFor="message" className="text-gray-700">
+                <Label htmlFor="message" className="text-base font-medium text-gray-700 mb-1 block">
                   Message
                 </Label>
                 <Textarea
@@ -171,23 +175,27 @@ export default function ContactPage() {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  className="mt-1 min-h-[150px]"
+                  className="w-full px-4 py-2.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors duration-200 min-h-[150px] resize-y"
                   required
+                  placeholder="Write your message here..."
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                disabled={loading}
+                className="w-full bg-primary hover:bg-red-600 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-4 flex items-center justify-center gap-2"
+                disabled={formLoading}
               >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Sending...
-                  </div>
+                {formLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Sending...</span>
+                  </>
                 ) : (
-                  "Send Message"
+                  <>
+                    <Send className="h-5 w-5" />
+                    <span>Send Message</span>
+                  </>
                 )}
               </Button>
             </form>
@@ -202,7 +210,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center text-white">
+                    <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white">
                       <MapPin className="h-6 w-6" />
                     </div>
                   </div>
@@ -219,7 +227,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center text-white">
+                    <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white">
                       <Phone className="h-6 w-6" />
                     </div>
                   </div>
@@ -236,7 +244,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center text-white">
+                    <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white">
                       <Mail className="h-6 w-6" />
                     </div>
                   </div>
@@ -270,7 +278,7 @@ export default function ContactPage() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-gray-50 hover:bg-red-600 text-gray-600 hover:text-white rounded-xl flex items-center justify-center transition-colors duration-300"
+                    className="w-12 h-12 bg-gray-50 hover:bg-primary text-gray-600 hover:text-white rounded-xl flex items-center justify-center transition-colors duration-300"
                   >
                     {social.icon}
                   </a>

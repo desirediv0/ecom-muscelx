@@ -29,7 +29,7 @@ const CartItem = React.memo(
       <div className="bg-white rounded-xl border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           <div className="md:col-span-6 flex items-center space-x-4">
-            <div className="relative h-20 w-20 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl overflow-hidden flex-shrink-0">
+            <div className="relative h-20 w-20 bg-gradient-to-br from-red-50 to-red-100 rounded-xl overflow-hidden flex-shrink-0">
               <Image
                 src={item.product.image || "/placeholder.svg"}
                 alt={item.product.name}
@@ -40,7 +40,7 @@ const CartItem = React.memo(
             <div className="flex-1">
               <Link
                 href={`/products/${item.product.slug}`}
-                className="font-semibold text-gray-800 hover:text-yellow-600 transition-colors line-clamp-2"
+                className="font-semibold text-gray-800 hover:text-red-600 transition-colors line-clamp-2"
               >
                 {item.product.name}
               </Link>
@@ -263,7 +263,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
@@ -311,7 +311,7 @@ export default function CartPage() {
               <Link href="/products">
                 <Button
                   variant="outline"
-                  className="border-yellow-200 text-yellow-600 hover:bg-yellow-50 px-6 py-3 rounded-xl font-semibold"
+                  className="border-red-200 hover:text-white text-red-600 hover:bg-red-500 px-6 py-3 rounded-xl font-semibold"
                 >
                   Continue Shopping
                 </Button>
@@ -323,7 +323,7 @@ export default function CartPage() {
                 disabled={loading}
               >
                 {loading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin hover:text-red-500" />
                 ) : null}
                 Clear Cart
               </Button>
@@ -340,7 +340,7 @@ export default function CartPage() {
               {/* Apply Coupon */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-3 flex items-center text-gray-700">
-                  <Tag className="h-4 w-4 mr-2 text-yellow-500" />
+                  <Tag className="h-4 w-4 mr-2 text-red-500" />
                   Have a coupon?
                 </h3>
                 {coupon ? (
@@ -388,13 +388,13 @@ export default function CartPage() {
                         className={`flex-1 h-12 px-4 border-2 rounded-xl transition-colors ${
                           couponError
                             ? "border-red-300 focus:border-red-500"
-                            : "border-gray-200 focus:border-yellow-500"
+                            : "border-gray-200 focus:border-red-500"
                         }`}
                       />
                       <Button
                         type="submit"
                         disabled={couponLoading}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 rounded-xl"
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl"
                       >
                         {couponLoading ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -446,7 +446,7 @@ export default function CartPage() {
 
                 <div className="flex justify-between font-bold text-xl mt-6 pt-6 border-t border-gray-100">
                   <span>Total</span>
-                  <span className="text-yellow-600">
+                  <span className="text-red-600">
                     {formatCurrency(totals.subtotal - totals.discount)}
                   </span>
                 </div>
@@ -454,7 +454,7 @@ export default function CartPage() {
 
               {/* Checkout Button */}
               <Button
-                className="w-full mt-6 h-14 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full mt-6 h-14 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-lg rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
                 onClick={handleCheckout}
               >
                 <span className="flex items-center justify-center">

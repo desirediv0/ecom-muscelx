@@ -100,16 +100,16 @@ export default function Home() {
               className="relative h-[400px] md:h-[500px]"
             >
               <Image
-                src="/hero-image.png"
+                src="/c3.jpg"
                 alt="Fitness Supplements"
                 fill
                 className="object-contain"
                 priority
-              />
+              /> 
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> 
 
       {/* Features Section */}
       <section className="py-16 bg-gray-50">
@@ -159,7 +159,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
+              > 
                 <Link href={`/category/${category.slug}`}>
                   <div className="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
                     <Image
@@ -167,16 +167,16 @@ export default function Home() {
                       alt={category.name}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
+                    />         
                     <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <h3 className="text-lg font-semibold text-white">
                         {category.name}
-                      </h3>
+                      </h3>     
                       <p className="text-sm text-white/80">
                         {category.productCount || 0} Products
-                      </p>
-                    </div>
+                      </p> 
+                    </div>  
                   </div>
                 </Link>
               </motion.div>

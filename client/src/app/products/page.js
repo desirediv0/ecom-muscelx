@@ -441,7 +441,7 @@ function ProductsContent() {
                 <div className="flex gap-3">
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-red-600 hover:underline font-medium"
+                    className="text-sm hover:bg-red-600 font-medium rounded px-4"
                   >
                     Clear all
                   </button>
@@ -471,13 +471,13 @@ function ProductsContent() {
                     name="search"
                     placeholder="Search products..."
                     defaultValue={filters.search}
-                    className="w-full pr-10 border-gray-200 focus:border-red-600 focus:ring-red-600 rounded-xl"
+                    className="w-full pr-10 border-gray-300 focus:border-red-600 focus:ring-red-600 rounded-xl"
                   />
                   <button
                     type="submit"
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-600 hover:text-red-700"
                   >
-                    <Search className="h-4 w-4" />
+                    <Search className="h-5 w-5 bg-white rounded-lg text-black" />
                   </button>
                 </form>
               </div>
@@ -843,20 +843,20 @@ function ProductsContent() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
+                          className="w-10 h-10 p-0 bg-red-500 hover:bg-red-600 hover:text-white rounded-full shadow-md"
                         >
-                          <Heart className="h-4 w-4" />
+                          <Heart className="h-5 w-5" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
+                          className="w-10 h-10 p-0 bg-red-500 hover:bg-red-600 hover:text-white rounded-full shadow-md"
                           onClick={(e) => {
                             e.preventDefault();
                             handleQuickView(product);
                           }}
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 " />
                         </Button>
                       </div>
                     </div>
@@ -913,7 +913,7 @@ function ProductsContent() {
                         </p>
                       )}
 
-                      <Button
+                      {/* <Button
                         className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
                         onClick={(e) => {
                           e.preventDefault();
@@ -922,7 +922,7 @@ function ProductsContent() {
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />
                         Add to Cart
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 ))}

@@ -123,7 +123,7 @@ function BlogContent() {
                   <Link href={`/blog/${post.slug}`}>
                     <Button
                       variant="link"
-                      className="px-0 text-red-600 hover:text-red-700 font-semibold group"
+                      className="px-0 text-white hover:text-white bg-red-500 hover:bg-red-600 p-2 font-semibold group"
                     >
                       Read More
                       <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />

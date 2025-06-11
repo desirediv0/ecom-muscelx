@@ -225,13 +225,13 @@ export default function CategoryPage() {
 
             <div className="flex items-center space-x-4">
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-gray-100 rounded-lg p-1">
+              <div className="flex items-center bg-gray-100 rounded-lg p-2 space-x-2">
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded-md transition-colors ${
                     viewMode === "grid"
                       ? "bg-white text-red-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
+                      : "text-gray-100 hover:text-gray-200"
                   }`}
                 >
                   <Grid3X3 className="h-4 w-4" />
@@ -241,7 +241,7 @@ export default function CategoryPage() {
                   className={`p-2 rounded-md transition-colors ${
                     viewMode === "list"
                       ? "bg-white text-red-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
+                      : "text-gray-100 hover:text-gray-200"
                   }`}
                 >
                   <List className="h-4 w-4" />

@@ -27,7 +27,7 @@
     --popover-foreground: 0 0% 13%;
     --primary: 0 90% 60%; /* Strong red */
     --primary-foreground: 0 0% 100%;
-    --secondary: 24 95% 53%;
+    --secondary: 0 85% 55%; /* Slightly darker red for hover states */
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
@@ -38,13 +38,9 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 90% 60%;
-    --chart-1: 0 90% 60%;
-    --chart-2: 24 95% 53%;
-    --chart-3: 0 0% 13%;
-    --chart-4: 0 0% 96.1%;
-    --chart-5: 0 84.2% 60.2%;
     --radius: 0.75rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -52,148 +48,162 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 24 95% 53%;
+    --primary: 0 90% 60%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 24 95% 53%;
+    --secondary: 0 85% 55%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 24 95% 53%;
+    --accent: 0 90% 60%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 24 95% 53%;
-    --chart-1: 24 95% 53%;
-    --chart-2: 24 95% 53%;
-    --chart-3: 24 95% 53%;
-    --chart-4: 24 95% 53%;
-    --chart-5: 24 95% 53%;
-  }
-  body {
-    @apply bg-white text-gray-900 font-jost antialiased;
-  }
-  a {
-    @apply text-primary hover:text-secondary transition-colors underline-offset-2;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-gray-900;
-  }
-  button, .btn, .Button {
-    @apply bg-primary text-white font-semibold rounded-lg shadow hover:bg-secondary transition-all;
+    --ring: 0 90% 60%;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  p,
-  .description,
-  .desc,
-  .product-desc,
-  .about-text {
-    @apply font-poppins;
-  }
+/* Base styles */
+body {
+  background-color: white;
+  color: hsl(var(--foreground));
+  font-family: 'Jost', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Add typography styles for blog content */
-@layer components {
-  .prose {
-    @apply text-gray-700 font-poppins;
-  }
+a {
+  color: hsl(var(--primary));
+  transition: color 0.2s;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
 
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    @apply text-gray-900 font-bold mt-6 mb-4 font-jost;
-  }
+a:hover {
+  color: hsl(var(--secondary));
+}
 
-  .prose h1 {
-    @apply text-3xl;
-  }
+button, .btn, .Button {
+  background-color: hsl(var(--primary));
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+}
 
-  .prose h2 {
-    @apply text-2xl;
-  }
+button:hover, .btn:hover, .Button:hover {
+  background-color: hsl(var(--secondary));
+}
 
-  .prose h3 {
-    @apply text-xl;
-  }
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: hsl(var(--foreground));
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
 
-  .prose p {
-    @apply my-4 font-poppins;
-  }
+.prose {
+  color: hsl(var(--foreground));
+  font-family: 'Poppins', sans-serif;
+}
 
-  .prose ul,
-  .prose ol {
-    @apply my-4 pl-6;
-  }
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: hsl(var(--foreground));
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Jost', sans-serif;
+}
 
-  .prose ul {
-    @apply list-disc;
-  }
+.prose h1 { font-size: 1.875rem; line-height: 2.25rem; }
+.prose h2 { font-size: 1.5rem; line-height: 2rem; }
+.prose h3 { font-size: 1.25rem; line-height: 1.75rem; }
 
-  .prose ol {
-    @apply list-decimal;
-  }
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
 
-  .prose li {
-    @apply mb-2;
-  }
+.prose ul,
+.prose ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
 
-  .prose a {
-    @apply text-[#F47C20] hover:text-[#1C4E80] underline;
-  }
+.prose ul { list-style-type: disc; }
+.prose ol { list-style-type: decimal; }
+.prose li { margin-bottom: 0.5rem; }
 
-  .prose blockquote {
-    @apply pl-4 border-l-4 border-gray-200 italic my-4;
-  }
+.prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
 
-  .prose code {
-    @apply bg-gray-100 px-1 py-0.5 rounded text-gray-800 font-mono text-sm;
-  }
+.prose a:hover {
+  color: hsl(var(--secondary));
+}
 
-  .prose pre {
-    @apply bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto my-4 font-mono text-sm;
-  }
+.prose blockquote {
+  padding-left: 1rem;
+  border-left: 4px solid hsl(var(--border));
+  font-style: italic;
+  margin: 1rem 0;
+}
 
-  .prose pre code {
-    @apply bg-transparent text-inherit p-0;
-  }
+.prose code {
+  background-color: hsl(var(--muted));
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
 
-  .prose img {
-    @apply rounded-md max-w-full h-auto my-4;
-  }
+.prose pre {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
 
-  .prose strong,
-  .prose b {
-    @apply font-bold;
-  }
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+}
 
-  .prose em,
-  .prose i {
-    @apply italic;
-  }
+.prose img {
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
 
-  /* Product thumbnails carousel */
-  .embla-thumbs {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
+/* Product thumbnails carousel */
+.embla-thumbs {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-  .embla-thumbs::-webkit-scrollbar {
-    display: none;
-  }
+.embla-thumbs::-webkit-scrollbar {
+  display: none;
+}
 
-  .embla-thumbs > div {
-    display: flex;
-    flex-direction: row;
-    min-width: 100%;
-  }
+.embla-thumbs > div {
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
 }
