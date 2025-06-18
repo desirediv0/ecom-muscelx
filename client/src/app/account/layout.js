@@ -59,9 +59,9 @@ export default function AccountLayout({ children }) {
             // For regular account pages, render with the sidebar
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Sidebar */}
-              <div className="md:col-span-1">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-24">
-                  <div className="space-y-1">
+              <div className="md:col-span-1 ">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6  sticky top-28">
+                  <div className="space-y-1 ">
                     <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center">
                       <div className="bg-red-100 p-2 rounded-lg mr-3">
                         <User className="h-5 w-5 text-red-600" />

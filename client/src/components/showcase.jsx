@@ -15,13 +15,13 @@ export default function GymSupplementBanner() {
   // Colors extracted from the Natural Supps logo
   const colors = {
     brown: "#5D4037", // Dark brown from mountains
-    gold: "#D68C16", // Gold/yellow from text
+    gold: "#D68C16", // Gold/red from text
     cream: "#F5F5DC", // Cream background
     darkBrown: "#3E2723", // Darker brown for accents
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-white to-[#FFEBEE] text-[#F44336] overflow-hidden">
+    <div className="w-full py-20 bg-gradient-to-b from-[#f7ccca] to-[#FFEBEE] text-[#F44336] overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="flex flex-col md:flex-row"
@@ -36,16 +36,6 @@ export default function GymSupplementBanner() {
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            {/* <div className="mb-6 max-w-[200px] md:max-w-[240px]">
-              <Image
-                src="/logo (2).png"
-                alt="Natural Supps Logo"
-                width={240}
-                height={120}
-                className="w-full h-auto"
-              />
-            </div> */}
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}

@@ -55,13 +55,13 @@ export default function ResendVerificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       {/* Header with logo */}
       <div className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <Link href="/" className="flex items-center justify-center">
             <div className="flex items-center space-x-2">
-              <div className="bg-yellow-500 p-2 rounded-lg">
+              <div className="bg-red-500 p-2 rounded-lg">
                 <ShoppingBag className="h-6 w-6 text-white" />
               </div>
               <span className="text-2xl font-bold text-gray-800">
@@ -76,14 +76,14 @@ export default function ResendVerificationPage() {
         <div className="w-full max-w-md">
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 px-8 py-8 text-center">
+            <div className="bg-gradient-to-r from-red-500 to-red-600 px-8 py-8 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
                 <Mail className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-2">
                 Resend Verification
               </h1>
-              <p className="text-yellow-100">
+              <p className="text-red-100">
                 Get a new verification link sent to your email
               </p>
             </div>
@@ -114,13 +114,13 @@ export default function ResendVerificationPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
-                          className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                          className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                           required
                         />
                       </div>
                       <Button
                         type="submit"
-                        className="w-full h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
+                        className="w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
                         disabled={status === "submitting"}
                       >
                         {status === "submitting" ? (
@@ -140,7 +140,7 @@ export default function ResendVerificationPage() {
                     <div className="mt-6 text-center">
                       <Link
                         href="/login"
-                        className="text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
+                        className="text-red-600 hover:text-red-700 font-medium transition-colors"
                       >
                         Back to Login
                       </Link>
@@ -150,7 +150,7 @@ export default function ResendVerificationPage() {
 
                 {status === "submitting" && (
                   <div className="flex flex-col items-center justify-center py-8">
-                    <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-4"></div>
                     <p className="text-gray-600">
                       Sending verification email...
                     </p>
@@ -173,7 +173,7 @@ export default function ResendVerificationPage() {
                       link.
                     </p>
                     <Link href="/login">
-                      <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
+                      <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105">
                         Back to Login
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>

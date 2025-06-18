@@ -91,7 +91,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 mt-28">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-full mb-8 shadow-lg">

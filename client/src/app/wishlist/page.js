@@ -97,7 +97,7 @@ export default function WishlistPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center mt-20">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-semibold text-gray-700">Loading Wishlist...</h1>
@@ -107,7 +107,7 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 mt-20">
       <ClientOnly>
         <div className="container mx-auto py-12 px-4">
           {/* Header Section */}

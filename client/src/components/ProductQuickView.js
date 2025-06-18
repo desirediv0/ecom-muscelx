@@ -472,7 +472,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                         key={star}
                         className={`h-5 w-5 ${
                           star <= Math.round(displayProduct.avgRating || 0)
-                            ? "text-yellow-400 fill-yellow-400"
+                            ? "text-red-400 fill-red-400"
                             : "text-red-100"
                         }`}
                       />

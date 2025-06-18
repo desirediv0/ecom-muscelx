@@ -110,7 +110,7 @@ export default function ReviewSection({ product }) {
                 Customer Reviews
               </h3>
               <div className="flex items-center">
-                <div className="flex text-yellow-400 mr-3">
+                <div className="flex text-red-400 mr-3">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -140,7 +140,7 @@ export default function ReviewSection({ product }) {
                       <p className="font-bold text-[#2C3E50] text-lg">
                         {review.user.name}
                       </p>
-                      <div className="flex text-yellow-400 mt-2">
+                      <div className="flex text-red-400 mt-2">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
@@ -216,7 +216,7 @@ export default function ReviewSection({ product }) {
                         className={`h-8 w-8 cursor-pointer transition-colors ${
                           formErrors.rating
                             ? "text-red-200 hover:text-red-400"
-                            : "text-gray-300 hover:text-yellow-400"
+                            : "text-gray-300 hover:text-red-400"
                         }`}
                         fill={reviewForm.rating >= rating ? "#FBBF24" : "none"}
                         onClick={() => handleRatingClick(rating)}
@@ -355,7 +355,7 @@ export default function ReviewSection({ product }) {
                         className={`h-8 w-8 cursor-pointer transition-colors ${
                           formErrors.rating
                             ? "text-red-200 hover:text-red-400"
-                            : "text-gray-300 hover:text-yellow-400"
+                            : "text-gray-300 hover:text-red-400"
                         }`}
                         fill={reviewForm.rating >= rating ? "#FBBF24" : "none"}
                         onClick={() => handleRatingClick(rating)}

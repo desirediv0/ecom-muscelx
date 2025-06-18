@@ -352,7 +352,7 @@ export default function CategoryPage() {
 
                 <div className="p-6">
                   <div className="flex items-center justify-center mb-3">
-                    <div className="flex text-yellow-400">
+                    <div className="flex text-red-400">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
@@ -446,7 +446,7 @@ export default function CategoryPage() {
                     <div className="flex flex-col h-full">
                       <div className="flex-1">
                         <div className="flex items-center mb-3">
-                          <div className="flex text-yellow-400">
+                          <div className="flex text-red-400">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}

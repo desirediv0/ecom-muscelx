@@ -142,7 +142,7 @@ export default function AccountPage() {
         >
           {/* Welcome Banner */}
           <motion.div
-            className="relative overflow-hidden bg-gradient-to-r from-red-500 to-red-600 rounded-3xl shadow-lg"
+            className="relative mt-16 overflow-hidden bg-gradient-to-r from-red-500 to-red-600 rounded-3xl shadow-lg"
             variants={itemVariants}
           >
             <div className="absolute right-0 top-0 w-64 h-64 bg-red-400 rounded-full -translate-y-1/2 translate-x-1/3 opacity-30"></div>

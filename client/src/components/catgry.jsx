@@ -48,7 +48,7 @@ const CircularCategoryCard = ({ category, index }) => {
             >
               <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm font-semibold bg-gradient-to-r from-yellow-500 to-yellow-100 bg-clip-text text-transparent">
+                <span className="text-sm font-semibold bg-gradient-to-r from-red-500 to-red-100 bg-clip-text text-transparent">
                   {category._count?.products || category.count || 0} Products
                 </span>
               </div>
@@ -96,8 +96,8 @@ const CircularCategoryCard = ({ category, index }) => {
           </div>
 
           {/* Decorative Elements */}
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-yellow-500/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-yellow-500/20 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-red-500/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-red-500/20 rounded-full blur-3xl" />
         </motion.div>
       </div>
     </motion.div>
@@ -165,8 +165,8 @@ const FeaturedCategoriesCarousel = ({ categories }) => {
           ))}
         </CarouselContent>
 
-        <CarouselPrevious className="hidden md:flex absolute -left-12 -translate-x-0 bg-white/80 backdrop-blur-sm border-none shadow-lg hover:bg-yellow-500 hover:text-white" />
-        <CarouselNext className="hidden md:flex absolute -right-12 -translate-x-0 bg-white/80 backdrop-blur-sm border-none shadow-lg hover:bg-yellow-500 hover:text-white" />
+        <CarouselPrevious className="hidden md:flex absolute -left-12 -translate-x-0 bg-white/80 backdrop-blur-sm border-none shadow-lg hover:bg-red-500 hover:text-white" />
+        <CarouselNext className="hidden md:flex absolute -right-12 -translate-x-0 bg-white/80 backdrop-blur-sm border-none shadow-lg hover:bg-red-500 hover:text-white" />
 
         {/* Dot indicators */}
         <div className="flex justify-center mt-8 gap-2">
@@ -177,7 +177,7 @@ const FeaturedCategoriesCarousel = ({ categories }) => {
                 onClick={() => api?.scrollTo(idx * 3)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   Math.floor(currentIndex / 3) === idx
-                    ? "bg-yellow-500 scale-110"
+                    ? "bg-red-500 scale-110"
                     : "bg-gray-300"
                 }`}
                 aria-label={`Go to slide group ${idx + 1}`}
@@ -239,7 +239,7 @@ const FeaturedCategoriesSection = () => {
           </motion.div>
 
           {/* Decorative Background Elements */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-yellow-300/20 to-yellow-300/20 rounded-full blur-3xl -z-10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-red-300/20 to-red-300/20 rounded-full blur-3xl -z-10" />
         </div>
 
         {categoriesLoading ? (
@@ -257,8 +257,8 @@ const FeaturedCategoriesSection = () => {
         ) : (
           <div className="relative">
             {/* Background Decorations */}
-            <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-300/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-300/10 rounded-full blur-3xl" />
+            <div className="absolute -top-40 -left-40 w-80 h-80 bg-red-300/10 rounded-full blur-3xl" />
+            <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-red-300/10 rounded-full blur-3xl" />
 
             <FeaturedCategoriesCarousel categories={categories} />
           </div>

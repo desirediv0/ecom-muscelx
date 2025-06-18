@@ -94,7 +94,7 @@ const BenefitsSec = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <section className="py-20 bg-gradient-to-br from-red-50 via-white to-red-50">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-20">
@@ -115,17 +115,17 @@ const BenefitsSec = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/80 to-yellow-800/90 z-10 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-900/80 to-red-800/90 z-10 flex items-center justify-center">
               <div className="text-white p-12 max-w-md">
                 <h3 className="text-3xl font-bold mb-6 leading-tight">
                   The highest quality for your fitness journey
                 </h3>
-                <p className="mb-6 text-yellow-100">
+                <p className="mb-6 text-red-100">
                   We carefully source and formulate each product to ensure you
                   get the best results for your fitness goals.
                 </p>
                 <Link href="/about">
-                  <button className="px-8 py-4 bg-white text-yellow-600 font-semibold rounded-xl hover:bg-yellow-50 transition-all duration-300 transform hover:scale-105">
+                  <button className="px-8 py-4 bg-white text-red-600 font-semibold rounded-xl hover:bg-red-50 transition-all duration-300 transform hover:scale-105">
                     LEARN MORE
                   </button>
                 </Link>
@@ -154,7 +154,7 @@ const BenefitsSec = () => {
                 <div className="flex items-start">
                   <div className="mr-5 mt-1">
                     <motion.div
-                      className="text-yellow-500 bg-yellow-100 p-3 rounded-xl"
+                      className="text-red-500 bg-red-100 p-3 rounded-xl"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ type: "spring", stiffness: 500 }}
                     >
@@ -162,7 +162,7 @@ const BenefitsSec = () => {
                     </motion.div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-3 text-gray-800 group-hover:text-yellow-600 transition-colors">
+                    <h3 className="text-xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors">
                       {benefit.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
@@ -192,7 +192,7 @@ const BenefitsSec = () => {
               className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100"
             >
               <motion.h4
-                className="text-4xl font-bold text-yellow-600 mb-2"
+                className="text-4xl font-bold text-red-600 mb-2"
                 initial={{ y: 20 }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}

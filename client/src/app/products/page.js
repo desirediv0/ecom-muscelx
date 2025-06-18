@@ -392,7 +392,7 @@ function ProductsContent() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 mt-20">
         {/* Hero Banner */}
         <div className="relative w-full h-[300px] mb-12 rounded-xl overflow-hidden shadow-xl">
           <Image
@@ -863,7 +863,7 @@ function ProductsContent() {
 
                     <div className="p-6">
                       <div className="flex items-center justify-center mb-3">
-                        <div className="flex text-yellow-400">
+                        <div className="flex text-red-400">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}

@@ -100,7 +100,7 @@ export default function RegisterPage() {
 
   return (
     <AuthRedirect>
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
         <Toaster position="top-center" />
 
         {/* Header with logo */}
@@ -108,7 +108,7 @@ export default function RegisterPage() {
           <div className="container mx-auto px-4 py-4">
             <Link href="/" className="flex items-center justify-center">
               <div className="flex items-center space-x-2">
-                <div className="bg-yellow-500 p-2 rounded-lg">
+                <div className="bg-red-500 p-2 rounded-lg">
                   <ShoppingBag className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold text-gray-800">
@@ -124,14 +124,14 @@ export default function RegisterPage() {
             {/* Registration Card */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               {/* Header Section */}
-              <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 px-8 py-8 text-center">
+              <div className="bg-gradient-to-r from-red-500 to-red-600 px-8 py-8 text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
                   <UserPlus className="h-8 w-8 text-white" />
                 </div>
                 <h1 className="text-2xl font-bold text-white mb-2">
                   Join muscelx
                 </h1>
-                <p className="text-yellow-100">
+                <p className="text-red-100">
                   Start your fitness journey today
                 </p>
               </div>
@@ -156,7 +156,7 @@ export default function RegisterPage() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Enter your full name"
-                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                       />
                     </div>
 
@@ -176,7 +176,7 @@ export default function RegisterPage() {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="Enter your email"
-                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                       />
                     </div>
 
@@ -195,7 +195,7 @@ export default function RegisterPage() {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="Enter your phone number"
-                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                       />
                     </div>
 
@@ -216,7 +216,7 @@ export default function RegisterPage() {
                           value={formData.password}
                           onChange={handleChange}
                           placeholder="Create password"
-                          className="w-full h-12 px-4 pr-12 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                          className="w-full h-12 px-4 pr-12 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                         />
                         <button
                           type="button"
@@ -248,17 +248,17 @@ export default function RegisterPage() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Confirm password"
-                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-yellow-500 transition-colors"
+                        className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-red-500 transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Password Requirements */}
-                  <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-                    <p className="text-sm text-yellow-800 font-medium mb-2">
+                  <div className="bg-red-50 p-4 rounded-xl border border-red-100">
+                    <p className="text-sm text-red-800 font-medium mb-2">
                       Password Requirements:
                     </p>
-                    <ul className="text-xs text-yellow-700 space-y-1">
+                    <ul className="text-xs text-red-700 space-y-1">
                       <li className="flex items-center space-x-2">
                         <CheckCircle className="h-3 w-3" />
                         <span>At least 8 characters long</span>
@@ -272,7 +272,7 @@ export default function RegisterPage() {
 
                   <Button
                     type="submit"
-                    className="w-full h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
+                    className="w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02]"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -300,7 +300,7 @@ export default function RegisterPage() {
                   <Link href="/login">
                     <Button
                       variant="outline"
-                      className="w-full h-12 border-2 border-yellow-200 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-300 font-semibold rounded-xl transition-all duration-200"
+                      className="w-full h-12 border-2 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-semibold rounded-xl transition-all duration-200"
                     >
                       Sign In Instead
                     </Button>
@@ -315,14 +315,14 @@ export default function RegisterPage() {
                 By creating an account, you agree to our{" "}
                 <Link
                   href="/terms"
-                  className="text-yellow-600 hover:text-yellow-700 font-medium"
+                  className="text-red-600 hover:text-red-700 font-medium"
                 >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
                 <Link
                   href="/privacy"
-                  className="text-yellow-600 hover:text-yellow-700 font-medium"
+                  className="text-red-600 hover:text-red-700 font-medium"
                 >
                   Privacy Policy
                 </Link>
