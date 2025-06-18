@@ -41,11 +41,11 @@ export default function AboutPage() {
     );
   }
 
-  return ( 
+  return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 mt-28">
         {/* Hero Section */}
-        <div className="text-center mb-16"> 
+        <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 rounded-full mb-8 shadow-lg">
             <Building2 className="h-10 w-10 text-white" />
           </div>
@@ -81,10 +81,17 @@ export default function AboutPage() {
               </h2>
               <div className="prose prose-lg max-w-none text-gray-600">
                 <p>
-                  Founded in 2010, MuscelX has grown from a small supplement store to one of India's leading fitness nutrition brands. Our journey began with a simple mission: to provide high-quality, scientifically-backed supplements that help people achieve their fitness goals.
+                  Founded in 2010, MuscelX has grown from a small supplement
+                  store to one of India&apos;s leading fitness nutrition brands.
+                  Our journey began with a simple mission: to provide
+                  high-quality, scientifically-backed supplements that help
+                  people achieve their fitness goals.
                 </p>
                 <p className="mt-4">
-                  Today, we're proud to serve thousands of fitness enthusiasts across the country, offering a wide range of products that meet the highest standards of quality and efficacy.
+                  Today, we&apos;re proud to serve thousands of fitness
+                  enthusiasts across the country, offering a wide range of
+                  products that meet the highest standards of quality and
+                  efficacy.
                 </p>
               </div>
             </div>
@@ -101,18 +108,21 @@ export default function AboutPage() {
               {
                 icon: <Award className="h-8 w-8" />,
                 title: "Quality First",
-                description: "We never compromise on the quality of our products, ensuring each supplement meets the highest standards."
+                description:
+                  "We never compromise on the quality of our products, ensuring each supplement meets the highest standards.",
               },
               {
                 icon: <Users className="h-8 w-8" />,
                 title: "Customer Focus",
-                description: "Your success is our success. We're committed to providing exceptional service and support."
+                description:
+                  "Your success is our success. We're committed to providing exceptional service and support.",
               },
               {
                 icon: <Beaker className="h-8 w-8" />,
                 title: "Scientific Approach",
-                description: "Our products are backed by scientific research and formulated for maximum effectiveness."
-              }
+                description:
+                  "Our products are backed by scientific research and formulated for maximum effectiveness.",
+              },
             ].map((value, index) => (
               <div
                 key={index}
@@ -124,9 +134,7 @@ export default function AboutPage() {
                 <h3 className="text-xl font-semibold mb-4 text-gray-800">
                   {value.title}
                 </h3>
-                <p className="text-gray-600">
-                  {value.description}
-                </p>
+                <p className="text-gray-600">{value.description}</p>
               </div>
             ))}
           </div>
@@ -142,23 +150,23 @@ export default function AboutPage() {
               {
                 name: "John Doe",
                 role: "Founder & CEO",
-                image: "/team/john-doe.jpg"
+                image: "/team/john-doe.jpg",
               },
               {
                 name: "Jane Smith",
                 role: "Head of Product Development",
-                image: "/team/jane-smith.jpg"
+                image: "/team/jane-smith.jpg",
               },
               {
                 name: "Mike Johnson",
                 role: "Fitness Expert",
-                image: "/team/mike-johnson.jpg"
+                image: "/team/mike-johnson.jpg",
               },
               {
                 name: "Sarah Wilson",
                 role: "Customer Success",
-                image: "/team/sarah-wilson.jpg"
-              }
+                image: "/team/sarah-wilson.jpg",
+              },
             ].map((member, index) => (
               <div
                 key={index}
@@ -176,9 +184,7 @@ export default function AboutPage() {
                   <h3 className="text-lg font-semibold mb-1 text-gray-800">
                     {member.name}
                   </h3>
-                  <p className="text-red-600 font-medium">
-                    {member.role}
-                  </p>
+                  <p className="text-red-600 font-medium">{member.role}</p>
                 </div>
               </div>
             ))}

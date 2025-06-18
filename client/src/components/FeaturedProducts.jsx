@@ -4,13 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { motion } from "framer-motion";
 import { Star, Eye, Heart, ShoppingCart } from "lucide-react";
 import ProductQuickView from "./ProductQuickView";
 
