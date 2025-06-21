@@ -40,5 +40,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default function ProductDetailPage({ params }) {
-  return <ProductContent slug={params.slug} />;
+  return (
+    <main className="bg-white mt-24">
+      <ProductContent slug={params.slug} />
+    </main>
+  );
 }
