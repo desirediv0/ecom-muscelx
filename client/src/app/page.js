@@ -78,7 +78,7 @@ export default function Home() {
     {
       name: "Rahul Sharma",
       role: "Professional Bodybuilder",
-      content: "Best supplements I've ever used. Quality is unmatched!",
+      content: "Best supplements I&apos;ve ever used. Quality is unmatched!",
       rating: 5,
       image: "/testimonial1.jpg",
     },
@@ -679,7 +679,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-                  "{testimonials[currentTestimonial].content}"
+                  &quot;{testimonials[currentTestimonial].content}&quot;
                 </p>
 
                 <div className="flex items-center justify-center gap-4">

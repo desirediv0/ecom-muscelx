@@ -608,7 +608,7 @@ export default function ProductContent({ slug }) {
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <Award className="h-5 w-5 text-yellow-500 mr-3" />
-                <span>India's #1 Most Trusted Supplement Brand</span>
+                <span>India&apos;s #1 Most Trusted Supplement Brand</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <Truck className="h-5 w-5 text-blue-500 mr-3" />

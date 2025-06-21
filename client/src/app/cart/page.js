@@ -226,7 +226,7 @@ export default function CartPage() {
             Your Cart is Empty
           </h1>
           <p className="text-gray-600 mb-8 text-lg">
-            Looks like you haven't added anything to your cart yet.
+            Looks like you haven&apos;t added anything to your cart yet.
           </p>
           <Button
             asChild
@@ -355,7 +355,7 @@ export default function CartPage() {
               ) : (
                 <div className="bg-green-50 border-2 border-dashed border-green-200 p-4 rounded-lg text-center">
                   <p className="font-bold text-lg text-green-700">
-                    Coupon "{coupon.code}" applied!
+                    Coupon &quot;{coupon.code}&quot; applied!
                   </p>
                   <button
                     onClick={handleRemoveCoupon}
