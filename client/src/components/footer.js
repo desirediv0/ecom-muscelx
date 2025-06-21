@@ -52,9 +52,9 @@ export function Footer() {
               </div>
             </div>
             <p className="text-gray-600 mb-6 text-base leading-relaxed">
-              India's premium fitness nutrition brand, dedicated to providing
-              high-quality supplements and nutritional products to help you
-              achieve your fitness goals.
+              India&apos;s premium fitness nutrition brand, dedicated to
+              providing high-quality supplements and nutritional products to
+              help you achieve your fitness goals.
             </p>
 
             {/* Social media links */}

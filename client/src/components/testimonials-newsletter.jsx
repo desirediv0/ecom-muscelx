@@ -148,7 +148,7 @@ export function TestimonialsNewsletter() {
 
                   {/* Testimonial Content */}
                   <p className="text-2xl md:text-3xl text-gray-800 mb-10 leading-relaxed text-center font-medium">
-                    "{testimonials[currentTestimonial].content}"
+                    &quot;{testimonials[currentTestimonial].content}&quot;
                   </p>
 
                   {/* Author Info */}
