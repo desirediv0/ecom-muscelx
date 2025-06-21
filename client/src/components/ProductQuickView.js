@@ -350,7 +350,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[1000px] max-h-[95vh] overflow-y-auto p-0 bg-white border-0 shadow-2xl rounded-3xl">
+      <DialogContent className="sm:max-w-[850px] max-h-[80vh] overflow-y-auto p-0 bg-white border-0 shadow-2xl rounded-3xl">
         {/* Header */}
         <DialogHeader className="p-4 border-b border-gray-100 flex justify-end sticky top-0 bg-white z-10">
           <Button
@@ -373,7 +373,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
             <div className="relative">
               <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden bg-gray-50 shadow-lg border border-gray-100">
                 <Image
-                  src={imgSrc || "/placeholder.svg"}
+                  src={imgSrc}
                   alt={displayProduct.name}
                   fill
                   className="object-contain p-6"
@@ -411,7 +411,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
             </div>
 
             {/* Product Info */}
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-3">
               <DialogTitle className="text-3xl font-bold text-gray-900 -mt-2">
                 {displayProduct.name}
               </DialogTitle>

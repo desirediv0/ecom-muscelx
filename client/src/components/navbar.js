@@ -26,7 +26,6 @@ const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { cart } = useCart();
 
-  console.log(cart);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -83,6 +82,20 @@ const Header = () => {
     };
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
+
   // Focus search input when expanded
   useEffect(() => {
     if (isSearchExpanded && searchInputRef.current) {
@@ -132,7 +145,7 @@ const Header = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`fixed z-50 top-[10px] px-4 left-0 right-0 mx-auto w-[95%] md:w-[90%] max-w-7xl flex flex-col md:flex-row items-center justify-between transition-all duration-500 bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl`}
       >
-        <div className="flex w-full md:w-auto items-center justify-between p-3 border-b border-gray-800">
+        <div className="flex w-full md:w-auto items-center justify-between p-3 md:border-b-0 border-b border-gray-800">
           {/* Logo with animation */}
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -159,7 +172,7 @@ const Header = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-gray-700 bg-red-50 p-2 rounded-full border border-red-200 hover:bg-red-100"
+            className="md:hidden text-white bg-red-600 p-2 rounded-full border border-red-500 hover:bg-red-700 transition-colors z-50"
           >
             {isMobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -227,13 +240,6 @@ const Header = () => {
               </div>
             </div>
           </div>
-
-          <Link
-            href="/blog"
-            className="font-medium text-gray-300 hover:text-white transition-colors"
-          >
-            Blog
-          </Link>
 
           <Link
             href="/about"
@@ -346,6 +352,20 @@ const Header = () => {
               <span className="text-sm">Wishlist</span>
             </Link>
           </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/cart"
+              className="relative flex items-center space-x-1 text-gray-700 bg-gray-50/80 backdrop-blur-md px-3 py-2 rounded-full border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all duration-300"
+            >
+              <ShoppingCart className="h-4 w-4" />
+              <span className="text-sm">Cart</span>
+              {cart?.totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                  {cart.totalQuantity}
+                </span>
+              )}
+            </Link>
+          </motion.div>
 
           <ClientOnly>
             {isAuthenticated ? (
@@ -427,191 +447,202 @@ const Header = () => {
               </Link>
             )}
           </ClientOnly>
-
-          {/* Cart component */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link
-              href="/cart"
-              className="relative flex items-center space-x-1 text-gray-700 bg-gray-50/80 backdrop-blur-md px-3 py-2 rounded-full border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all duration-300"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              <span className="text-sm">Cart</span>
-              {cart?.totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                  {cart.totalQuantity}
-                </span>
-              )}
-            </Link>
-          </motion.div>
         </div>
 
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="w-full md:hidden mt-1 border-t border-gray-200 pt-2 px-3 pb-3 backdrop-blur-md bg-black/90 rounded-b-2xl"
-            >
+            <>
+              {/* Mobile Menu Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+
               {/* Mobile Menu Content */}
-              <div className="flex flex-col space-y-2">
-                {/* Mobile Search */}
-                <form
-                  onSubmit={handleSearch}
-                  className="mb-4 overflow-hidden overflow-y-auto"
-                >
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white" />
-                    <Input
-                      type="text"
-                      placeholder="Search products..."
-                      className="w-full pl-12 pr-12 py-3 text-base border-gray-200 focus:border-white focus:ring-white rounded-lg"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      autoComplete="off"
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800 md:hidden"
+                style={{ maxHeight: "100vh" }}
+              >
+                {/* Mobile Menu Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-800">
+                  <div className="flex items-center space-x-3">
+                    <Image
+                      src="/logo.png"
+                      alt="MuselX Logo"
+                      width={32}
+                      height={32}
+                      className="rounded-lg"
                     />
-                    <button
-                      type="submit"
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white text-black"
-                      aria-label="Search"
-                    >
-                      <Search className="h-4 w-4" />
-                    </button>
+                    <span className="text-xl font-bold text-white">MuselX</span>
                   </div>
-                </form>
-
-                <div className="border-b border-gray-200 pb-2 mb-4">
-                  <Link
-                    href="/products"
-                    className="block py-3 text-lg font-medium hover:text-white transition-colors"
+                  <button
                     onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-white bg-red-600 p-2 rounded-full border border-red-500 hover:bg-red-700 transition-colors"
                   >
-                    All Products
-                  </Link>
+                    <X className="h-5 w-5" />
+                  </button>
                 </div>
 
-                <div className="border-b border-gray-200 pb-4 mb-4">
-                  <h3 className="font-bold text-lg mb-3 text-gray-300">
-                    Categories
-                  </h3>
-                  <div className="space-y-3 pl-2">
-                    {categories.map((category) => (
-                      <div key={category.id} className="py-1">
-                        <Link
-                          href={`/category/${category.slug}`}
-                          className="block hover:text-white text-base transition-colors"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          {category.name}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-b border-gray-200 pb-4 mb-4">
-                  <Link
-                    href="/blog"
-                    className="block py-3 text-lg font-medium hover:text-white transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Blog
-                  </Link>
-                </div>
-
-                <div className="border-b border-gray-200 pb-4 mb-4">
-                  <Link
-                    href="/about"
-                    className="block py-3 text-lg font-medium hover:text-white transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    About Us
-                  </Link>
-                </div>
-
-                <div className="border-b border-gray-200 pb-4 mb-4">
-                  <Link
-                    href="/contact"
-                    className="block py-3 text-lg font-medium hover:text-white transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Contact Us
-                  </Link>
-                </div>
-
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0 }}
-                  className="border-t border-gray-200 pt-2 mt-2"
+                {/* Scrollable Menu Content */}
+                <div
+                  className="overflow-y-auto"
+                  style={{ maxHeight: "calc(100vh - 80px)" }}
                 >
-                  {/* Wishlist for mobile */}
-                  <Link
-                    href="/wishlist"
-                    className="flex items-center space-x-2 text-gray-700 text-sm hover:text-white py-2 px-3 rounded-lg hover:bg-red-50 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Heart className="h-4 w-4" />
-                    <span>Wishlist</span>
-                  </Link>
-
-                  <ClientOnly>
-                    {isAuthenticated ? (
-                      <>
-                        <Link
-                          href="/account"
-                          className="block text-gray-700 text-sm hover:text-white py-2 px-3 rounded-lg hover:bg-red-50 transition-colors"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          My Account
-                        </Link>
-                        <Link
-                          href="/account/orders"
-                          className="block text-gray-700 text-sm hover:text-white py-2 px-3 rounded-lg hover:bg-red-50 transition-colors"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          My Orders
-                        </Link>
+                  <div className="p-4 space-y-4">
+                    {/* Mobile Search */}
+                    <form onSubmit={handleSearch} className="mb-6">
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Input
+                          type="text"
+                          placeholder="Search products..."
+                          className="w-full pl-12 pr-12 py-3 text-base bg-gray-800 border-gray-700 text-white placeholder:text-gray-400 focus:border-red-500 focus:ring-red-500 rounded-lg"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          autoComplete="off"
+                        />
                         <button
-                          onClick={() => {
-                            handleLogout();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="w-full text-left text-gray-700 text-sm hover:text-white py-2 px-3 rounded-lg hover:bg-red-50 transition-colors"
+                          type="submit"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors"
+                          aria-label="Search"
                         >
-                          Logout
+                          <Search className="h-4 w-4" />
                         </button>
-                      </>
-                    ) : (
+                      </div>
+                    </form>
+
+                    {/* Navigation Links */}
+                    <div className="space-y-2">
                       <Link
-                        href="/login"
-                        className="flex items-center space-x-2 text-white text-sm bg-gradient-to-r from-red-500 to-red-600 py-2 px-4 rounded-lg my-2"
+                        href="/products"
+                        className="block py-3 px-4 text-lg font-medium text-white hover:bg-gray-800 rounded-lg transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <LogIn className="h-4 w-4" />
-                        <span>Login</span>
+                        All Products
                       </Link>
-                    )}
-                  </ClientOnly>
-                  {/* Cart for mobile */}
-                  <Link
-                    href="/cart"
-                    className="flex items-center space-x-2 text-gray-700 text-sm hover:text-white py-2 px-3 rounded-lg hover:bg-red-50 transition-colors relative"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    <span>Cart</span>
-                    {cart?.totalQuantity > 0 && (
-                      <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-black">
-                        {cart.totalQuantity}
-                      </span>
-                    )}
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
+
+                      {/* Categories Section */}
+                      <div className="border-t border-gray-800 pt-4">
+                        <h3 className="font-bold text-lg mb-3 text-gray-300 px-4">
+                          Categories
+                        </h3>
+                        <div className="space-y-1 max-h-60 overflow-y-auto">
+                          {categories.map((category) => (
+                            <Link
+                              key={category.id}
+                              href={`/category/${category.slug}`}
+                              className="block py-2 px-6 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {category.name}
+                            </Link>
+                          ))}
+                          <Link
+                            href="/categories"
+                            className="block py-2 px-6 text-red-400 font-medium hover:bg-gray-800 rounded-lg transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            View All Categories
+                          </Link>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-gray-800 pt-4 space-y-2">
+                        <Link
+                          href="/about"
+                          className="block py-3 px-4 text-lg font-medium text-white hover:bg-gray-800 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          About Us
+                        </Link>
+
+                        <Link
+                          href="/contact"
+                          className="block py-3 px-4 text-lg font-medium text-white hover:bg-gray-800 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Contact Us
+                        </Link>
+                      </div>
+
+                      {/* User Actions */}
+                      <div className="border-t border-gray-800 pt-4 space-y-2">
+                        <Link
+                          href="/wishlist"
+                          className="flex items-center space-x-3 py-3 px-4 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Heart className="h-5 w-5" />
+                          <span>Wishlist</span>
+                        </Link>
+
+                        <Link
+                          href="/cart"
+                          className="flex items-center space-x-3 py-3 px-4 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <ShoppingCart className="h-5 w-5" />
+                          <span>Cart</span>
+                          {cart?.totalQuantity > 0 && (
+                            <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                              {cart.totalQuantity}
+                            </span>
+                          )}
+                        </Link>
+
+                        <ClientOnly>
+                          {isAuthenticated ? (
+                            <div className="space-y-2">
+                              <Link
+                                href="/account"
+                                className="block py-3 px-4 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                My Account
+                              </Link>
+                              <Link
+                                href="/account/orders"
+                                className="block py-3 px-4 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                My Orders
+                              </Link>
+                              <button
+                                onClick={() => {
+                                  handleLogout();
+                                  setIsMobileMenuOpen(false);
+                                }}
+                                className="w-full text-left py-3 px-4 text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                              >
+                                Logout
+                              </button>
+                            </div>
+                          ) : (
+                            <Link
+                              href="/login"
+                              className="flex items-center space-x-3 py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              <LogIn className="h-5 w-5" />
+                              <span>Login</span>
+                            </Link>
+                          )}
+                        </ClientOnly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </motion.nav>

@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
@@ -17,7 +16,6 @@ import {
   Zap,
   Target,
   TrendingUp,
-  Users,
   CheckCircle,
   Flame,
   Eye,
@@ -26,6 +24,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchApi } from "@/lib/utils";
 import ProductQuickView from "@/components/ProductQuickView";
+import { TestimonialsNewsletter } from "@/components/testimonials-newsletter";
 
 const staggerContainer = {
   initial: {},
@@ -70,33 +69,8 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-
-  const testimonials = [
-    {
-      name: "Rahul Sharma",
-      role: "Professional Bodybuilder",
-      content: "Best supplements I&apos;ve ever used. Quality is unmatched!",
-      rating: 5,
-      image: "/testimonial1.jpg",
-    },
-    {
-      name: "Priya Singh",
-      role: "Fitness Enthusiast",
-      content: "Amazing results in just 3 months. Highly recommended!",
-      rating: 5,
-      image: "/testimonial2.jpg",
-    },
-    {
-      name: "Arjun Patel",
-      role: "Gym Owner",
-      content: "My clients love these products. Fast delivery too!",
-      rating: 5,
-      image: "/testimonial3.jpg",
-    },
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,13 +101,6 @@ export default function Home() {
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   const handleQuickView = (product) => {
@@ -636,130 +603,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <Users className="h-4 w-4" />
-              <span>Customer Reviews</span>
-            </div>
-            <h2 className="text-4xl lg:text-6xl font-black mb-6 text-gray-900">
-              SUCCESS{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">
-                STORIES
-              </span>
-            </h2>
-          </motion.div>
-
-          <div className="relative max-w-4xl mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTestimonial}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5 }}
-                className="bg-gray-50 rounded-2xl border border-gray-200 p-8 text-center shadow-lg"
-              >
-                <div className="flex justify-center mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-6 w-6 fill-red-400 text-red-400"
-                    />
-                  ))}
-                </div>
-
-                <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-                  &quot;{testimonials[currentTestimonial].content}&quot;
-                </p>
-
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold">
-                      {testimonials[currentTestimonial].name.charAt(0)}
-                    </span>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-gray-900 font-semibold">
-                      {testimonials[currentTestimonial].name}
-                    </div>
-                    <div className="text-gray-600 text-sm">
-                      {testimonials[currentTestimonial].role}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Testimonial Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial
-                      ? "bg-red-500 scale-125"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="relative bg-gradient-to-r from-red-500 to-red-600 rounded-3xl p-12 md:p-16 overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/newsletter-pattern.svg')] opacity-10" />
-
-            <div className="relative z-10 max-w-2xl mx-auto text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-4xl lg:text-5xl font-black mb-6 text-white leading-tight">
-                  JOIN THE
-                  <span className="block mt-2">ELITE CLUB</span>
-                </h2>
-                <p className="text-xl text-red-100 mb-10">
-                  Get exclusive access to new products, special offers, and
-                  expert fitness tips
-                </p>
-
-                <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 py-4 text-lg rounded-xl bg-white/10 border-0 text-white placeholder:text-red-200 focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
-                  />
-                  <Button className="bg-white text-red-600 hover:bg-gray-100 py-4 px-8 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300">
-                    Subscribe
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </form>
-
-                <p className="text-red-100 text-sm mt-4">
-                  Join 50,000+ fitness enthusiasts. Unsubscribe anytime.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TestimonialsNewsletter />
 
       {/* Product Quick View Modal */}
       <ProductQuickView

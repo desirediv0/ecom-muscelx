@@ -82,7 +82,7 @@ const ProductCard = ({ product, onQuickView }) => {
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
           <Image
-            src={product.image || "/product-placeholder.jpg"}
+            src={product.image}
             alt={product.name}
             fill
             className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
@@ -97,7 +97,6 @@ const ProductCard = ({ product, onQuickView }) => {
             <Button
               aria-label="Toggle Wishlist"
               variant="outline"
-              size="icon"
               className="bg-white/80 backdrop-blur-sm rounded-full h-10 w-10 shadow-md hover:bg-white"
               onClick={handleWishlistToggle}
               disabled={wishlistLoading}
@@ -115,7 +114,6 @@ const ProductCard = ({ product, onQuickView }) => {
             <Button
               aria-label="Quick View"
               variant="outline"
-              size="icon"
               className="bg-white/80 backdrop-blur-sm rounded-full h-10 w-10 shadow-md hover:bg-white"
               onClick={handleQuickViewClick}
             >
@@ -191,7 +189,7 @@ function FilterSidebar({
           onClick={() => toggleSection("category")}
           className="w-full flex justify-between items-center"
         >
-          <h3 className="font-semibold text-gray-800">Category</h3>
+          <h3 className="font-semibold text-white">Category</h3>
           <ChevronDown
             className={`h-5 w-5 transition-transform ${
               openSections.category ? "rotate-180" : ""
@@ -402,7 +400,9 @@ function ProductsContent() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">
-          <h1 className="text-4xl md:text-6xl font-black">All Products</h1>
+          <h1 className="text-4xl md:text-6xl font-black text-red-600">
+            All Products
+          </h1>
           <p className="text-lg md:text-xl mt-4 max-w-2xl">
             Find the perfect supplements to fuel your fitness journey.
           </p>
