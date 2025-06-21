@@ -102,7 +102,7 @@ const ProductCard = ({ product, onQuickView }) => {
               disabled={wishlistLoading}
             >
               {wishlistLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <Loader2 className="h-10 w-10 animate-spin" />
               ) : (
                 <Heart
                   className={`h-10 w-10 transition-all ${
