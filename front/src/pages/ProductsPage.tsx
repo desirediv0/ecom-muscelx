@@ -107,6 +107,9 @@ export function ProductForm({
   const [variantImages, setVariantImages] = useState<Map<string, File[]>>(
     new Map()
   );
+  const [variantPrimaryImageIndex, setVariantPrimaryImageIndex] = useState<
+    Map<string, number>
+  >(new Map());
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
   const [selectedWeights, setSelectedWeights] = useState<string[]>([]);
 
@@ -264,27 +267,27 @@ export function ProductForm({
               primaryCategoryId: primaryCategory?.id || "",
               sku:
                 productData.variants?.length === 1 &&
-                  !productData.variants[0].flavorId &&
-                  !productData.variants[0].weightId
+                !productData.variants[0].flavorId &&
+                !productData.variants[0].weightId
                   ? productData.variants[0].sku
                   : "",
               price:
                 productData.variants?.length === 1 &&
-                  !productData.variants[0].flavorId &&
-                  !productData.variants[0].weightId
+                !productData.variants[0].flavorId &&
+                !productData.variants[0].weightId
                   ? productData.variants[0].price.toString()
                   : "",
               salePrice:
                 productData.variants?.length === 1 &&
-                  !productData.variants[0].flavorId &&
-                  !productData.variants[0].weightId &&
-                  productData.variants[0].salePrice
+                !productData.variants[0].flavorId &&
+                !productData.variants[0].weightId &&
+                productData.variants[0].salePrice
                   ? productData.variants[0].salePrice.toString()
                   : "",
               quantity:
                 productData.variants?.length === 1 &&
-                  !productData.variants[0].flavorId &&
-                  !productData.variants[0].weightId
+                !productData.variants[0].flavorId &&
+                !productData.variants[0].weightId
                   ? productData.variants[0].quantity
                   : 0,
               isSupplement: productData.isSupplement || false,
@@ -552,6 +555,13 @@ export function ProductForm({
     // Add new files to existing images
     newVariantImages.set(variantId, [...existingImages, ...newFiles]);
     setVariantImages(newVariantImages);
+
+    // Set first image as primary if no images existed before
+    if (existingImages.length === 0 && newFiles.length > 0) {
+      const newPrimaryMap = new Map(variantPrimaryImageIndex);
+      newPrimaryMap.set(variantId, 0);
+      setVariantPrimaryImageIndex(newPrimaryMap);
+    }
   };
 
   // Remove variant image
@@ -564,10 +574,36 @@ export function ProductForm({
 
     if (updatedImages.length > 0) {
       newVariantImages.set(variantId, updatedImages);
+
+      // Update primary index if needed
+      const currentPrimaryIndex = variantPrimaryImageIndex.get(variantId) || 0;
+      const newPrimaryMap = new Map(variantPrimaryImageIndex);
+
+      if (imageIndex === currentPrimaryIndex) {
+        // If removing primary image, set first remaining as primary
+        newPrimaryMap.set(variantId, 0);
+      } else if (imageIndex < currentPrimaryIndex) {
+        // If removing image before primary, adjust primary index
+        newPrimaryMap.set(variantId, currentPrimaryIndex - 1);
+      }
+
+      setVariantPrimaryImageIndex(newPrimaryMap);
     } else {
       newVariantImages.delete(variantId);
+      // Remove primary index mapping when no images left
+      const newPrimaryMap = new Map(variantPrimaryImageIndex);
+      newPrimaryMap.delete(variantId);
+      setVariantPrimaryImageIndex(newPrimaryMap);
     }
+
     setVariantImages(newVariantImages);
+  };
+
+  // Set new image as primary
+  const setNewImageAsPrimary = (variantId: string, imageIndex: number) => {
+    const newPrimaryMap = new Map(variantPrimaryImageIndex);
+    newPrimaryMap.set(variantId, imageIndex);
+    setVariantPrimaryImageIndex(newPrimaryMap);
   };
 
   // Delete existing variant image from server
@@ -599,6 +635,40 @@ export function ProductForm({
     } catch (error: any) {
       console.error("Error deleting variant image:", error);
       toast.error(error.response?.data?.message || "Failed to delete image");
+    }
+  };
+
+  // Set variant image as primary
+  const handleSetVariantImageAsPrimary = async (imageId: string) => {
+    try {
+      const response = await products.setVariantImageAsPrimary(imageId);
+      if (response.data.success) {
+        // Refresh the product data to get updated images
+        if (mode === "edit" && productId) {
+          const productResponse = await products.getProductById(productId);
+          if (productResponse.data.success) {
+            const productData = productResponse.data.data?.product || {};
+
+            // Update variants with new image data
+            const updatedVariants = variants.map((variant) => {
+              const updatedVariant = productData.variants?.find(
+                (v: any) => v.id === variant.id
+              );
+              return updatedVariant
+                ? { ...variant, images: updatedVariant.images || [] }
+                : variant;
+            });
+
+            setVariants(updatedVariants);
+          }
+        }
+        toast.success("Image set as primary successfully");
+      }
+    } catch (error: any) {
+      console.error("Error setting image as primary:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to set image as primary"
+      );
     }
   };
 
@@ -725,8 +795,6 @@ export function ProductForm({
           const productVariants = response.data.data.product.variants;
 
           for (const variant of productVariants) {
-
-
             // Also check if any key in variantImages Map matches this variant's flavor+weight
             for (const [mapKey, mapImages] of variantImages.entries()) {
               // Check if this variant matches by flavorId and weightId
@@ -740,7 +808,15 @@ export function ProductForm({
               if (matchingVariant && mapImages && mapImages.length > 0) {
                 try {
                   for (let i = 0; i < mapImages.length; i++) {
-                    await products.uploadVariantImage(variant.id, mapImages[i]);
+                    // Check if this image is set as primary for this variant
+                    const primaryIndex =
+                      variantPrimaryImageIndex.get(mapKey) || 0;
+                    const isPrimary = i === primaryIndex;
+                    await products.uploadVariantImage(
+                      variant.id,
+                      mapImages[i],
+                      isPrimary
+                    );
                   }
                   toast.success(
                     `Uploaded ${mapImages.length} image(s) for ${variant.flavor?.name || "variant"}`
@@ -1457,92 +1533,205 @@ export function ProductForm({
                               </td>
                               <td className="px-3 py-2 whitespace-nowrap">
                                 <div className="space-y-2">
-                                  <input
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    onChange={(e) =>
-                                      handleVariantImageUpload(
-                                        variant.id,
-                                        e.target.files
-                                      )
-                                    }
-                                    className="text-xs"
-                                  />
-                                  {/* Show existing variant images */}
-                                  {variant.images &&
-                                    variant.images.length > 0 && (
-                                      <div className="flex flex-wrap gap-1 mb-2">
-                                        {variant.images.map(
-                                          (image: any, index: number) => (
-                                            <div
-                                              key={`existing-${index}`}
-                                              className="relative"
-                                            >
-                                              <img
-                                                src={image.url}
-                                                alt={
-                                                  image.alt ||
-                                                  `Variant ${index + 1}`
-                                                }
-                                                className="w-12 h-12 object-cover rounded border"
-                                              />
-                                              <button
-                                                type="button"
-                                                onClick={() =>
-                                                  handleDeleteVariantImage(
-                                                    image.id
-                                                  )
-                                                }
-                                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
-                                              >
-                                                ×
-                                              </button>
-                                              {image.isPrimary && (
-                                                <div className="absolute bottom-0 left-0 bg-blue-500 text-white text-xs px-1 rounded-tr">
-                                                  Primary
-                                                </div>
+                                  {/* Variant Images Section */}
+                                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                    <h5 className="font-semibold text-gray-800 mb-3">
+                                      Images for{" "}
+                                      {variant.flavor?.name || "Unknown"} -{" "}
+                                      {variant.weight?.value}
+                                      {variant.weight?.unit || ""}
+                                    </h5>
+
+                                    {/* File Upload */}
+                                    <div className="mb-4">
+                                      <input
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={(e) =>
+                                          handleVariantImageUpload(
+                                            variant.id,
+                                            e.target.files
+                                          )
+                                        }
+                                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                      />
+                                    </div>
+
+                                    {/* Display Images */}
+                                    <div className="space-y-4">
+                                      {/* Existing Server Images */}
+                                      {variant.images &&
+                                        variant.images.length > 0 && (
+                                          <div>
+                                            <h6 className="text-sm font-medium text-gray-700 mb-2">
+                                              Existing Images
+                                            </h6>
+                                            <div className="grid grid-cols-4 gap-3">
+                                              {variant.images.map(
+                                                (image: any, index: number) => (
+                                                  <div
+                                                    key={`existing-${image.id}`}
+                                                    className="relative group"
+                                                  >
+                                                    <div
+                                                      className={`relative w-24 h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
+                                                        image.isPrimary
+                                                          ? "border-blue-500 ring-2 ring-blue-200"
+                                                          : "border-gray-300 hover:border-blue-400"
+                                                      }`}
+                                                      onClick={() =>
+                                                        handleSetVariantImageAsPrimary(
+                                                          image.id
+                                                        )
+                                                      }
+                                                    >
+                                                      <img
+                                                        src={image.url}
+                                                        alt={`Variant image ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                      />
+
+                                                      {/* Primary Badge */}
+                                                      {image.isPrimary && (
+                                                        <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                                                          PRIMARY
+                                                        </div>
+                                                      )}
+
+                                                      {/* Hover Overlay */}
+                                                      {!image.isPrimary && (
+                                                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-40 transition-all flex items-center justify-center">
+                                                          <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100">
+                                                            Set Primary
+                                                          </span>
+                                                        </div>
+                                                      )}
+                                                    </div>
+
+                                                    {/* Delete Button */}
+                                                    <button
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteVariantImage(
+                                                          image.id
+                                                        );
+                                                      }}
+                                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                                                    >
+                                                      ×
+                                                    </button>
+                                                  </div>
+                                                )
                                               )}
                                             </div>
-                                          )
+                                          </div>
                                         )}
-                                      </div>
-                                    )}
 
-                                  {/* Show newly uploaded images */}
-                                  {variantImages.get(variant.id) && (
-                                    <div className="flex flex-wrap gap-1">
-                                      {variantImages
-                                        .get(variant.id)!
-                                        .map((file, index) => (
-                                          <div
-                                            key={`new-${index}`}
-                                            className="relative"
-                                          >
-                                            <img
-                                              src={URL.createObjectURL(file)}
-                                              alt={`New Variant ${index + 1}`}
-                                              className="w-12 h-12 object-cover rounded border border-green-500"
-                                            />
-                                            <button
-                                              type="button"
-                                              onClick={() =>
-                                                removeVariantImage(
-                                                  variant.id,
-                                                  index
-                                                )
-                                              }
-                                              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
-                                            >
-                                              ×
-                                            </button>
-                                            <div className="absolute bottom-0 left-0 bg-green-500 text-white text-xs px-1 rounded-tr">
-                                              New
+                                      {/* New Uploaded Images */}
+                                      {variantImages.get(variant.id) &&
+                                        variantImages.get(variant.id)!.length >
+                                          0 && (
+                                          <div>
+                                            <h6 className="text-sm font-medium text-gray-700 mb-2">
+                                              New Images (will be uploaded on
+                                              save)
+                                            </h6>
+                                            <div className="grid grid-cols-4 gap-3">
+                                              {variantImages
+                                                .get(variant.id)!
+                                                .map((file, index) => {
+                                                  const isPrimary =
+                                                    (variantPrimaryImageIndex.get(
+                                                      variant.id
+                                                    ) || 0) === index;
+                                                  const imageUrl =
+                                                    URL.createObjectURL(file);
+
+                                                  return (
+                                                    <div
+                                                      key={`new-${index}`}
+                                                      className="relative group"
+                                                    >
+                                                      <div
+                                                        className={`relative w-24 h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
+                                                          isPrimary
+                                                            ? "border-green-500 ring-2 ring-green-200"
+                                                            : "border-gray-300 hover:border-green-400"
+                                                        }`}
+                                                        onClick={() =>
+                                                          setNewImageAsPrimary(
+                                                            variant.id,
+                                                            index
+                                                          )
+                                                        }
+                                                      >
+                                                        <img
+                                                          src={imageUrl}
+                                                          alt={`New image ${index + 1}`}
+                                                          className="w-full h-full object-cover"
+                                                        />
+
+                                                        {/* Primary Badge */}
+                                                        {isPrimary && (
+                                                          <div className="absolute top-1 left-1 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                                                            PRIMARY
+                                                          </div>
+                                                        )}
+
+                                                        {/* New Badge */}
+                                                        <div className="absolute top-1 right-1 bg-blue-500 text-white text-xs px-1 py-0.5 rounded">
+                                                          NEW
+                                                        </div>
+
+                                                        {/* Hover Overlay */}
+                                                        {!isPrimary && (
+                                                          <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-40 transition-all flex items-center justify-center">
+                                                            <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100">
+                                                              Set Primary
+                                                            </span>
+                                                          </div>
+                                                        )}
+                                                      </div>
+
+                                                      {/* Delete Button */}
+                                                      <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          e.stopPropagation();
+                                                          removeVariantImage(
+                                                            variant.id,
+                                                            index
+                                                          );
+                                                        }}
+                                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                                                      >
+                                                        ×
+                                                      </button>
+                                                    </div>
+                                                  );
+                                                })}
                                             </div>
                                           </div>
-                                        ))}
+                                        )}
+
+                                      {/* No Images Message */}
+                                      {(!variant.images ||
+                                        variant.images.length === 0) &&
+                                        (!variantImages.get(variant.id) ||
+                                          variantImages.get(variant.id)!
+                                            .length === 0) && (
+                                          <div className="text-center py-8 text-gray-500">
+                                            <p>No images uploaded yet</p>
+                                            <p className="text-sm">
+                                              Upload images using the file input
+                                              above
+                                            </p>
+                                          </div>
+                                        )}
                                     </div>
-                                  )}
+                                  </div>
                                 </div>
                               </td>
                               <td className="px-3 py-2 whitespace-nowrap">
@@ -1760,13 +1949,15 @@ const CategorySelector = ({
 
     if (isCurrentlySelected) {
       // If deselecting, remove this category
-      newSelectionIds = newSelectionIds.filter((id) => id !== categoryId);
+      newSelectionIds = newSelectionIds.filter(
+        (id: string) => id !== categoryId
+      );
 
       // If this is a parent, also remove all its children
       if (isParent(categoryId)) {
         const childrenIds = getChildrenIds(categoryId);
         newSelectionIds = newSelectionIds.filter(
-          (id) => !childrenIds.includes(id)
+          (id: string) => !childrenIds.includes(id)
         );
       }
     } else {
@@ -1837,10 +2028,11 @@ const CategorySelector = ({
               onClick={() => {
                 onSetPrimaryCategory(categoryId);
               }}
-              className={`text-xs px-2 py-1 rounded-full ${isPrimary
+              className={`text-xs px-2 py-1 rounded-full ${
+                isPrimary
                   ? "bg-indigo-100 text-indigo-700"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+              }`}
             >
               {isPrimary ? "Primary" : "Set as Primary"}
             </button>
@@ -1882,10 +2074,11 @@ const CategorySelector = ({
                       onClick={() => {
                         onSetPrimaryCategory(childId);
                       }}
-                      className={`text-xs px-2 py-1 rounded-full ${isChildPrimary
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        isChildPrimary
                           ? "bg-indigo-100 text-indigo-700"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
+                      }`}
                     >
                       {isChildPrimary ? "Primary" : "Set as Primary"}
                     </button>
@@ -2146,7 +2339,7 @@ function ProductsList() {
       console.error("Error marking product as inactive:", error);
       toast.error(
         error.message ||
-        "An error occurred while marking the product as inactive"
+          "An error occurred while marking the product as inactive"
       );
     }
   };
@@ -2184,7 +2377,7 @@ function ProductsList() {
       } else {
         toast.error(
           response.data.message ||
-          `Failed to ${currentStatus ? "deactivate" : "activate"} product`
+            `Failed to ${currentStatus ? "deactivate" : "activate"} product`
         );
       }
     } catch (error: any) {
@@ -2194,7 +2387,7 @@ function ProductsList() {
       );
       toast.error(
         error.message ||
-        `An error occurred while ${currentStatus ? "deactivating" : "activating"} the product`
+          `An error occurred while ${currentStatus ? "deactivating" : "activating"} the product`
       );
     }
   };
@@ -2439,7 +2632,7 @@ function ProductsList() {
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1">
                             {product.categories &&
-                              product.categories.length > 0 ? (
+                            product.categories.length > 0 ? (
                               product.categories.map((category: any) => {
                                 // Check if this is a child category
                                 const isChild = category.parentId !== null;
@@ -2488,10 +2681,11 @@ function ProductsList() {
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <span
-                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${product.isActive
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                              product.isActive
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500"
                                 : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500"
-                              }`}
+                            }`}
                           >
                             {product.isActive ? "Active" : "Inactive"}
                           </span>

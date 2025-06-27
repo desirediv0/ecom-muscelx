@@ -2640,10 +2640,6 @@ export const uploadVariantImage = asyncHandler(async (req, res, next) => {
   const { variantId } = req.params;
   const { isPrimary } = req.body;
 
-  if (!req.file) {
-    throw new ApiError(400, "Image file is required");
-  }
-
   // Check if variant exists
   const variant = await prisma.productVariant.findUnique({
     where: { id: variantId },
@@ -2656,55 +2652,50 @@ export const uploadVariantImage = asyncHandler(async (req, res, next) => {
     throw new ApiError(404, "Product variant not found");
   }
 
+  if (!req.file) {
+    throw new ApiError(400, "Image file is required");
+  }
+
   try {
-    // Process and upload image to S3
+    // Upload to S3 using existing function
     const imageUrl = await processAndUploadImage(
       req.file,
       `variants/${variantId}`
     );
 
-    // Use a transaction to ensure all database operations complete together
-    const result = await prisma.$transaction(async (tx) => {
-      // If setting as primary, update other images to not be primary
+    // Start transaction
+    await prisma.$transaction(async (tx) => {
+      // If this is being set as primary, unset all other images as primary for this variant
       if (isPrimary === "true" || isPrimary === true) {
         await tx.productVariantImage.updateMany({
-          where: {
-            variantId,
-            isPrimary: true,
-          },
+          where: { variantId },
           data: { isPrimary: false },
         });
       }
 
-      // Create image record
-      return await tx.productVariantImage.create({
+      // If no images exist and this is the first one, make it primary automatically
+      const shouldBePrimary =
+        isPrimary === "true" ||
+        isPrimary === true ||
+        variant.images.length === 0;
+
+      // Create the new image
+      await tx.productVariantImage.create({
         data: {
           variantId,
           url: imageUrl,
-          alt: req.body.alt || `Variant ${variantId} image`,
-          isPrimary: isPrimary === "true" || isPrimary === true,
+          alt: req.body.alt || null,
+          isPrimary: shouldBePrimary,
         },
       });
     });
 
-    // Format response with full URL
-    const formattedImage = {
-      ...result,
-      url: getFileUrl(imageUrl),
-    };
-
     res
       .status(201)
-      .json(
-        new ApiResponsive(
-          201,
-          { image: formattedImage },
-          "Variant image uploaded successfully"
-        )
-      );
+      .json(new ApiResponse(201, null, "Variant image uploaded successfully"));
   } catch (error) {
-    console.error("Variant image upload error:", error);
-    throw new ApiError(500, `Failed to upload variant image: ${error.message}`);
+    console.error("Error uploading variant image:", error);
+    throw new ApiError(500, "Failed to upload variant image");
   }
 });
 
@@ -2954,4 +2945,57 @@ export const bulkVariantOperations = asyncHandler(async (req, res) => {
         "Product variants updated successfully"
       )
     );
+});
+
+// Set variant image as primary
+export const setVariantImageAsPrimary = asyncHandler(async (req, res, next) => {
+  const { imageId } = req.params;
+
+  // Check if image exists
+  const image = await prisma.productVariantImage.findUnique({
+    where: { id: imageId },
+    include: {
+      variant: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  if (!image) {
+    throw new ApiError(404, "Variant image not found");
+  }
+
+  try {
+    // Use a transaction to ensure all database operations complete together
+    await prisma.$transaction(async (tx) => {
+      // First, set all images of this variant to not primary
+      await tx.productVariantImage.updateMany({
+        where: {
+          variantId: image.variant.id,
+          isPrimary: true,
+        },
+        data: { isPrimary: false },
+      });
+
+      // Then set this image as primary
+      await tx.productVariantImage.update({
+        where: { id: imageId },
+        data: { isPrimary: true },
+      });
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponsive(200, {}, "Variant image set as primary successfully")
+      );
+  } catch (error) {
+    console.error("Error setting variant image as primary:", error);
+    throw new ApiError(
+      500,
+      `Failed to set variant image as primary: ${error.message}`
+    );
+  }
 });

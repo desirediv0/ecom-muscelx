@@ -111,15 +111,23 @@ export default function ProductCarousel({
 
   if (!images || images.length === 0) {
     return (
-      <div className="relative h-[500px] w-full bg-gray-50 flex items-center justify-center rounded-xl overflow-hidden shadow-sm border border-gray-200 mb-8">
-        <Image
-          src="/product-placeholder.jpg"
-          alt={productName}
-          fill
-          className="object-contain p-6"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority
-        />
+      <div className="bg-white rounded-xl overflow-hidden mb-8 shadow-sm border border-gray-200">
+        <div className="relative h-[500px] w-full bg-gray-50 flex items-center justify-center">
+          <Image
+            src="/product-placeholder.jpg"
+            alt={productName}
+            fill
+            className="object-contain p-6"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+            onError={() => {}}
+          />
+          {showSaleBadge && (
+            <div className="absolute top-6 left-6 bg-[#F47C20] text-white text-sm font-bold px-4 py-2 rounded-lg shadow-lg">
+              SALE
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -142,12 +150,15 @@ export default function ProductCarousel({
             <CarouselItem key={index}>
               <div className="relative h-[500px] w-full bg-gray-50 transition-all duration-300">
                 <Image
-                  src={image.url || "/product-placeholder.jpg"}
-                  alt={`${productName} - Image ${index + 1}`}
+                  src={image?.url || "/product-placeholder.jpg"}
+                  alt={`${productName || "Product"} - Image ${index + 1}`}
                   fill
                   className="object-contain p-6"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority={index === 0}
+                  onError={(e) => {
+                    e.target.src = "/product-placeholder.jpg";
+                  }}
                 />
                 {showSaleBadge && index === 0 && (
                   <div className="absolute top-6 left-6 bg-[#F47C20] text-white text-sm font-bold px-4 py-2 rounded-lg shadow-lg">
@@ -201,11 +212,16 @@ export default function ProductCarousel({
                   >
                     <div className="relative w-24 h-24">
                       <Image
-                        src={image.url}
-                        alt={`${productName} - Thumbnail ${index + 1}`}
+                        src={image?.url || "/product-placeholder.jpg"}
+                        alt={`${productName || "Product"} - Thumbnail ${
+                          index + 1
+                        }`}
                         fill
                         className="object-contain p-2"
                         sizes="96px"
+                        onError={(e) => {
+                          e.target.src = "/product-placeholder.jpg";
+                        }}
                       />
                     </div>
                     {selectedSlide === index && (

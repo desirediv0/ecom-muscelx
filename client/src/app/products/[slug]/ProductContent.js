@@ -146,6 +146,7 @@ export default function ProductContent({ slug }) {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
   const [availableCombinations, setAvailableCombinations] = useState([]);
+  const [currentImages, setCurrentImages] = useState([]);
 
   const { addToCart } = useCart();
 
@@ -188,9 +189,33 @@ export default function ProductContent({ slug }) {
           setSelectedVariant(firstAvailableVariant.variant);
         }
       }
+
+      // Set initial images with proper fallback handling
+      if (productData.images && productData.images.length > 0) {
+        setCurrentImages(productData.images);
+      } else if (productData.variants && productData.variants.length > 0) {
+        const firstVariantWithImages = productData.variants.find(
+          (v) => v.images && v.images.length > 0
+        );
+        if (firstVariantWithImages) {
+          const sortedImages = [...firstVariantWithImages.images].sort(
+            (a, b) => {
+              if (a.isPrimary && !b.isPrimary) return -1;
+              if (!a.isPrimary && b.isPrimary) return 1;
+              return 0;
+            }
+          );
+          setCurrentImages(sortedImages);
+        } else {
+          setCurrentImages([]);
+        }
+      } else {
+        setCurrentImages([]);
+      }
     } catch (err) {
       console.error("Error fetching product details:", err);
       setError(err.message);
+      setCurrentImages([]); // Ensure images is always an array even on error
     } finally {
       setLoading(false);
     }
@@ -249,10 +274,27 @@ export default function ProductContent({ slug }) {
           c.flavorId === selectedFlavor?.id && c.weightId === selectedWeight?.id
       )?.variant;
       setSelectedVariant(variant || null);
+
+      // Update images based on selected variant
+      if (variant && variant.images && variant.images.length > 0) {
+        // Sort images so primary is first
+        const sortedImages = [...variant.images].sort((a, b) => {
+          if (a.isPrimary && !b.isPrimary) return -1;
+          if (!a.isPrimary && b.isPrimary) return 1;
+          return 0;
+        });
+        setCurrentImages(sortedImages);
+      } else if (product && product.images && product.images.length > 0) {
+        setCurrentImages(product.images);
+      } else {
+        // If no images, set empty array to show placeholder
+        setCurrentImages([]);
+      }
+
       // Reset quantity to 1 when variant changes
       setQuantity(1);
     }
-  }, [selectedFlavor, selectedWeight, availableCombinations]);
+  }, [selectedFlavor, selectedWeight, availableCombinations, product]);
 
   // Ensure quantity never exceeds available stock
   useEffect(() => {
@@ -422,7 +464,7 @@ export default function ProductContent({ slug }) {
           {/* Left: Image Carousel */}
           <div className="lg:sticky top-24 self-start">
             <ProductCarousel
-              images={product.images}
+              images={currentImages}
               productName={product.name}
               showSaleBadge={onSale}
             />
@@ -655,11 +697,14 @@ export default function ProductContent({ slug }) {
                 <Link href={`/products/${p.slug}`} key={p.id} className="group">
                   <div className="bg-gray-100 rounded-lg overflow-hidden">
                     <Image
-                      src={p.image}
-                      alt={p.name}
+                      src={p.image || "/product-placeholder.jpg"}
+                      alt={p.name || "Product"}
                       width={400}
                       height={400}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = "/product-placeholder.jpg";
+                      }}
                     />
                   </div>
                   <h3 className="font-bold text-lg mt-4 group-hover:text-red-600 transition">

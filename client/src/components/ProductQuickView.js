@@ -74,12 +74,28 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
           const productData = response.data.product;
           setProductDetails(productData);
 
-          if (productData.images && productData.images.length > 0) {
-            setImgSrc(
-              productData.images[0].url ||
-                productData.image ||
-                "/product-placeholder.jpg"
+          // Set initial image - prioritize variant images over product images
+          if (productData.variants && productData.variants.length > 0) {
+            const firstActiveVariant = productData.variants.find(
+              (v) => v.isActive && v.quantity > 0
             );
+            if (
+              firstActiveVariant &&
+              firstActiveVariant.images &&
+              firstActiveVariant.images.length > 0
+            ) {
+              setImgSrc(firstActiveVariant.images[0].url);
+            } else if (productData.images && productData.images.length > 0) {
+              setImgSrc(
+                productData.images[0].url || "/product-placeholder.jpg"
+              );
+            } else {
+              setImgSrc(productData.image || "/product-placeholder.jpg");
+            }
+          } else if (productData.images && productData.images.length > 0) {
+            setImgSrc(productData.images[0].url || "/product-placeholder.jpg");
+          } else {
+            setImgSrc(productData.image || "/product-placeholder.jpg");
           }
 
           if (productData.variants && productData.variants.length > 0) {
@@ -129,6 +145,30 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
     fetchProductDetails();
   }, [product, open]);
+
+  // Update image when selected variant changes
+  useEffect(() => {
+    if (
+      selectedVariant &&
+      selectedVariant.images &&
+      selectedVariant.images.length > 0
+    ) {
+      // Sort images so primary is first
+      const sortedImages = [...selectedVariant.images].sort((a, b) => {
+        if (a.isPrimary && !b.isPrimary) return -1;
+        if (!a.isPrimary && b.isPrimary) return 1;
+        return 0;
+      });
+      setImgSrc(sortedImages[0].url);
+    } else if (productDetails) {
+      // Fallback to product images or default
+      if (productDetails.images && productDetails.images.length > 0) {
+        setImgSrc(productDetails.images[0].url || "/product-placeholder.jpg");
+      } else {
+        setImgSrc(productDetails.image || "/product-placeholder.jpg");
+      }
+    }
+  }, [selectedVariant, productDetails]);
 
   const getAvailableWeightsForFlavor = (flavorId) => {
     const availableWeights = availableCombinations

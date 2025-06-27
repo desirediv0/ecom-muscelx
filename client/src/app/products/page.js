@@ -77,16 +77,53 @@ const ProductCard = ({ product, onQuickView }) => {
     onQuickView(product);
   };
 
+  // Get the best image to display - prioritize product image, then primary variant image
+  const getProductImage = () => {
+    if (product.image && product.image !== "/product-placeholder.jpg") {
+      return product.image;
+    }
+
+    // If no product image, check if there are variants with images
+    if (product.variants && product.variants.length > 0) {
+      // First try to find a variant with a primary image
+      const variantWithPrimaryImage = product.variants.find(
+        (v) => v.images && v.images.some((img) => img.isPrimary)
+      );
+
+      if (variantWithPrimaryImage) {
+        const primaryImage = variantWithPrimaryImage.images.find(
+          (img) => img.isPrimary
+        );
+        if (primaryImage) {
+          return primaryImage.url;
+        }
+      }
+
+      // If no primary image found, use first available variant image
+      const variantWithImage = product.variants.find(
+        (v) => v.images && v.images.length > 0
+      );
+      if (variantWithImage) {
+        return variantWithImage.images[0].url;
+      }
+    }
+
+    return "/product-placeholder.jpg";
+  };
+
   return (
     <div className="bg-white border border-gray-200 hover:border-red-500 rounded-2xl overflow-hidden transition-all duration-300 group shadow-sm hover:shadow-xl hover:-translate-y-1">
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
           <Image
-            src={product.image}
+            src={getProductImage()}
             alt={product.name}
             fill
             className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            onError={(e) => {
+              e.target.src = "/product-placeholder.jpg";
+            }}
           />
           {product.hasSale && (
             <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
