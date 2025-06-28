@@ -155,13 +155,13 @@ const Header = () => {
             <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-red-500 to-red-400 opacity-20 group-hover:opacity-40 blur transition duration-500"></div>
             <Link
               href="/"
-              className="relative flex items-center rounded-md p-5"
+              className="relative flex items-center rounded-md p-4"
             >
               <Image
                 src="/logo.png"
                 alt="Logo"
-                width={120}
-                height={120}
+                width={170}
+                height={170}
                 className="rounded"
               />
             </Link>

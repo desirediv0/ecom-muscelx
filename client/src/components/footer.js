@@ -45,9 +45,9 @@ export function Footer() {
                 <Image
                   src="/logo.png"
                   alt="MuselX Logo"
-                  width={300}
-                  height={300}
-                  className="rounded-lg"
+                  width={220}
+                  height={220}
+                  className="rounded"
                 />
               </div>
             </div>
