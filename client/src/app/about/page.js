@@ -23,8 +23,8 @@ export default function AboutPage() {
               <span className="text-white font-medium">About Us</span>
             </div>
             <p className="text-xl text-red-100 max-w-3xl mx-auto leading-relaxed">
-              India's most trusted fitness supplement brand, empowering athletes
-              and fitness enthusiasts since 2010
+              India&apos;s most trusted fitness supplement brand, empowering
+              athletes and fitness enthusiasts since 2010
             </p>
           </div>
         </div>
@@ -54,11 +54,11 @@ export default function AboutPage() {
                   products that promised the world but delivered nothing.
                 </p>
                 <p>
-                  Today, we're proud to be India's leading fitness nutrition
-                  brand, serving over 100,000+ satisfied customers across the
-                  country. Our products are trusted by professional athletes,
-                  bodybuilders, and fitness enthusiasts who demand nothing but
-                  the best.
+                  Today, we&apos;re proud to be India&apos;s leading fitness
+                  nutrition brand, serving over 100,000+ satisfied customers
+                  across the country. Our products are trusted by professional
+                  athletes, bodybuilders, and fitness enthusiasts who demand
+                  nothing but the best.
                 </p>
                 <p>
                   Every supplement we create undergoes rigorous testing and

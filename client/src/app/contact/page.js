@@ -159,7 +159,7 @@ export default function ContactPage() {
                 </h2>
                 <p className="text-gray-600">
                   Have questions about our supplements? Need personalized
-                  fitness advice? We're here to help!
+                  fitness advice? We&apos;re here to help!
                 </p>
               </div>
 

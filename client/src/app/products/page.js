@@ -1018,7 +1018,7 @@ function ProductsContent() {
                 <Search className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-4 text-xl font-bold">No Products Found</h3>
                 <p className="text-gray-500 mt-2">
-                  We couldn't find any products matching your filters.
+                  We couldn&apos;t find any products matching your filters.
                 </p>
                 <Button onClick={clearFilters} className="mt-6">
                   Clear All Filters
