@@ -325,7 +325,9 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-2xl font-semibold text-gray-700">Loading Checkout...</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">
+            Loading Checkout...
+          </h1>
         </div>
       </div>
     );
@@ -338,7 +340,9 @@ export default function CheckoutPage() {
           <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <ShoppingBag className="h-12 w-12 text-gray-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Cart is Empty</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            Cart is Empty
+          </h1>
           <p className="text-gray-600 mb-8">
             Add items to your cart before proceeding to checkout.
           </p>
@@ -359,14 +363,14 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-lg w-full bg-white shadow-xl rounded-lg p-10 text-center relative">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent z-0"></div>
-          
+
           <div className="relative z-10">
             <div className="flex justify-center mb-6">
               <div className="h-36 w-36 bg-gray-100 rounded-full flex items-center justify-center animate-bounce">
-                <PartyPopper 
+                <PartyPopper
                   className={`h-20 w-20 text-gray-600 ${
                     confettiCannon ? "animate-pulse" : ""
-                  }`} 
+                  }`}
                 />
               </div>
             </div>
@@ -453,7 +457,7 @@ export default function CheckoutPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:bg-red-50 rounded-xl"
+                  className="text-white hover:bg-red-700 rounded-xl"
                   onClick={() => setShowAddressForm(!showAddressForm)}
                 >
                   <Plus className="h-4 w-4 mr-1" />
@@ -476,7 +480,7 @@ export default function CheckoutPage() {
                   <span className="text-red-700">
                     You don&apos;t have any saved addresses.{" "}
                     <button
-                      className="font-medium underline hover:text-red-800"
+                      className="font-medium underline  text-white"
                       onClick={() => setShowAddressForm(true)}
                     >
                       Add an address

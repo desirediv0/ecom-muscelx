@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchApi, formatCurrency } from "@/lib/utils";
@@ -14,9 +14,7 @@ import {
   Heart,
   Truck,
   ShieldCheck,
-  Package,
   Loader2,
-  Share2,
   Eye,
   CheckCircle,
   ChevronRight,
@@ -25,10 +23,25 @@ import {
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
-import ReviewSection from "./ReviewSection";
 import { toast } from "sonner";
-import ProductQuickView from "@/components/ProductQuickView";
 import ProductCarousel from "./ProductCarousel";
+
+// Helper function to normalize image URLs for Next.js Image component
+const normalizeImageUrl = (url) => {
+  if (!url) return "/placeholder.jpg";
+
+  // If it's already an absolute URL, return as is
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  // If it's a relative path that doesn't start with "/", add it
+  if (!url.startsWith("/")) {
+    return `/${url}`;
+  }
+
+  return url;
+};
 
 const ProductCard = React.memo(({ product, onQuickView }) => (
   <div className="bg-white border border-gray-200/80 rounded-2xl hover:border-red-400/70 transition-all duration-300 group shadow-md hover:shadow-xl hover:shadow-red-500/10 overflow-hidden flex flex-col h-full relative">
@@ -46,10 +59,13 @@ const ProductCard = React.memo(({ product, onQuickView }) => (
     <div className="relative p-4 flex-grow">
       <div className="relative mb-4 overflow-hidden rounded-xl bg-gray-50 aspect-square">
         <Image
-          src={product.image || "/placeholder.svg"}
+          src={normalizeImageUrl(product.image)}
           alt={product.name}
           fill
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+          onError={(e) => {
+            e.target.src = normalizeImageUrl("/product-placeholder.jpg");
+          }}
         />
         {product.hasSale && (
           <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
@@ -156,6 +172,9 @@ export default function ProductContent({ slug }) {
     try {
       const response = await fetchApi(`/public/products/${slug}`);
       const productData = response.data.product;
+
+      // API response already includes flavorOptions and weightOptions
+
       setProduct(productData);
       setRelatedProducts(response.data.relatedProducts || []);
 
@@ -426,10 +445,14 @@ export default function ProductContent({ slug }) {
 
   if (!product) return null;
 
-  const price = selectedVariant?.price || product.basePrice;
-  const salePrice =
-    selectedVariant?.salePrice || (product.hasSale ? product.basePrice : null);
-  const regularPrice = selectedVariant?.price || product.regularPrice;
+  const price = parseFloat(selectedVariant?.price) || product.basePrice;
+  const salePrice = selectedVariant?.salePrice
+    ? parseFloat(selectedVariant.salePrice)
+    : product.hasSale
+    ? product.basePrice
+    : null;
+  const regularPrice =
+    parseFloat(selectedVariant?.price) || product.regularPrice;
   const onSale = salePrice && salePrice < regularPrice;
 
   return (
@@ -551,8 +574,8 @@ export default function ProductContent({ slug }) {
                 <h3 className="text-sm font-semibold text-gray-800 mb-3">
                   Weight:{" "}
                   <span className="font-bold text-red-600">
-                    {selectedWeight?.value}
-                    {selectedWeight?.unit}
+                    {selectedWeight?.display ||
+                      `${selectedWeight?.value}${selectedWeight?.unit}`}
                   </span>
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -566,8 +589,7 @@ export default function ProductContent({ slug }) {
                           : "border-gray-300 bg-white hover:border-red-500 text-black"
                       }`}
                     >
-                      {weight.value}
-                      {weight.unit}
+                      {weight.display || `${weight.value}${weight.unit}`}
                     </button>
                   ))}
                 </div>
@@ -580,7 +602,7 @@ export default function ProductContent({ slug }) {
                   <button
                     onClick={() => handleQuantityChange(-1)}
                     disabled={quantity <= 1}
-                    className={`px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-l-lg transition ${
+                    className={`px-4 py-3 text-white  hover:bg-red-600 rounded-l-lg transition ${
                       quantity <= 1 ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
@@ -594,7 +616,7 @@ export default function ProductContent({ slug }) {
                     disabled={
                       selectedVariant && quantity >= selectedVariant.quantity
                     }
-                    className={`px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-r-lg transition ${
+                    className={`px-4 py-3 text-white  hover:bg-red-600 rounded-r-lg transition ${
                       selectedVariant && quantity >= selectedVariant.quantity
                         ? "opacity-50 cursor-not-allowed"
                         : ""
@@ -697,13 +719,13 @@ export default function ProductContent({ slug }) {
                 <Link href={`/products/${p.slug}`} key={p.id} className="group">
                   <div className="bg-gray-100 rounded-lg overflow-hidden">
                     <Image
-                      src={p.image || "/product-placeholder.jpg"}
+                      src={p.image || "/placeholder.jpg"}
                       alt={p.name || "Product"}
                       width={400}
                       height={400}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        e.target.src = "/product-placeholder.jpg";
+                        e.target.src = "/placeholder.jpg";
                       }}
                     />
                   </div>

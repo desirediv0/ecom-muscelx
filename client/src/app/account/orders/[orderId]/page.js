@@ -228,7 +228,7 @@ export default function OrderDetailsPage({ params }) {
     <ClientOnly>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-20">
           <div>
             <Link
               href="/account/orders"
@@ -243,22 +243,6 @@ export default function OrderDetailsPage({ params }) {
           </div>
 
           <div className="flex items-center space-x-3 mt-4 md:mt-0">
-            <Button
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Invoice
-            </Button>
-
-            <Button
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all"
-            >
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
-
             {canCancel && !showCancelForm && (
               <Button
                 onClick={() => setShowCancelForm(true)}
@@ -296,8 +280,8 @@ export default function OrderDetailsPage({ params }) {
               Order Not Found
             </h2>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              The order you&apos;re looking for doesn&apos;t exist or you don&apos;t have
-              permission to view it.
+              The order you&apos;re looking for doesn&apos;t exist or you
+              don&apos;t have permission to view it.
             </p>
             <Link href="/account/orders">
               <Button className="bg-red-600 hover:bg-red-700 px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all">
@@ -344,24 +328,6 @@ export default function OrderDetailsPage({ params }) {
                         {order.items.length} item
                         {order.items.length !== 1 ? "s" : ""}
                       </p>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mb-6">
-                    <div className="flex justify-between text-xs text-gray-500 mb-2">
-                      <span>Order Progress</span>
-                      <span>{getProgressPercentage(order.status)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-500 ${
-                          getStatusInfo(order.status).progressColor
-                        }`}
-                        style={{
-                          width: `${getProgressPercentage(order.status)}%`,
-                        }}
-                      ></div>
                     </div>
                   </div>
 

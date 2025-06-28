@@ -25,6 +25,23 @@ import {
 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
+// Helper function to normalize image URLs for Next.js Image component
+const normalizeImageUrl = (url) => {
+  if (!url) return "/product-placeholder.jpg";
+
+  // If it's already an absolute URL, return as is
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  // If it's a relative path that doesn't start with "/", add it
+  if (!url.startsWith("/")) {
+    return `/${url}`;
+  }
+
+  return url;
+};
+
 export default function ProductQuickView({ product, open, onOpenChange }) {
   const [selectedFlavor, setSelectedFlavor] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(null);
@@ -50,14 +67,42 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
       setError(null);
       setSuccess(false);
       setProductDetails(null);
-      setImgSrc("");
+      setImgSrc("/product-placeholder.jpg");
       setAvailableCombinations([]);
       setInitialLoading(true);
       return;
     }
 
     if (product) {
-      setImgSrc(product.image || "/product-placeholder.jpg");
+      // Use product as initial data - don't modify it here, let the API call handle the complete data
+      setProductDetails(product);
+
+      // Set initial image from product or first variant
+      if (product.variants && product.variants.length > 0) {
+        const firstActiveVariant = product.variants.find(
+          (v) => v.isActive && v.images && v.images.length > 0
+        );
+        if (firstActiveVariant) {
+          const primaryImage = firstActiveVariant.images.find(
+            (img) => img.isPrimary
+          );
+          setImgSrc(
+            normalizeImageUrl(
+              primaryImage ? primaryImage.url : firstActiveVariant.images[0].url
+            )
+          );
+        } else if (product.images && product.images.length > 0) {
+          setImgSrc(normalizeImageUrl(product.images[0].url));
+        } else {
+          setImgSrc(normalizeImageUrl(product.image));
+        }
+      } else if (product.images && product.images.length > 0) {
+        setImgSrc(normalizeImageUrl(product.images[0].url));
+      } else {
+        setImgSrc(normalizeImageUrl(product.image));
+      }
+
+      setInitialLoading(false);
     }
   }, [product, open]);
 
@@ -77,30 +122,34 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
           // Set initial image - prioritize variant images over product images
           if (productData.variants && productData.variants.length > 0) {
             const firstActiveVariant = productData.variants.find(
-              (v) => v.isActive && v.quantity > 0
+              (v) => v.isActive && v.images && v.images.length > 0
             );
-            if (
-              firstActiveVariant &&
-              firstActiveVariant.images &&
-              firstActiveVariant.images.length > 0
-            ) {
-              setImgSrc(firstActiveVariant.images[0].url);
-            } else if (productData.images && productData.images.length > 0) {
-              setImgSrc(
-                productData.images[0].url || "/product-placeholder.jpg"
+            if (firstActiveVariant) {
+              const primaryImage = firstActiveVariant.images.find(
+                (img) => img.isPrimary
               );
+              setImgSrc(
+                normalizeImageUrl(
+                  primaryImage
+                    ? primaryImage.url
+                    : firstActiveVariant.images[0].url
+                )
+              );
+            } else if (productData.images && productData.images.length > 0) {
+              setImgSrc(normalizeImageUrl(productData.images[0].url));
             } else {
-              setImgSrc(productData.image || "/product-placeholder.jpg");
+              setImgSrc(normalizeImageUrl(productData.image));
             }
           } else if (productData.images && productData.images.length > 0) {
-            setImgSrc(productData.images[0].url || "/product-placeholder.jpg");
+            setImgSrc(normalizeImageUrl(productData.images[0].url));
           } else {
-            setImgSrc(productData.image || "/product-placeholder.jpg");
+            setImgSrc(normalizeImageUrl(productData.image));
           }
 
+          // Set up available combinations from active variants
           if (productData.variants && productData.variants.length > 0) {
             const combinations = productData.variants
-              .filter((v) => v.isActive && v.quantity > 0)
+              .filter((v) => v.isActive)
               .map((variant) => ({
                 flavorId: variant.flavorId,
                 weightId: variant.weightId,
@@ -109,26 +158,52 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
             setAvailableCombinations(combinations);
 
+            // Auto-select first available options
             if (productData.flavorOptions?.length > 0) {
               const firstFlavor = productData.flavorOptions[0];
               setSelectedFlavor(firstFlavor);
 
-              const matchingVariant = combinations.find(
-                (combo) => combo.flavorId === firstFlavor.id
+              // Find available variants for this flavor
+              const availableVariantsForFlavor = combinations.filter(
+                (combo) =>
+                  combo.flavorId === firstFlavor.id &&
+                  combo.variant.quantity > 0
               );
 
-              if (matchingVariant && productData.weightOptions) {
+              if (
+                availableVariantsForFlavor.length > 0 &&
+                productData.weightOptions
+              ) {
+                // Select the first available weight for this flavor
+                const firstAvailableVariant = availableVariantsForFlavor[0];
                 const matchingWeight = productData.weightOptions.find(
-                  (weight) => weight.id === matchingVariant.weightId
+                  (weight) => weight.id === firstAvailableVariant.weightId
                 );
 
                 if (matchingWeight) {
                   setSelectedWeight(matchingWeight);
-                  setSelectedVariant(matchingVariant.variant);
+                  setSelectedVariant(firstAvailableVariant.variant);
                 }
               }
-            } else if (productData.variants.length > 0) {
-              setSelectedVariant(productData.variants[0]);
+            } else if (productData.weightOptions?.length > 0) {
+              const firstWeight = productData.weightOptions[0];
+              setSelectedWeight(firstWeight);
+
+              const matchingVariant = combinations.find(
+                (combo) =>
+                  combo.weightId === firstWeight.id &&
+                  combo.variant.quantity > 0
+              );
+
+              if (matchingVariant) {
+                setSelectedVariant(matchingVariant.variant);
+              }
+            } else {
+              // If no flavor/weight options, just select first available variant
+              const firstActiveVariant = productData.variants.find(
+                (v) => v.isActive && v.quantity > 0
+              );
+              setSelectedVariant(firstActiveVariant || productData.variants[0]);
             }
           }
         } else {
@@ -159,13 +234,13 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
         if (!a.isPrimary && b.isPrimary) return 1;
         return 0;
       });
-      setImgSrc(sortedImages[0].url);
+      setImgSrc(normalizeImageUrl(sortedImages[0].url));
     } else if (productDetails) {
       // Fallback to product images or default
       if (productDetails.images && productDetails.images.length > 0) {
-        setImgSrc(productDetails.images[0].url || "/product-placeholder.jpg");
+        setImgSrc(normalizeImageUrl(productDetails.images[0].url));
       } else {
-        setImgSrc(productDetails.image || "/product-placeholder.jpg");
+        setImgSrc(normalizeImageUrl(productDetails.image));
       }
     }
   }, [selectedVariant, productDetails]);
@@ -322,21 +397,24 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
     }
 
     if (selectedVariant) {
-      if (selectedVariant.salePrice && selectedVariant.salePrice > 0) {
+      const salePrice = parseFloat(selectedVariant.salePrice);
+      const regularPrice = parseFloat(selectedVariant.price);
+
+      if (selectedVariant.salePrice && salePrice > 0) {
         return (
           <div className="flex items-baseline gap-3">
             <span className="text-3xl font-bold text-red-600">
-              {formatCurrency(selectedVariant.salePrice)}
+              {formatCurrency(salePrice)}
             </span>
             <span className="text-xl text-gray-500 line-through">
-              {formatCurrency(selectedVariant.price)}
+              {formatCurrency(regularPrice)}
             </span>
           </div>
         );
       }
       return (
         <span className="text-3xl font-bold text-red-600">
-          {formatCurrency(selectedVariant.price || 0)}
+          {formatCurrency(regularPrice || 0)}
         </span>
       );
     }
@@ -418,7 +496,9 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                   fill
                   className="object-contain p-6"
                   sizes="(max-width: 768px) 100vw, 450px"
-                  onError={() => setImgSrc("/product-placeholder.jpg")}
+                  onError={() =>
+                    setImgSrc(normalizeImageUrl("/product-placeholder.jpg"))
+                  }
                 />
                 {displayProduct.hasSale && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold px-4 py-2 rounded-xl shadow-lg">
@@ -571,7 +651,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                                 : "border-gray-200 text-gray-400 bg-gray-100 cursor-not-allowed"
                             }`}
                           >
-                            {weight.value} {weight.unit}
+                            {weight.display || `${weight.value} ${weight.unit}`}
                           </button>
                         );
                       })}
@@ -662,7 +742,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
                 >
                   <Button
                     variant="outline"
-                    className="w-full py-4 border-2 border-red-500 text-red-600 hover:bg-red-50 font-bold text-lg rounded-xl transition-all"
+                    className="w-full py-4 border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-600 font-bold text-lg rounded-xl transition-all"
                   >
                     View Details
                   </Button>

@@ -100,7 +100,9 @@ export default function WishlistPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center mt-20">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-2xl font-semibold text-gray-700">Loading Wishlist...</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">
+            Loading Wishlist...
+          </h1>
         </div>
       </div>
     );
@@ -156,9 +158,12 @@ export default function WishlistPage() {
                 <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
                   <Heart className="h-12 w-12 text-gray-600" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-800 mb-4">Wishlist is Empty</h1>
+                <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                  Wishlist is Empty
+                </h1>
                 <p className="text-gray-600 mb-8">
-                  Save your favorite items to your wishlist for easy access later.
+                  Save your favorite items to your wishlist for easy access
+                  later.
                 </p>
                 <Link href="/products">
                   <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
@@ -204,10 +209,7 @@ export default function WishlistPage() {
                     <Link href={`/products/${product.slug}`}>
                       <div className="relative h-64 w-full bg-gradient-to-br from-red-50 to-red-100 overflow-hidden">
                         <Image
-                          src={
-                            product.images[0] ||
-                            "/placeholder.svg?height=300&width=400"
-                          }
+                          src={product.images[0] || "/placeholder.jpg"}
                           alt={product.name}
                           fill
                           className="object-contain p-4 transition-transform group-hover:scale-105"

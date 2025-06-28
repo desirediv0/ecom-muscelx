@@ -167,9 +167,7 @@ export function Footer() {
                   size={16}
                   className="text-red-600 mt-0.5 flex-shrink-0"
                 />
-                <span className="text-gray-700">
-                  A-36, Sector 83, Noida - 201305, Uttar Pradesh (India)
-                </span>
+                <span className="text-gray-700">Gurgaon, Haryana, India</span>
               </div>
 
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
@@ -191,42 +189,6 @@ export function Footer() {
                   +91 8800 123 456
                 </a>
               </div>
-
-              <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-xl">
-                <Clock
-                  size={16}
-                  className="text-red-600 mt-0.5 flex-shrink-0"
-                />
-                <div className="text-gray-700">
-                  <div className="font-semibold">Open Hours:</div>
-                  <div>Mon - Sat: 9:00 AM - 8:00 PM</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="mt-8">
-              <h4 className="text-gray-900 font-semibold mb-4 text-sm uppercase tracking-wide">
-                Quick Links
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                {[
-                  { label: "About Us", href: "/about" },
-                  { label: "Blog", href: "/blog" },
-                  { label: "Careers", href: "/careers" },
-                  { label: "FAQs", href: "/faq" },
-                  { label: "Privacy Policy", href: "/privacy" },
-                  { label: "Terms & Conditions", href: "/terms" },
-                ].map((link, idx) => (
-                  <Link
-                    key={idx}
-                    href={link.href}
-                    className="text-gray-600 hover:text-red-600 transition-colors duration-200 py-1"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -242,7 +204,7 @@ export function Footer() {
               <span className="hidden md:inline">Made in India with ❤️</span>
             </div>
 
-            <div className="flex items-center space-x-2 text-sm">
+            {/* <div className="flex items-center space-x-2 text-sm">
               <span className="text-gray-500">Designed & Developed by</span>
               <Link
                 href="https://desirediv.com/"
@@ -253,7 +215,7 @@ export function Footer() {
                 <span>Desire Div</span>
                 <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform duration-200" />
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

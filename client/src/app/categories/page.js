@@ -11,7 +11,7 @@ import { AlertCircle, ShoppingBag } from "lucide-react";
 const CategoryCard = ({ category, index }) => {
   // Function to get image URL
   const getImageUrl = (image) => {
-    if (!image) return "/placeholder.svg?height=300&width=400";
+    if (!image) return "/placeholder.jpg";
     if (image.startsWith("http")) return image;
     return `https://desirediv-storage.blr1.digitaloceanspaces.com/${image}`;
   };
@@ -32,7 +32,7 @@ const CategoryCard = ({ category, index }) => {
         >
           {/* Main Image Container with Overlay */}
           <div className="relative h-[250px] overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent z-10" />
             <Image
               src={getImageUrl(category.image)}
               alt={category.name}

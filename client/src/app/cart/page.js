@@ -231,9 +231,12 @@ export default function CartPage() {
           <Button
             asChild
             size="lg"
-            className="w-full text-lg font-bold rounded-xl py-6 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-red-500/30 transition-all"
+            className="w-full text-lg font-bold  rounded-xl py-6 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-red-500/30 transition-all"
           >
-            <Link href="/products">
+            <Link
+              href="/products"
+              className="flex items-center justify-center text-white hover:text-white"
+            >
               Start Shopping
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

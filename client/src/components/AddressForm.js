@@ -338,7 +338,7 @@ export default function AddressForm({
 
           {/* Default Address Checkbox - Full width */}
           <div className="lg:col-span-3">
-            <div className="flex items-center space-x-3 bg-red-500 p-4 rounded-xl border border-red-200">
+            <div className="flex items-center space-x-3 bg-red-50 p-4 rounded-xl border border-red-200">
               <input
                 type="checkbox"
                 id="isDefault"
@@ -349,7 +349,7 @@ export default function AddressForm({
               />
               <Label
                 htmlFor="isDefault"
-                className="font-medium cursor-pointer text-gray-700 flex items-center"
+                className="font-medium cursor-pointer text-gray-700 flex items-center "
               >
                 <Home className="h-4 w-4 mr-2 text-red-500" />
                 Set as default address

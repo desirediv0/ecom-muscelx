@@ -22,7 +22,7 @@ import ProductQuickView from "@/components/ProductQuickView";
 
 // Helper function to format image URLs correctly
 const getImageUrl = (image) => {
-  if (!image) return "/placeholder.svg?height=300&width=400";
+  if (!image) return "/placeholder.jpg";
   if (image.startsWith("http")) return image;
   return `https://desirediv-storage.blr1.digitaloceanspaces.com/${image}`;
 };
@@ -163,10 +163,7 @@ export default function CategoryPage() {
         {category && (
           <div className="mb-10">
             <div className="flex items-center mb-4 text-sm text-gray-600">
-              <Link
-                href="/"
-                className="hover:text-red-600 transition-colors"
-              >
+              <Link href="/" className="hover:text-red-600 transition-colors">
                 Home
               </Link>
               <span className="mx-2">•</span>
@@ -177,9 +174,7 @@ export default function CategoryPage() {
                 Products
               </Link>
               <span className="mx-2">•</span>
-              <span className="text-red-600 font-medium">
-                {category.name}
-              </span>
+              <span className="text-red-600 font-medium">{category.name}</span>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8">
@@ -296,7 +291,8 @@ export default function CategoryPage() {
               No Products Found
             </h2>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              We couldn&apos;t find any products in this category. Please check back later.
+              We couldn&apos;t find any products in this category. Please check
+              back later.
             </p>
             <Link href="/products">
               <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300">

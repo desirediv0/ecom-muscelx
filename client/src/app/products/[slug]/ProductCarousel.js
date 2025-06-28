@@ -12,6 +12,23 @@ import {
 import { Pause, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 
+// Helper function to normalize image URLs for Next.js Image component
+const normalizeImageUrl = (url) => {
+  if (!url) return "/product-placeholder.jpg";
+
+  // If it's already an absolute URL, return as is
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  // If it's a relative path that doesn't start with "/", add it
+  if (!url.startsWith("/")) {
+    return `/${url}`;
+  }
+
+  return url;
+};
+
 export default function ProductCarousel({
   images,
   productName,
@@ -114,7 +131,7 @@ export default function ProductCarousel({
       <div className="bg-white rounded-xl overflow-hidden mb-8 shadow-sm border border-gray-200">
         <div className="relative h-[500px] w-full bg-gray-50 flex items-center justify-center">
           <Image
-            src="/product-placeholder.jpg"
+            src={normalizeImageUrl("/product-placeholder.jpg")}
             alt={productName}
             fill
             className="object-contain p-6"
@@ -150,14 +167,16 @@ export default function ProductCarousel({
             <CarouselItem key={index}>
               <div className="relative h-[500px] w-full bg-gray-50 transition-all duration-300">
                 <Image
-                  src={image?.url || "/product-placeholder.jpg"}
+                  src={normalizeImageUrl(image?.url)}
                   alt={`${productName || "Product"} - Image ${index + 1}`}
                   fill
                   className="object-contain p-6"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority={index === 0}
                   onError={(e) => {
-                    e.target.src = "/product-placeholder.jpg";
+                    e.target.src = normalizeImageUrl(
+                      "/product-placeholder.jpg"
+                    );
                   }}
                 />
                 {showSaleBadge && index === 0 && (
@@ -212,7 +231,7 @@ export default function ProductCarousel({
                   >
                     <div className="relative w-24 h-24">
                       <Image
-                        src={image?.url || "/product-placeholder.jpg"}
+                        src={normalizeImageUrl(image?.url)}
                         alt={`${productName || "Product"} - Thumbnail ${
                           index + 1
                         }`}
@@ -220,7 +239,9 @@ export default function ProductCarousel({
                         className="object-contain p-2"
                         sizes="96px"
                         onError={(e) => {
-                          e.target.src = "/product-placeholder.jpg";
+                          e.target.src = normalizeImageUrl(
+                            "/product-placeholder.jpg"
+                          );
                         }}
                       />
                     </div>

@@ -101,7 +101,9 @@ export default function AddressesPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-2xl font-semibold text-gray-700">Loading Addresses...</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">
+            Loading Addresses...
+          </h1>
         </div>
       </div>
     );
@@ -113,7 +115,7 @@ export default function AddressesPage() {
       <div className="bg-gradient-to-r from-red-600 to-red-500 rounded-2xl p-10 text-white shadow-xl border-2 border-red-200">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-extrabold mb-2 tracking-tight">
+            <h1 className="text-4xl font-extrabold mb-2 tracking-tight text-white">
               My Addresses
             </h1>
             <p className="text-red-100 text-lg">

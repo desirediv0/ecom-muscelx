@@ -371,7 +371,7 @@ export default function Home() {
                     {/* Category Image */}
                     <div className="h-64 relative overflow-hidden">
                       <Image
-                        src={category.image || "/category-placeholder.jpg"}
+                        src={category.image || "/placeholder.jpg"}
                         alt={category.name}
                         fill
                         className="object-cover transform group-hover:scale-110 transition-transform duration-700"
