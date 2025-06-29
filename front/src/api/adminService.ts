@@ -304,6 +304,14 @@ export const products = {
   setVariantImageAsPrimary: (imageId: string) => {
     return api.patch(`/api/admin/variants/images/${imageId}/set-primary`);
   },
+  reorderVariantImages: (
+    variantId: string,
+    imageOrders: Array<{ imageId: string; order: number }>
+  ) => {
+    return api.patch(`/api/admin/variants/${variantId}/images/reorder`, {
+      imageOrders,
+    });
+  },
 };
 
 // Flavors Management
