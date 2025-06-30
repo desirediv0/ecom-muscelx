@@ -22,9 +22,19 @@ import ProductQuickView from "@/components/ProductQuickView";
 
 // Helper function to format image URLs correctly
 const getImageUrl = (image) => {
-  if (!image) return "/placeholder.jpg";
-  if (image.startsWith("http")) return image;
-  return `https://desirediv-storage.blr1.digitaloceanspaces.com/${image}`;
+  if (!image) return "/product-placeholder.jpg";
+
+  // If it's already an absolute URL, return as is
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  // If it's a relative path that doesn't start with "/", add it
+  if (!image.startsWith("/")) {
+    return `/${image}`;
+  }
+
+  return image;
 };
 
 export default function CategoryPage() {
@@ -127,7 +137,7 @@ export default function CategoryPage() {
   // Loading state
   if (loading && !category) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white pt-32">
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
@@ -140,7 +150,7 @@ export default function CategoryPage() {
   // Error state
   if (error && !category) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white pt-32">
         <div className="container mx-auto px-4 py-8">
           <div className="bg-red-50 p-6 rounded-2xl border border-red-200 flex items-start max-w-2xl mx-auto shadow-lg">
             <AlertCircle className="text-red-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -157,7 +167,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-32">
       <div className="container mx-auto px-4 py-8">
         {/* Category header */}
         {category && (
@@ -193,11 +203,17 @@ export default function CategoryPage() {
                 {category.image && (
                   <div className="w-32 h-32 rounded-2xl overflow-hidden bg-gray-50 flex-shrink-0 shadow-md">
                     <Image
-                      src={getImageUrl(category.image) || "/placeholder.svg"}
+                      src={
+                        getImageUrl(category.image) ||
+                        "/product-placeholder.jpg"
+                      }
                       alt={category.name}
                       width={128}
                       height={128}
                       className="w-full h-full object-contain p-4"
+                      onError={(e) => {
+                        e.target.src = "/product-placeholder.jpg";
+                      }}
                     />
                   </div>
                 )}
@@ -267,17 +283,17 @@ export default function CategoryPage() {
 
         {/* Products Grid/List */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-pulse"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden animate-pulse"
               >
-                <div className="h-64 bg-gray-200" />
-                <div className="p-6">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-3" />
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-4" />
-                  <div className="h-10 bg-gray-200 rounded" />
+                <div className="h-48 bg-gray-200" />
+                <div className="p-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                  <div className="h-3 bg-gray-200 rounded w-1/2 mb-3" />
+                  <div className="h-8 bg-gray-200 rounded" />
                 </div>
               </div>
             ))}
@@ -301,111 +317,97 @@ export default function CategoryPage() {
             </Link>
           </div>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                className="bg-white border border-gray-200 rounded-lg hover:border-red-400/70 transition-all duration-300 group shadow-sm hover:shadow-lg overflow-hidden flex flex-col h-full relative"
               >
-                <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
-                  <Link href={`/products/${product.slug}`}>
-                    <Image
-                      src={getImageUrl(product.image) || "/placeholder.svg"}
-                      alt={product.name}
-                      fill
-                      className="object-contain p-4 transition-transform group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </Link>
-
-                  {product.hasSale && (
-                    <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                      SALE
-                    </span>
-                  )}
-
-                  <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
-                    >
-                      <Heart className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-10 h-10 p-0 bg-white/90 hover:bg-red-600 hover:text-white rounded-full shadow-md"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleQuickView(product);
-                      }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center justify-center mb-3">
-                    <div className="flex text-red-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4"
-                          fill={
-                            i < Math.round(product.avgRating || 0)
-                              ? "currentColor"
-                              : "none"
-                          }
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-500 ml-2">
-                      ({product.reviewCount || 0})
-                    </span>
-                  </div>
-
-                  <Link
-                    href={`/products/${product.slug}`}
-                    className="block hover:text-red-600 transition-colors"
-                  >
-                    <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 text-center">
-                      {product.name}
-                    </h3>
-                  </Link>
-
-                  <div className="text-center mb-4">
-                    {product.hasSale ? (
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="font-bold text-xl text-red-600">
-                          {formatCurrency(product.basePrice)}
-                        </span>
-                        <span className="text-gray-500 line-through">
-                          {formatCurrency(product.regularPrice)}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="font-bold text-xl text-gray-800">
-                        {formatCurrency(product.basePrice)}
-                      </span>
-                    )}
-                  </div>
-
-                  {product.flavors > 1 && (
-                    <p className="text-xs text-gray-500 text-center mb-4">
-                      {product.flavors} variants
-                    </p>
-                  )}
-
+                <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
                   <Button
-                    className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                    variant="outline"
+                    className="bg-white/90 backdrop-blur-sm rounded-full text-black h-8 w-8 p-0 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200"
+                  >
+                    <Heart className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="bg-white/90 backdrop-blur-sm rounded-full text-black h-8 w-8 p-0 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200"
                     onClick={(e) => {
                       e.preventDefault();
                       handleQuickView(product);
                     }}
                   >
-                    <Eye className="h-4 w-4 mr-2" />
+                    <Eye className="h-3 w-3" />
+                  </Button>
+                </div>
+
+                <div className="relative p-3 flex-grow">
+                  <div className="relative mb-3 overflow-hidden rounded-lg bg-gray-50 aspect-square">
+                    <Image
+                      src={
+                        getImageUrl(product.image) || "/product-placeholder.jpg"
+                      }
+                      alt={product.name}
+                      fill
+                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
+                      onError={(e) => {
+                        e.target.src = "/product-placeholder.jpg";
+                      }}
+                    />
+                    {product.hasSale && (
+                      <div className="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                        SALE
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold text-gray-800 group-hover:text-red-600 transition-colors line-clamp-2 h-10">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-center justify-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={12}
+                          className={
+                            i < Math.round(product.avgRating || 0)
+                              ? "fill-red-400 text-red-400"
+                              : "text-gray-300"
+                          }
+                        />
+                      ))}
+                      <span className="ml-1 text-xs text-gray-500">
+                        ({product.reviewCount || 0})
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col items-center space-y-1">
+                      <span className="text-lg font-bold text-red-600">
+                        {product.basePrice
+                          ? formatCurrency(product.basePrice)
+                          : ""}
+                      </span>
+                      {product.hasSale && product.regularPrice && (
+                        <span className="text-sm text-gray-400 line-through">
+                          {formatCurrency(product.regularPrice)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 pt-0 mt-auto">
+                  <Button
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 text-sm transition-all duration-300"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleQuickView(product);
+                    }}
+                  >
+                    <Eye className="h-3 w-3 mr-1" />
                     Quick View
                   </Button>
                 </div>
@@ -417,24 +419,30 @@ export default function CategoryPage() {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                className="bg-white border border-gray-200/80 rounded-2xl hover:border-red-400/70 transition-all duration-300 group shadow-md hover:shadow-xl hover:shadow-red-500/10 overflow-hidden"
               >
                 <div className="flex flex-col md:flex-row">
                   <div className="relative w-full md:w-64 h-64 md:h-auto bg-gray-50 overflow-hidden">
                     <Link href={`/products/${product.slug}`}>
                       <Image
-                        src={getImageUrl(product.image) || "/placeholder.svg"}
+                        src={
+                          getImageUrl(product.image) ||
+                          "/product-placeholder.jpg"
+                        }
                         alt={product.name}
                         fill
-                        className="object-contain p-4 transition-transform group-hover:scale-105"
+                        className="object-cover p-4 transition-transform group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 256px"
+                        onError={(e) => {
+                          e.target.src = "/product-placeholder.jpg";
+                        }}
                       />
                     </Link>
 
                     {product.hasSale && (
-                      <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                      <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
                         SALE
-                      </span>
+                      </div>
                     )}
                   </div>
 
@@ -442,20 +450,18 @@ export default function CategoryPage() {
                     <div className="flex flex-col h-full">
                       <div className="flex-1">
                         <div className="flex items-center mb-3">
-                          <div className="flex text-red-400">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className="h-4 w-4"
-                                fill={
-                                  i < Math.round(product.avgRating || 0)
-                                    ? "currentColor"
-                                    : "none"
-                                }
-                              />
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-500 ml-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              size={16}
+                              className={
+                                i < Math.round(product.avgRating || 0)
+                                  ? "fill-red-400 text-red-400"
+                                  : "text-gray-300"
+                              }
+                            />
+                          ))}
+                          <span className="ml-2 text-sm text-gray-500">
                             ({product.reviewCount || 0})
                           </span>
                         </div>
@@ -464,13 +470,15 @@ export default function CategoryPage() {
                           href={`/products/${product.slug}`}
                           className="block hover:text-red-600 transition-colors"
                         >
-                          <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                          <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-red-600">
                             {product.name}
                           </h3>
                         </Link>
 
                         <p className="text-gray-600 mb-4 line-clamp-2">
-                          {product.description}
+                          {product.shortDescription ||
+                            product.description ||
+                            "Premium quality product designed for your fitness goals."}
                         </p>
 
                         {product.flavors > 1 && (
@@ -481,19 +489,15 @@ export default function CategoryPage() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <div>
-                          {product.hasSale ? (
-                            <div className="flex items-center space-x-2">
-                              <span className="font-bold text-2xl text-red-600">
-                                {formatCurrency(product.basePrice)}
-                              </span>
-                              <span className="text-gray-500 line-through">
-                                {formatCurrency(product.regularPrice)}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="font-bold text-2xl text-gray-800">
-                              {formatCurrency(product.basePrice)}
+                        <div className="flex items-baseline space-x-2">
+                          <span className="text-2xl font-black text-red-600">
+                            {product.basePrice
+                              ? formatCurrency(product.basePrice)
+                              : ""}
+                          </span>
+                          {product.hasSale && product.regularPrice && (
+                            <span className="text-base text-gray-400 line-through">
+                              {formatCurrency(product.regularPrice)}
                             </span>
                           )}
                         </div>
@@ -501,7 +505,7 @@ export default function CategoryPage() {
                         <div className="flex items-center space-x-3">
                           <Button
                             variant="outline"
-                            className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
+                            className="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold transition-all duration-200"
                             onClick={(e) => {
                               e.preventDefault();
                               handleQuickView(product);
@@ -511,13 +515,14 @@ export default function CategoryPage() {
                             Quick View
                           </Button>
                           <Button
-                            className="bg-red-600 hover:bg-red-700 text-white"
+                            className="bg-red-600 hover:bg-red-700 text-white font-bold transition-all duration-200"
                             onClick={(e) => {
                               e.preventDefault();
                               handleQuickView(product);
                             }}
                           >
-                            Add to Cart
+                            <ShoppingBag className="h-4 w-4 mr-2" />
+                            View Details
                           </Button>
                         </div>
                       </div>
@@ -535,7 +540,6 @@ export default function CategoryPage() {
             <div className="flex items-center bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
               <Button
                 variant="ghost"
-                size="sm"
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page === 1 || loading}
                 className="rounded-none border-0 hover:bg-red-600 hover:text-white px-4 py-3"
@@ -583,7 +587,6 @@ export default function CategoryPage() {
 
               <Button
                 variant="ghost"
-                size="sm"
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page === pagination.pages || loading}
                 className="rounded-none border-0 hover:bg-red-600 hover:text-white px-4 py-3"
@@ -597,8 +600,8 @@ export default function CategoryPage() {
         {/* Quick View Dialog */}
         <ProductQuickView
           product={quickViewProduct}
-          open={quickViewOpen}
-          onOpenChange={setQuickViewOpen}
+          isOpen={quickViewOpen}
+          onClose={() => setQuickViewOpen(false)}
         />
       </div>
     </div>

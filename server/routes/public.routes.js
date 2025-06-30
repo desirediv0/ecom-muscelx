@@ -10,6 +10,7 @@ import {
   getAllFlavors,
   getAllWeights,
   getMaxPrice,
+  getProductReviews,
 } from "../controllers/product.controller.js";
 import { trackProductView } from "../middlewares/tracking.middleware.js";
 
@@ -28,5 +29,8 @@ router.get("/product-variant", getProductVariant);
 // Flavors and Weights
 router.get("/flavors", getAllFlavors);
 router.get("/weights", getAllWeights);
+
+// Reviews
+router.get("/reviews/product/:productId", getProductReviews);
 
 export default router;

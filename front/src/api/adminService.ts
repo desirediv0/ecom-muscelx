@@ -286,11 +286,16 @@ export const products = {
   uploadVariantImage: (
     variantId: string,
     imageFile: File,
-    isPrimary: boolean = false
+    isPrimary?: boolean
   ) => {
     const formData = new FormData();
     formData.append("image", imageFile);
-    formData.append("isPrimary", isPrimary.toString());
+
+    // Only append isPrimary if it's explicitly set (true or false)
+    // If undefined, let backend handle the decision
+    if (isPrimary !== undefined) {
+      formData.append("isPrimary", isPrimary.toString());
+    }
 
     return api.post(`/api/admin/variants/${variantId}/images`, formData, {
       headers: {
@@ -361,21 +366,6 @@ export const flavors = {
     return api.delete(
       `/api/admin/flavors/${flavorId}${force ? "?force=true" : ""}`
     );
-  },
-
-  // Variant image management
-  uploadVariantImage: (variantId: string, imageFile: File) => {
-    const formData = new FormData();
-    formData.append("image", imageFile);
-    return api.post(`/api/admin/variants/${variantId}/images`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  },
-
-  deleteVariantImage: (imageId: string) => {
-    return api.delete(`/api/admin/variants/images/${imageId}`);
   },
 };
 

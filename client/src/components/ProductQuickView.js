@@ -11,23 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Star,
-  Minus,
-  Plus,
-  ShoppingCart,
-  CheckCircle,
-  AlertCircle,
-  X,
-  Zap,
-  Shield,
-  Award,
-} from "lucide-react";
-import { useCart } from "@/lib/cart-context";
+import { Star, AlertCircle, Zap, Shield, Award } from "lucide-react";
 
 // Helper function to normalize image URLs for Next.js Image component
 const normalizeImageUrl = (url) => {
-  if (!url) return "/product-placeholder.jpg";
+  if (!url) return "/placeholder.jpg";
 
   // If it's already an absolute URL, return as is
   if (url.startsWith("http://") || url.startsWith("https://")) {
@@ -42,16 +30,12 @@ const normalizeImageUrl = (url) => {
   return url;
 };
 
-export default function ProductQuickView({ product, open, onOpenChange }) {
+export default function ProductQuickView({ product, isOpen, onClose }) {
   const [selectedFlavor, setSelectedFlavor] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
-  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [addingToCart, setAddingToCart] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const { addToCart } = useCart();
   const [productDetails, setProductDetails] = useState(null);
   const [imgSrc, setImgSrc] = useState("");
   const [availableCombinations, setAvailableCombinations] = useState([]);
@@ -59,15 +43,13 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
   // Reset states when product changes or dialog closes
   useEffect(() => {
-    if (!open) {
+    if (!isOpen) {
       setSelectedFlavor(null);
       setSelectedWeight(null);
       setSelectedVariant(null);
-      setQuantity(1);
       setError(null);
-      setSuccess(false);
       setProductDetails(null);
-      setImgSrc("/product-placeholder.jpg");
+      setImgSrc("/placeholder.jpg");
       setAvailableCombinations([]);
       setInitialLoading(true);
       return;
@@ -104,19 +86,23 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
 
       setInitialLoading(false);
     }
-  }, [product, open]);
+  }, [product, isOpen]);
 
   // Fetch product details when product changes
   useEffect(() => {
     const fetchProductDetails = async () => {
-      if (!product || !open) return;
+      if (!product || !isOpen) return;
 
       setLoading(true);
       setInitialLoading(true);
+      setError(null);
       try {
+        console.log("Fetching details for product:", product.name);
         const response = await fetchApi(`/public/products/${product.slug}`);
+
         if (response.data && response.data.product) {
           const productData = response.data.product;
+          console.log("Product data loaded:", productData);
           setProductDetails(productData);
 
           // Set initial image - prioritize variant images over product images
@@ -157,38 +143,38 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
               }));
 
             setAvailableCombinations(combinations);
+            console.log("Available combinations:", combinations);
 
             // Auto-select first available options
             if (productData.flavorOptions?.length > 0) {
               const firstFlavor = productData.flavorOptions[0];
-              setSelectedFlavor(firstFlavor);
-
-              // Find available variants for this flavor
               const availableVariantsForFlavor = combinations.filter(
                 (combo) =>
                   combo.flavorId === firstFlavor.id &&
                   combo.variant.quantity > 0
               );
 
-              if (
-                availableVariantsForFlavor.length > 0 &&
-                productData.weightOptions
-              ) {
-                // Select the first available weight for this flavor
-                const firstAvailableVariant = availableVariantsForFlavor[0];
-                const matchingWeight = productData.weightOptions.find(
-                  (weight) => weight.id === firstAvailableVariant.weightId
-                );
+              if (availableVariantsForFlavor.length > 0) {
+                setSelectedFlavor(firstFlavor);
 
-                if (matchingWeight) {
-                  setSelectedWeight(matchingWeight);
-                  setSelectedVariant(firstAvailableVariant.variant);
+                if (productData.weightOptions?.length > 0) {
+                  // Select the first available weight for this flavor
+                  const firstAvailableVariant = availableVariantsForFlavor[0];
+                  const matchingWeight = productData.weightOptions.find(
+                    (weight) => weight.id === firstAvailableVariant.weightId
+                  );
+
+                  if (matchingWeight) {
+                    setSelectedWeight(matchingWeight);
+                    setSelectedVariant(firstAvailableVariant.variant);
+                  }
+                } else {
+                  // No weight options, just set the variant
+                  setSelectedVariant(availableVariantsForFlavor[0].variant);
                 }
               }
             } else if (productData.weightOptions?.length > 0) {
               const firstWeight = productData.weightOptions[0];
-              setSelectedWeight(firstWeight);
-
               const matchingVariant = combinations.find(
                 (combo) =>
                   combo.weightId === firstWeight.id &&
@@ -196,6 +182,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
               );
 
               if (matchingVariant) {
+                setSelectedWeight(firstWeight);
                 setSelectedVariant(matchingVariant.variant);
               }
             } else {
@@ -207,6 +194,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
             }
           }
         } else {
+          console.error("No product data in response");
           setError("Product details not available");
         }
       } catch (err) {
@@ -219,7 +207,7 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
     };
 
     fetchProductDetails();
-  }, [product, open]);
+  }, [product, isOpen]);
 
   // Update image when selected variant changes
   useEffect(() => {
@@ -347,60 +335,18 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
     }
   };
 
-  const handleQuantityChange = (change) => {
-    const newQuantity = quantity + change;
-    if (newQuantity < 1) return;
-    if (
-      selectedVariant &&
-      selectedVariant.quantity > 0 &&
-      newQuantity > selectedVariant.quantity
-    )
-      return;
-    setQuantity(newQuantity);
-  };
-
-  const handleAddToCart = async () => {
-    setAddingToCart(true);
-    setError(null);
-    setSuccess(false);
-
-    let variantToAdd = selectedVariant;
-
-    if (!variantToAdd && productDetails?.variants?.length > 0) {
-      variantToAdd = productDetails.variants[0];
-    }
-
-    if (!variantToAdd) {
-      setError("No product variant available");
-      setAddingToCart(false);
-      return;
-    }
-
-    try {
-      await addToCart(variantToAdd.id, quantity);
-      setSuccess(true);
-
-      setTimeout(() => {
-        onOpenChange(false);
-      }, 2000);
-    } catch (err) {
-      console.error("Error adding to cart:", err);
-      setError("Failed to add to cart. Please try again.");
-    } finally {
-      setAddingToCart(false);
-    }
-  };
-
   const getPriceDisplay = () => {
     if (initialLoading || loading) {
       return <div className="h-8 w-32 bg-gray-200 animate-pulse rounded"></div>;
     }
 
     if (selectedVariant) {
-      const salePrice = parseFloat(selectedVariant.salePrice);
+      const salePrice = selectedVariant.salePrice
+        ? parseFloat(selectedVariant.salePrice)
+        : null;
       const regularPrice = parseFloat(selectedVariant.price);
 
-      if (selectedVariant.salePrice && salePrice > 0) {
+      if (salePrice && salePrice > 0) {
         return (
           <div className="flex items-baseline gap-3">
             <span className="text-3xl font-bold text-red-600">
@@ -459,7 +405,11 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
       );
     }
 
-    return null;
+    return (
+      <span className="text-3xl font-bold text-red-600">
+        {formatCurrency(0)}
+      </span>
+    );
   };
 
   if (!product) return null;
@@ -467,286 +417,265 @@ export default function ProductQuickView({ product, open, onOpenChange }) {
   const displayProduct = productDetails || product;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[850px] max-h-[80vh] overflow-y-auto p-0 bg-white border-0 shadow-2xl rounded-3xl">
-        {/* Header */}
-        <DialogHeader className="p-4 border-b border-gray-100 flex justify-end sticky top-0 bg-white z-10">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onOpenChange(false)}
-            className="w-8 h-8 p-0 rounded-full hover:bg-gray-200 text-gray-500 hover:text-gray-800"
-          >
-            <X className="h-5 w-5" />
-          </Button>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-2 border-gray-300 rounded-lg shadow-xl">
+        <DialogHeader className="border-b-2 border-gray-200 pb-4">
+          <DialogTitle className="text-2xl font-bold text-gray-900 pr-8">
+            {productDetails?.name || "Product Details"}
+          </DialogTitle>
         </DialogHeader>
 
-        {loading && !productDetails ? (
-          <div className="py-20 flex justify-center">
-            <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+        {initialLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <p className="text-gray-900 font-medium">{error}</p>
+          </div>
+        ) : !productDetails ? (
+          <div className="text-center py-12">
+            <p className="text-gray-700 font-medium">Product not found.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 bg-white rounded-b-3xl">
-            {/* Product Image */}
-            <div className="relative">
-              <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden bg-gray-50 shadow-lg border border-gray-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+            {/* Left - Product Image */}
+            <div className="space-y-4">
+              <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-300">
                 <Image
                   src={imgSrc}
-                  alt={displayProduct.name}
+                  alt={productDetails.name}
                   fill
-                  className="object-contain p-6"
-                  sizes="(max-width: 768px) 100vw, 450px"
-                  onError={() =>
-                    setImgSrc(normalizeImageUrl("/product-placeholder.jpg"))
-                  }
+                  className="object-contain p-4"
+                  onError={(e) => {
+                    e.target.src = "/product-placeholder.jpg";
+                  }}
                 />
-                {displayProduct.hasSale && (
-                  <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold px-4 py-2 rounded-xl shadow-lg">
+                {productDetails.hasSale && (
+                  <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-md">
                     SALE
                   </div>
                 )}
               </div>
 
-              {/* Product Features */}
-              <div className="grid grid-cols-3 gap-3 mt-6">
-                <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-                  <Shield className="h-5 w-5 text-green-600 mx-auto mb-1" />
-                  <span className="text-xs font-semibold text-green-700">
-                    Lab Tested
-                  </span>
-                </div>
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-                  <Zap className="h-5 w-5 text-blue-600 mx-auto mb-1" />
-                  <span className="text-xs font-semibold text-blue-700">
-                    Fast Acting
-                  </span>
-                </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-center">
-                  <Award className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
-                  <span className="text-xs font-semibold text-yellow-700">
-                    Premium
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Product Info */}
-            <div className="flex flex-col space-y-3">
-              <DialogTitle className="text-3xl font-bold text-gray-900 -mt-2">
-                {displayProduct.name}
-              </DialogTitle>
-
-              {/* Success Message */}
-              {success && (
-                <div className="p-4 bg-green-50 border border-green-200 text-green-700 text-base rounded-xl flex items-center">
-                  <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                  <span className="font-semibold">
-                    Item added to cart successfully!
-                  </span>
-                </div>
-              )}
-
-              {/* Error message */}
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-200 text-red-600 text-base rounded-xl flex items-center">
-                  <AlertCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                  <span className="font-semibold">{error}</span>
-                </div>
-              )}
-
-              {/* Price */}
-              <div className="border-b border-gray-100 pb-4">
-                {getPriceDisplay()}
-              </div>
-
-              {/* Rating */}
-              {displayProduct.avgRating > 0 && (
-                <div className="flex items-center space-x-3">
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-5 w-5 ${
-                          star <= Math.round(displayProduct.avgRating || 0)
-                            ? "text-red-400 fill-red-400"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-600 font-medium">
-                    {displayProduct.avgRating?.toFixed(1)} (
-                    {displayProduct.reviewCount || 0} reviews)
-                  </span>
-                </div>
-              )}
-
-              {/* Flavor selection */}
-              {productDetails?.flavorOptions &&
-                productDetails.flavorOptions.length > 0 && (
-                  <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Choose Flavor
-                    </label>
-                    <div className="flex flex-wrap gap-3">
-                      {productDetails.flavorOptions.map((flavor) => {
-                        const availableWeightIds = getAvailableWeightsForFlavor(
-                          flavor.id
-                        );
-                        const isAvailable = availableWeightIds.length > 0;
-
-                        return (
-                          <button
-                            key={flavor.id}
-                            type="button"
-                            onClick={() => handleFlavorChange(flavor)}
-                            disabled={!isAvailable}
-                            className={`px-4 py-2 rounded-xl border-2 text-sm font-semibold transition-all shadow-sm ${
-                              selectedFlavor?.id === flavor.id
-                                ? "border-red-500 bg-red-500 text-white shadow-md"
-                                : isAvailable
-                                ? "border-gray-300 bg-white text-gray-800 hover:border-red-500 hover:text-red-600"
-                                : "border-gray-200 text-gray-400 bg-gray-100 cursor-not-allowed"
-                            }`}
-                          >
-                            {flavor.name}
-                          </button>
-                        );
-                      })}
-                    </div>
+              {/* Additional Images */}
+              {productDetails.variants &&
+                productDetails.variants.some((v) => v.images?.length > 1) && (
+                  <div className="flex gap-2 overflow-x-auto">
+                    {productDetails.variants
+                      .filter((v) => v.images?.length > 0)
+                      .slice(0, 1)[0]
+                      ?.images?.slice(0, 4)
+                      .map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setImgSrc(normalizeImageUrl(img.url))}
+                          className="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-lg border-2 border-gray-300 overflow-hidden hover:border-red-500 transition-colors"
+                        >
+                          <Image
+                            src={normalizeImageUrl(img.url)}
+                            alt={`Product ${idx + 1}`}
+                            width={80}
+                            height={80}
+                            className="w-full h-full object-contain p-1"
+                            onError={(e) => {
+                              e.target.src = "/product-placeholder.jpg";
+                            }}
+                          />
+                        </button>
+                      ))}
                   </div>
                 )}
+            </div>
 
-              {/* Weight selection */}
-              {productDetails?.weightOptions &&
-                productDetails.weightOptions.length > 0 && (
-                  <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Choose Weight
-                    </label>
-                    <div className="flex flex-wrap gap-3">
-                      {productDetails.weightOptions.map((weight) => {
-                        const availableFlavorIds = getAvailableFlavorsForWeight(
-                          weight.id
+            {/* Right - Product Details */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  {productDetails.name}
+                </h2>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-4 w-4"
+                        fill={
+                          i < Math.round(productDetails.avgRating || 0)
+                            ? "#ef4444"
+                            : "none"
+                        }
+                        stroke="#ef4444"
+                      />
+                    ))}
+                    <span className="ml-2 text-sm text-gray-700 font-medium">
+                      ({productDetails.reviewCount || 0} reviews)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-baseline space-x-3 mb-4">
+                  {getPriceDisplay()}
+                </div>
+              </div>
+
+              {/* Product Description */}
+              {productDetails.shortDescription && (
+                <div className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <p className="text-gray-800 leading-relaxed font-medium">
+                    {productDetails.shortDescription}
+                  </p>
+                </div>
+              )}
+
+              {/* Flavor Selection */}
+              {productDetails.flavorOptions?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">
+                    Available Flavors
+                    {selectedFlavor && (
+                      <span className="ml-2 text-red-600 font-black">
+                        ({selectedFlavor.name})
+                      </span>
+                    )}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {productDetails.flavorOptions.map((flavor) => {
+                      const isAvailable =
+                        getAvailableWeightsForFlavor(flavor.id).length > 0;
+                      return (
+                        <button
+                          key={flavor.id}
+                          onClick={() =>
+                            isAvailable && handleFlavorChange(flavor)
+                          }
+                          disabled={!isAvailable}
+                          className={`px-4 py-2 text-sm font-bold border-2 rounded-lg transition-all duration-200 ${
+                            selectedFlavor?.id === flavor.id
+                              ? "border-red-600 bg-red-600 text-white shadow-lg"
+                              : isAvailable
+                              ? "border-gray-400 bg-white text-gray-800 hover:border-red-500 hover:text-red-600 hover:bg-red-50"
+                              : "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                          }`}
+                        >
+                          {flavor.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Weight Selection */}
+              {productDetails.weightOptions?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">
+                    Available Weights
+                    {selectedWeight && (
+                      <span className="ml-2 text-red-600 font-black">
+                        (
+                        {selectedWeight.display ||
+                          `${selectedWeight.value}${selectedWeight.unit}`}
+                        )
+                      </span>
+                    )}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {productDetails.weightOptions
+                      .filter((weight) => {
+                        if (!selectedFlavor) return true;
+                        return availableCombinations.some(
+                          (combo) =>
+                            combo.flavorId === selectedFlavor.id &&
+                            combo.weightId === weight.id &&
+                            combo.variant.quantity > 0
                         );
+                      })
+                      .map((weight) => {
                         const isAvailable = selectedFlavor
                           ? availableCombinations.some(
                               (combo) =>
                                 combo.flavorId === selectedFlavor.id &&
-                                combo.weightId === weight.id
+                                combo.weightId === weight.id &&
+                                combo.variant.quantity > 0
                             )
-                          : availableFlavorIds.length > 0;
-
+                          : availableCombinations.some(
+                              (combo) =>
+                                combo.weightId === weight.id &&
+                                combo.variant.quantity > 0
+                            );
                         return (
                           <button
                             key={weight.id}
-                            type="button"
-                            onClick={() => handleWeightChange(weight)}
+                            onClick={() =>
+                              isAvailable && handleWeightChange(weight)
+                            }
                             disabled={!isAvailable}
-                            className={`px-4 py-2 rounded-xl border-2 text-sm font-semibold transition-all shadow-sm ${
+                            className={`px-4 py-2 text-sm font-bold border-2 rounded-lg transition-all duration-200 ${
                               selectedWeight?.id === weight.id
-                                ? "border-red-500 bg-red-500 text-white shadow-md"
+                                ? "border-red-600 bg-red-600 text-white shadow-lg"
                                 : isAvailable
-                                ? "border-gray-300 bg-white text-gray-800 hover:border-red-500 hover:text-red-600"
-                                : "border-gray-200 text-gray-400 bg-gray-100 cursor-not-allowed"
+                                ? "border-gray-400 bg-white text-gray-800 hover:border-red-500 hover:text-red-600 hover:bg-red-50"
+                                : "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
                             }`}
                           >
-                            {weight.display || `${weight.value} ${weight.unit}`}
+                            {weight.display || `${weight.value}${weight.unit}`}
                           </button>
                         );
                       })}
-                    </div>
                   </div>
-                )}
-
-              {/* Stock Availability */}
-              {selectedVariant && (
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                  <span
-                    className={`text-sm font-semibold ${
-                      selectedVariant.quantity > 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {selectedVariant.quantity > 0
-                      ? `✓ In Stock (${selectedVariant.quantity} available)`
-                      : "✗ Out of Stock"}
-                  </span>
                 </div>
               )}
 
-              {/* Quantity */}
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-3">
-                  Quantity
-                </label>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden bg-white">
-                    <button
-                      onClick={() => handleQuantityChange(-1)}
-                      className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={quantity <= 1 || loading}
-                    >
-                      <Minus className="h-4 w-4 text-gray-600" />
-                    </button>
-                    <span className="px-6 py-3 bg-white font-bold text-gray-900 min-w-[4rem] text-center">
-                      {quantity}
+              {/* Stock Information */}
+              {selectedVariant && (
+                <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    Stock Information
+                  </h3>
+                  <div className="text-sm text-gray-700 font-medium">
+                    <span className="font-bold">Available:</span>{" "}
+                    <span className="text-green-600 font-bold">
+                      {selectedVariant.quantity} in stock
                     </span>
-                    <button
-                      onClick={() => handleQuantityChange(1)}
-                      className="p-3 bg-gray-50 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={
-                        loading ||
-                        (selectedVariant &&
-                          selectedVariant.quantity > 0 &&
-                          quantity >= selectedVariant.quantity)
-                      }
-                    >
-                      <Plus className="h-4 w-4 text-gray-600" />
-                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Product Features */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center p-3 bg-green-50 border-2 border-green-200 rounded-lg">
+                  <Shield className="h-6 w-6 text-green-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-green-800">
+                    100% Authentic
+                  </div>
+                </div>
+                <div className="text-center p-3 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                  <Zap className="h-6 w-6 text-blue-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-blue-800">
+                    Fast Delivery
+                  </div>
+                </div>
+                <div className="text-center p-3 bg-yellow-50 border-2 border-yellow-200 rounded-lg">
+                  <Award className="h-6 w-6 text-yellow-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-yellow-800">
+                    Trusted Brand
                   </div>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex space-x-4 pt-4">
+              {/* View Full Details Link */}
+              <div className="pt-4 border-t-2 border-gray-200">
                 <Button
-                  onClick={handleAddToCart}
-                  className="flex-1 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
-                  disabled={
-                    loading ||
-                    addingToCart ||
-                    (!selectedVariant &&
-                      (!productDetails?.variants ||
-                        productDetails.variants.length === 0)) ||
-                    (selectedVariant && selectedVariant.quantity < 1)
-                  }
+                  asChild
+                  variant="outline"
+                  className="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold rounded-lg py-3 text-base transition-all duration-200"
                 >
-                  {addingToCart ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
-                      Adding...
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="h-5 w-5 mr-3" />
-                      Add to Cart
-                    </>
-                  )}
+                  <Link href={`/products/${productDetails.slug}`}>
+                    View Full Details & Purchase
+                  </Link>
                 </Button>
-
-                <Link
-                  href={`/products/${displayProduct.slug}`}
-                  className="flex-1"
-                >
-                  <Button
-                    variant="outline"
-                    className="w-full py-4 border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-600 font-bold text-lg rounded-xl transition-all"
-                  >
-                    View Details
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>

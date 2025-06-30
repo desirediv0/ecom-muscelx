@@ -107,19 +107,19 @@ export const getProducts = asyncHandler(async (req, res, next) => {
         ...variant,
         flavor: variant.flavor
           ? {
-            ...variant.flavor,
-            image: variant.flavor.image
-              ? getFileUrl(variant.flavor.image)
-              : null,
-          }
+              ...variant.flavor,
+              image: variant.flavor.image
+                ? getFileUrl(variant.flavor.image)
+                : null,
+            }
           : null,
         images: variant.images
           ? variant.images
-            .sort((a, b) => a.order - b.order)
-            .map((image) => ({
-              ...image,
-              url: getFileUrl(image.url),
-            }))
+              .sort((a, b) => a.order - b.order)
+              .map((image) => ({
+                ...image,
+                url: getFileUrl(image.url),
+              }))
           : [],
       })),
     };
@@ -208,17 +208,17 @@ export const getProductById = asyncHandler(async (req, res, next) => {
       ...variant,
       flavor: variant.flavor
         ? {
-          ...variant.flavor,
-          image: variant.flavor.image
-            ? getFileUrl(variant.flavor.image)
-            : null,
-        }
+            ...variant.flavor,
+            image: variant.flavor.image
+              ? getFileUrl(variant.flavor.image)
+              : null,
+          }
         : null,
       images: variant.images
         ? variant.images.map((image) => ({
-          ...image,
-          url: getFileUrl(image.url),
-        }))
+            ...image,
+            url: getFileUrl(image.url),
+          }))
         : [],
     })),
     // Include SEO fields
@@ -570,8 +570,8 @@ export const createProduct = asyncHandler(async (req, res, next) => {
         const price = req.body.price ? parseFloat(req.body.price) : 0;
         const salePrice =
           req.body.salePrice &&
-            req.body.salePrice !== "null" &&
-            req.body.salePrice !== ""
+          req.body.salePrice !== "null" &&
+          req.body.salePrice !== ""
             ? parseFloat(req.body.salePrice)
             : null;
         const quantity = req.body.quantity ? parseInt(req.body.quantity) : 0;
@@ -714,8 +714,9 @@ export const createProduct = asyncHandler(async (req, res, next) => {
                   data: {
                     variantId: variant._dbId,
                     url: imageUrl,
-                    alt: `${variant.name || newProduct.name} - Variant Image ${i + 1
-                      }`,
+                    alt: `${variant.name || newProduct.name} - Variant Image ${
+                      i + 1
+                    }`,
                     isPrimary: i === 0, // First image is primary
                     order: i, // Set proper order
                   },
@@ -775,17 +776,17 @@ export const createProduct = asyncHandler(async (req, res, next) => {
           ...variant,
           flavor: variant.flavor
             ? {
-              ...variant.flavor,
-              image: variant.flavor.image
-                ? getFileUrl(variant.flavor.image)
-                : null,
-            }
+                ...variant.flavor,
+                image: variant.flavor.image
+                  ? getFileUrl(variant.flavor.image)
+                  : null,
+              }
             : null,
           images: variant.images
             ? variant.images.map((image) => ({
-              ...image,
-              url: getFileUrl(image.url),
-            }))
+                ...image,
+                url: getFileUrl(image.url),
+              }))
             : [],
         })),
         // Include message when variants couldn't be deleted due to orders
@@ -1064,13 +1065,13 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
         const variantIdsToDelete =
           requestExistingVariantIds.length > 0
             ? // Delete only variants that exist in DB but not in the request's existingVariantIds
-            existingVariantIds.filter(
-              (id) => !requestExistingVariantIds.includes(id)
-            )
+              existingVariantIds.filter(
+                (id) => !requestExistingVariantIds.includes(id)
+              )
             : // Fallback to the traditional approach - delete variants not in the updated list
-            existingVariantIds.filter(
-              (id) => !updatedVariantIds.includes(id)
-            );
+              existingVariantIds.filter(
+                (id) => !updatedVariantIds.includes(id)
+              );
 
         // Delete removed variants safely
         if (variantIdsToDelete.length > 0) {
@@ -1709,9 +1710,10 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
           if (salePrice !== undefined) {
             await prisma.$executeRaw`
               UPDATE "ProductVariant" 
-              SET "salePrice" = ${updateData.salePrice === null
-                ? null
-                : String(updateData.salePrice)
+              SET "salePrice" = ${
+                updateData.salePrice === null
+                  ? null
+                  : String(updateData.salePrice)
               }, 
                   "updatedAt" = NOW() 
               WHERE "id" = ${product.variants[0].id};
@@ -1886,11 +1888,11 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
         ...variant,
         flavor: variant.flavor
           ? {
-            ...variant.flavor,
-            image: variant.flavor.image
-              ? getFileUrl(variant.flavor.image)
-              : null,
-          }
+              ...variant.flavor,
+              image: variant.flavor.image
+                ? getFileUrl(variant.flavor.image)
+                : null,
+            }
           : null,
       })),
       // Include message when variants couldn't be deleted due to orders
@@ -2976,20 +2978,19 @@ export const uploadVariantImage = asyncHandler(async (req, res, next) => {
           }
 
           // Determine if this should be primary
-          const shouldBePrimary =
-            isPrimary === "true" ||
-            isPrimary === true ||
-            currentVariant.images.length === 0;
+          // Priority 1: Explicit request to make it primary (isPrimary = true)
+          // Priority 2: If no existing images and no explicit isPrimary value sent (undefined/null)
+          const explicitlyPrimary = isPrimary === "true" || isPrimary === true;
+          const explicitlyNotPrimary =
+            isPrimary === "false" || isPrimary === false;
+          const isFirstImageEver = currentVariant.images.length === 0;
+          const noPrimarySpecified =
+            isPrimary === undefined || isPrimary === null || isPrimary === "";
 
-          console.log(
-            `📸 Uploading image for variant ${variantId} (attempt ${retryCount + 1
-            }):`,
-            {
-              currentImageCount: currentVariant.images.length,
-              shouldBePrimary,
-              requestedOrder: order,
-            }
-          );
+          // Only set as primary if explicitly requested, OR if it's the first image and no explicit value was sent
+          const shouldBePrimary =
+            explicitlyPrimary ||
+            (isFirstImageEver && noPrimarySpecified && !explicitlyNotPrimary);
 
           // Determine the correct order first
           let imageOrder;
@@ -3042,12 +3043,6 @@ export const uploadVariantImage = asyncHandler(async (req, res, next) => {
               isPrimary: shouldBePrimary,
               order: imageOrder,
             },
-          });
-
-          console.log(`✅ Created image:`, {
-            id: createdImage.id,
-            order: createdImage.order,
-            isPrimary: createdImage.isPrimary,
           });
 
           return createdImage;
@@ -3439,9 +3434,9 @@ export const bulkVariantOperations = asyncHandler(async (req, res) => {
     ...variant,
     flavor: variant.flavor
       ? {
-        ...variant.flavor,
-        image: variant.flavor.image ? getFileUrl(variant.flavor.image) : null,
-      }
+          ...variant.flavor,
+          image: variant.flavor.image ? getFileUrl(variant.flavor.image) : null,
+        }
       : null,
   }));
 
@@ -3519,7 +3514,8 @@ export const setVariantImageAsPrimary = asyncHandler(async (req, res, next) => {
           const variantId = currentImage.variant.id;
 
           console.log(
-            `🔑 Setting image ${imageId} as primary (attempt ${retryCount + 1
+            `🔑 Setting image ${imageId} as primary (attempt ${
+              retryCount + 1
             }):`,
             {
               currentOrder,
@@ -3583,7 +3579,8 @@ export const setVariantImageAsPrimary = asyncHandler(async (req, res, next) => {
           // Wait a bit before retrying for deadlock/write conflict
           await new Promise((resolve) => setTimeout(resolve, 100 * retryCount));
           console.log(
-            `🔄 Retrying primary image transaction (attempt ${retryCount + 1
+            `🔄 Retrying primary image transaction (attempt ${
+              retryCount + 1
             }/${maxRetries})`
           );
           continue;

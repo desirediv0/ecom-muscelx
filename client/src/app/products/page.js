@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { fetchApi, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import {
   Star,
   Filter,
@@ -79,8 +78,11 @@ const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
   };
 
   const handleQuickViewClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log("QuickView clicked for product:", product.name);
     onQuickView(product);
   };
 
@@ -234,10 +236,11 @@ const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <Heart
-                        className={`h-4 w-4 ${isWishlisted
+                        className={`h-4 w-4 ${
+                          isWishlisted
                             ? "text-red-500 fill-current"
                             : "text-gray-800"
-                          }`}
+                        }`}
                       />
                     )}
                   </Button>
@@ -294,8 +297,9 @@ const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <Heart
-                  className={`h-4 w-4 transition-all ${isWishlisted ? "text-red-500 fill-current" : "text-gray-800"
-                    }`}
+                  className={`h-4 w-4 transition-all ${
+                    isWishlisted ? "text-red-500 fill-current" : "text-gray-800"
+                  }`}
                 />
               )}
             </Button>
@@ -374,7 +378,6 @@ function FilterSidebar({
 }) {
   const [openSections, setOpenSections] = useState({
     category: true,
-    price: true,
     flavors: true,
     weights: true,
     availability: true,
@@ -386,78 +389,85 @@ function FilterSidebar({
 
   const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
     if (key === "sort") return false;
-    if (key === "priceRange") return value[0] !== 0 || value[1] !== 10000;
     if (Array.isArray(value)) return value.length > 0;
-    return value !== "";
+    return value !== "" && value !== false;
   }).length;
 
   const content = (
-    <div className="space-y-6">
-      {/* Search */}
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">
-          <Search className="h-4 w-4" />
-          Search Products
-        </h3>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search products..."
-            value={filters.search}
-            onChange={(e) => handleFilterChange("search", e.target.value)}
-            className="pl-10 focus:ring-red-500 focus:border-red-500"
-          />
-          {filters.search && (
-            <button
-              onClick={() => handleFilterChange("search", "")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
-            >
-              <X className="h-4 w-4" />
-            </button>
+    <div className="space-y-4">
+      {/* Simple Header */}
+      <div className="bg-white border border-gray-300 p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="h-5 w-5 text-red-600" />
+            <h2 className="text-lg font-bold text-gray-800 group-hover:text-black">
+              Smart Filters
+            </h2>
+          </div>
+          {activeFiltersCount > 0 && (
+            <div className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+              {activeFiltersCount}
+            </div>
           )}
         </div>
+        {activeFiltersCount > 0 && (
+          <Button
+            onClick={clearFilters}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2"
+          >
+            Clear All Filters
+          </Button>
+        )}
       </div>
 
       {/* Categories */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="bg-white border border-gray-300 rounded-lg">
         <button
           onClick={() => toggleSection("category")}
-          className="w-full flex justify-between items-center mb-4"
+          className="w-full flex justify-between items-center p-4 hover:bg-gray-50 group bg-white"
         >
-          <h3 className="font-semibold text-white">Categories</h3>
+          <div className="flex items-center gap-2">
+            <Filter className="h-5 w-5 text-gray-600" />
+            <h3 className="font-bold text-black">Categories</h3>
+          </div>
           {openSections.category ? (
-            <ChevronUp className="h-4 w-4 text-gray-500" />
+            <ChevronUp className="h-5 w-5 text-gray-600" />
           ) : (
-            <ChevronDown className="h-4 w-4 text-gray-500" />
+            <ChevronDown className="h-5 w-5 text-gray-600" />
           )}
         </button>
         {openSections.category && (
-          <div className="space-y-3 max-h-48 overflow-y-auto">
-            <div className="flex items-center">
+          <div className="p-4 pt-0 space-y-2 max-h-64 overflow-y-auto">
+            <div className="flex items-center p-2 rounded hover:bg-gray-50 group">
               <Checkbox
                 id="cat-all"
                 checked={!filters.category}
                 onCheckedChange={() => handleFilterChange("category", "")}
+                className="w-4 h-4"
               />
               <label
                 htmlFor="cat-all"
-                className="ml-3 text-sm text-gray-700 cursor-pointer"
+                className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
               >
-                All Categories
+                🌟 All Categories
               </label>
             </div>
             {categories.map((cat) => (
-              <div key={cat.id} className="flex items-center">
+              <div
+                key={cat.id}
+                className="flex items-center p-2 rounded hover:bg-gray-50 group"
+              >
                 <Checkbox
                   id={`cat-${cat.id}`}
                   checked={filters.category === cat.slug}
                   onCheckedChange={(checked) =>
                     handleFilterChange("category", checked ? cat.slug : "")
                   }
+                  className="w-4 h-4"
                 />
                 <label
                   htmlFor={`cat-${cat.id}`}
-                  className="ml-3 text-sm text-gray-800 cursor-pointer"
+                  className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
                 >
                   {cat.name}
                 </label>
@@ -469,22 +479,28 @@ function FilterSidebar({
 
       {/* Flavors */}
       {availableFilters.flavors.length > 0 && (
-        <div className="p-4 border-b border-gray-200">
+        <div className="bg-white border border-gray-300 rounded-lg">
           <button
             onClick={() => toggleSection("flavors")}
-            className="w-full flex justify-between items-center mb-4"
+            className="w-full flex justify-between items-center p-4 hover:bg-gray-50 group bg-white"
           >
-            <h3 className="font-semibold text-white">Flavors</h3>
+            <div className="flex items-center gap-2">
+              <Star className="h-5 w-5 text-gray-600" />
+              <h3 className="font-bold text-black">Flavors</h3>
+            </div>
             {openSections.flavors ? (
-              <ChevronUp className="h-4 w-4 text-gray-500" />
+              <ChevronUp className="h-5 w-5 text-gray-600" />
             ) : (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-5 w-5 text-gray-600" />
             )}
           </button>
           {openSections.flavors && (
-            <div className="space-y-3 max-h-48 overflow-y-auto">
+            <div className="p-4 pt-0 space-y-2 max-h-64 overflow-y-auto">
               {availableFilters.flavors.map((flavor) => (
-                <div key={flavor} className="flex items-center">
+                <div
+                  key={flavor}
+                  className="flex items-center p-2 rounded hover:bg-gray-50 group"
+                >
                   <Checkbox
                     id={`flavor-${flavor}`}
                     checked={filters.flavors.includes(flavor)}
@@ -494,10 +510,11 @@ function FilterSidebar({
                         : filters.flavors.filter((f) => f !== flavor);
                       handleFilterChange("flavors", newFlavors);
                     }}
+                    className="w-4 h-4"
                   />
                   <label
                     htmlFor={`flavor-${flavor}`}
-                    className="ml-3 text-sm text-gray-800 cursor-pointer"
+                    className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
                   >
                     {flavor}
                   </label>
@@ -510,20 +527,23 @@ function FilterSidebar({
 
       {/* Weights */}
       {availableFilters.weights.length > 0 && (
-        <div className="p-4 border-b border-gray-200">
+        <div className="bg-white border border-gray-300 rounded-lg">
           <button
             onClick={() => toggleSection("weights")}
-            className="w-full flex justify-between items-center mb-4"
+            className="w-full flex justify-between items-center p-4 hover:bg-gray-50 group bg-white"
           >
-            <h3 className="font-semibold text-white">Weights</h3>
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-5 w-5 text-gray-600" />
+              <h3 className="font-bold text-black">Weights</h3>
+            </div>
             {openSections.weights ? (
-              <ChevronUp className="h-4 w-4 text-gray-500" />
+              <ChevronUp className="h-5 w-5 text-gray-600" />
             ) : (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-5 w-5 text-gray-600" />
             )}
           </button>
           {openSections.weights && (
-            <div className="space-y-3 max-h-48 overflow-y-auto">
+            <div className="p-4 pt-0 space-y-2 max-h-64 overflow-y-auto">
               {availableFilters.weights
                 .sort((a, b) => {
                   const aNum = parseFloat(a);
@@ -531,7 +551,10 @@ function FilterSidebar({
                   return aNum - bNum;
                 })
                 .map((weight) => (
-                  <div key={weight} className="flex items-center">
+                  <div
+                    key={weight}
+                    className="flex items-center p-2 rounded hover:bg-gray-50 group"
+                  >
                     <Checkbox
                       id={`weight-${weight}`}
                       checked={filters.weights.includes(weight)}
@@ -541,10 +564,11 @@ function FilterSidebar({
                           : filters.weights.filter((w) => w !== weight);
                         handleFilterChange("weights", newWeights);
                       }}
+                      className="w-4 h-4"
                     />
                     <label
                       htmlFor={`weight-${weight}`}
-                      className="ml-3 text-sm text-gray-800 cursor-pointer"
+                      className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
                     >
                       {weight}
                     </label>
@@ -554,127 +578,46 @@ function FilterSidebar({
           )}
         </div>
       )}
-
-      {/* Availability */}
-      <div className="p-4 border-b border-gray-200">
-        <button
-          onClick={() => toggleSection("availability")}
-          className="w-full flex justify-between items-center mb-4"
-        >
-          <h3 className="font-semibold text-white">Availability</h3>
-          {openSections.availability ? (
-            <ChevronUp className="h-4 w-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          )}
-        </button>
-        {openSections.availability && (
-          <div className="space-y-3">
-            <div className="flex items-center">
-              <Checkbox
-                id="in-stock"
-                checked={filters.inStock}
-                onCheckedChange={(checked) =>
-                  handleFilterChange("inStock", checked)
-                }
-              />
-              <label
-                htmlFor="in-stock"
-                className="ml-3 text-sm text-gray-800 cursor-pointer"
-              >
-                In Stock Only
-              </label>
-            </div>
-            <div className="flex items-center">
-              <Checkbox
-                id="on-sale"
-                checked={filters.onSale}
-                onCheckedChange={(checked) =>
-                  handleFilterChange("onSale", checked)
-                }
-              />
-              <label
-                htmlFor="on-sale"
-                className="ml-3 text-sm text-gray-800 cursor-pointer"
-              >
-                On Sale
-              </label>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Clear Filters */}
-      <div className="p-4">
-        <Button
-          onClick={clearFilters}
-          variant="outline"
-          className="w-full border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
-          disabled={activeFiltersCount === 0}
-        >
-          Clear All Filters{" "}
-          {activeFiltersCount > 0 && `(${activeFiltersCount})`}
-        </Button>
-      </div>
     </div>
   );
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block lg:w-1/4 xl:w-1/5">
-        <div className="sticky top-24 bg-white border border-gray-200 rounded-2xl shadow-sm max-h-[calc(100vh-6rem)] overflow-y-auto">
-          <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-red-50 to-red-100 rounded-t-2xl">
-            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Filters
-            </h2>
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="bg-red-100 text-red-700">
-                {activeFiltersCount}
-              </Badge>
-            )}
-          </div>
-          {content}
-        </div>
-      </aside>
+      <div className="hidden lg:block">
+        <div className="sticky top-4">{content}</div>
+      </div>
 
       {/* Mobile Sheet */}
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              variant="outline"
-              className="flex items-center gap-2 relative"
+              size="lg"
+              className="flex items-center gap-2 relative mb-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg"
             >
-              <Filter className="h-4 w-4" />
+              <SlidersHorizontal className="h-5 w-5" />
               <span>Filters</span>
               {activeFiltersCount > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="ml-1 bg-red-100 text-red-700 text-xs"
-                >
+                <span className="bg-white text-red-600 px-2 py-1 rounded-full text-sm font-bold">
                   {activeFiltersCount}
-                </Badge>
+                </span>
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-sm p-0">
-            <SheetHeader className="p-4 border-b border-gray-200">
-              <SheetTitle className="flex items-center gap-2">
-                <Filter className="h-5 w-5" />
+          <SheetContent side="left" className="w-full max-w-sm p-0 bg-gray-50">
+            <SheetHeader className="p-4 bg-red-600 text-white">
+              <SheetTitle className="flex items-center gap-2 text-lg font-bold">
+                <SlidersHorizontal className="h-5 w-5" />
                 Filters
                 {activeFiltersCount > 0 && (
-                  <Badge
-                    variant="secondary"
-                    className="bg-red-100 text-red-700"
-                  >
+                  <span className="bg-white text-red-600 px-2 py-1 rounded-full text-sm font-bold">
                     {activeFiltersCount}
-                  </Badge>
+                  </span>
                 )}
               </SheetTitle>
             </SheetHeader>
-            <div className="py-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+            <div className="p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
               {content}
             </div>
           </SheetContent>
@@ -701,12 +644,7 @@ function ProductsContent() {
   const [viewMode, setViewMode] = useState("grid");
 
   const [filters, setFilters] = useState({
-    search: searchParams.get("search") || "",
     category: searchParams.get("category") || "",
-    priceRange: [
-      parseInt(searchParams.get("minPrice")) || 0,
-      parseInt(searchParams.get("maxPrice")) || 10000,
-    ],
     flavors: searchParams.get("flavors")?.split(",").filter(Boolean) || [],
     weights: searchParams.get("weights")?.split(",").filter(Boolean) || [],
     inStock: searchParams.get("inStock") === "true",
@@ -726,10 +664,7 @@ function ProductsContent() {
       const params = new URLSearchParams();
 
       Object.entries(newFilters).forEach(([key, value]) => {
-        if (key === "priceRange") {
-          if (value[0] > 0) params.set("minPrice", value[0].toString());
-          if (value[1] < 10000) params.set("maxPrice", value[1].toString());
-        } else if (Array.isArray(value) && value.length > 0) {
+        if (Array.isArray(value) && value.length > 0) {
           params.set(key, value.join(","));
         } else if (typeof value === "boolean" && value) {
           params.set(key, "true");
@@ -798,12 +733,7 @@ function ProductsContent() {
           order: filters.sort.split(":")[1],
         });
 
-        if (filters.search) params.set("search", filters.search);
         if (filters.category) params.set("category", filters.category);
-        if (filters.priceRange[0] > 0)
-          params.set("minPrice", filters.priceRange[0]);
-        if (filters.priceRange[1] < 10000)
-          params.set("maxPrice", filters.priceRange[1]);
         if (filters.flavors.length > 0)
           params.set("flavors", filters.flavors.join(","));
         if (filters.weights.length > 0)
@@ -835,9 +765,7 @@ function ProductsContent() {
 
   const clearFilters = () => {
     const clearedFilters = {
-      search: "",
       category: "",
-      priceRange: [0, 10000],
       flavors: [],
       weights: [],
       inStock: false,
@@ -863,7 +791,6 @@ function ProductsContent() {
   const sortOptions = {
     "createdAt:desc": "Newest First",
     "createdAt:asc": "Oldest First",
-
     "name:asc": "Name: A to Z",
     "name:desc": "Name: Z to A",
   };
@@ -909,15 +836,18 @@ function ProductsContent() {
 
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          <FilterSidebar
-            categories={categories}
-            filters={filters}
-            handleFilterChange={handleFilterChange}
-            clearFilters={clearFilters}
-            availableFilters={availableFilters}
-          />
+          {/* Modern Filter Sidebar */}
+          <div className="lg:w-80 lg:flex-shrink-0">
+            <FilterSidebar
+              categories={categories}
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              clearFilters={clearFilters}
+              availableFilters={availableFilters}
+            />
+          </div>
 
-          <main className="flex-1 w-full">
+          <main className="flex-1 w-full min-w-0">
             {/* Results Header */}
             <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row justify-between items-center mb-6 shadow-sm">
               <div className="flex items-center gap-4 mb-3 md:mb-0">
@@ -950,10 +880,11 @@ function ProductsContent() {
                     <button
                       key={mode.value}
                       onClick={() => setViewMode(mode.value)}
-                      className={`p-2 rounded-md transition-all ${viewMode === mode.value
+                      className={`p-2 rounded-md transition-all ${
+                        viewMode === mode.value
                           ? "bg-white shadow-sm text-red-600 hover:bg-red-50"
                           : "text-white hover:text-gray-300"
-                        }`}
+                      }`}
                       title={mode.label}
                     >
                       <mode.icon className="h-4 w-4" />
@@ -988,9 +919,10 @@ function ProductsContent() {
             {/* Products Grid */}
             {loading ? (
               <div
-                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                className={`grid gap-6 ${
+                  gridModes.find((m) => m.value === viewMode)?.cols ||
                   "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                  }`}
+                }`}
               >
                 {[...Array(9)].map((_, i) => (
                   <ProductCardSkeleton key={i} />
@@ -1022,9 +954,10 @@ function ProductsContent() {
               </div>
             ) : (
               <div
-                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                className={`grid gap-6 ${
+                  gridModes.find((m) => m.value === viewMode)?.cols ||
                   "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                  }`}
+                }`}
               >
                 {products.map((product) => (
                   <ProductCard
@@ -1100,8 +1033,8 @@ function ProductsContent() {
 
       <ProductQuickView
         product={quickViewProduct}
-        open={isQuickViewOpen}
-        onOpenChange={setIsQuickViewOpen}
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
       />
     </div>
   );

@@ -15,22 +15,47 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  /* Custom scrollbar styles */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #dc2626;
+    border-radius: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #b91c1c;
+  }
+
+  /* Firefox scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #dc2626 #f1f5f9;
+  }
 }
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 13%;
+    --foreground: 0 0% 9%; /* Darker text for better contrast */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 13%;
+    --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 0 0% 9%;
     --primary: 0 90% 60%; /* Strong red */
     --primary-foreground: 0 0% 100%;
     --secondary: 0 85% 55%; /* Slightly darker red for hover states */
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted-foreground: 0 0% 35%; /* Darker muted text */
     --accent: 0 90% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
@@ -38,7 +63,7 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 90% 60%;
-    --radius: 0.75rem;
+    --radius: 0.5rem; /* Reduced border radius globally */
   }
 
   .dark {
@@ -66,10 +91,11 @@
 
 /* Base styles */
 body {
-  background-color: white;
-  color: hsl(var(--foreground));
-  font-family: 'Jost', sans-serif;
+  background-color: #f8f9fa;
+  color: #1a1a1a; /* Much darker text for better readability */
+  font-family: "Jost", sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-weight: 500; /* Slightly bolder base font weight */
 }
 
 a {
@@ -77,37 +103,49 @@ a {
   transition: color 0.2s;
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
+  font-weight: 600; /* Bolder links */
 }
 
 a:hover {
   color: hsl(var(--secondary));
 }
 
-button, .btn, .Button {
+button,
+.btn,
+.Button {
   background-color: hsl(var(--primary));
   color: white;
-  font-weight: 600;
-  border-radius: var(--radius);
+  font-weight: 700; /* Bolder buttons */
+  border-radius: 0.5rem; /* Reduced border radius */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   padding: 0.5rem 1rem;
 }
 
-button:hover, .btn:hover, .Button:hover {
+button:hover,
+.btn:hover,
+.Button:hover {
   background-color: hsl(var(--secondary));
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  color: hsl(var(--foreground));
-  font-weight: bold;
+/* Typography - Improved contrast and readability */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #1a1a1a; /* Much darker headings */
+  font-weight: 800; /* Much bolder headings */
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .prose {
-  color: hsl(var(--foreground));
-  font-family: 'Poppins', sans-serif;
+  color: #1a1a1a; /* Much darker prose text */
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
 .prose h1,
@@ -116,21 +154,33 @@ h1, h2, h3, h4, h5, h6 {
 .prose h4,
 .prose h5,
 .prose h6 {
-  color: hsl(var(--foreground));
-  font-weight: bold;
+  color: #1a1a1a; /* Much darker headings */
+  font-weight: 800; /* Much bolder headings */
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  font-family: 'Jost', sans-serif;
+  font-family: "Jost", sans-serif;
 }
 
-.prose h1 { font-size: 1.875rem; line-height: 2.25rem; }
-.prose h2 { font-size: 1.5rem; line-height: 2rem; }
-.prose h3 { font-size: 1.25rem; line-height: 1.75rem; }
+.prose h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.prose h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
 
 .prose p {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+  color: #1a1a1a; /* Much darker paragraph text */
+  font-weight: 500;
+  line-height: 1.7; /* Better line height for readability */
 }
 
 .prose ul,
@@ -140,13 +190,22 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 1.5rem;
 }
 
-.prose ul { list-style-type: disc; }
-.prose ol { list-style-type: decimal; }
-.prose li { margin-bottom: 0.5rem; }
+.prose ul {
+  list-style-type: disc;
+}
+.prose ol {
+  list-style-type: decimal;
+}
+.prose li {
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+  font-weight: 500;
+}
 
 .prose a {
   color: hsl(var(--primary));
   text-decoration: underline;
+  font-weight: 600;
 }
 
 .prose a:hover {
@@ -158,19 +217,23 @@ h1, h2, h3, h4, h5, h6 {
   border-left: 4px solid hsl(var(--border));
   font-style: italic;
   margin: 1rem 0;
+  color: #374151;
+  font-weight: 500;
 }
 
 .prose code {
-  background-color: hsl(var(--muted));
+  background-color: #f3f4f6;
+  color: #1f2937;
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   font-family: monospace;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .prose pre {
-  background-color: hsl(var(--card));
-  color: hsl(var(--card-foreground));
+  background-color: #1f2937;
+  color: #f9fafb;
   padding: 1rem;
   border-radius: 0.5rem;
   overflow-x: auto;
@@ -182,6 +245,7 @@ h1, h2, h3, h4, h5, h6 {
 .prose pre code {
   background-color: transparent;
   padding: 0;
+  color: inherit;
 }
 
 .prose img {
@@ -189,6 +253,11 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%;
   height: auto;
   margin: 1rem 0;
+}
+
+.prose strong {
+  color: #1a1a1a;
+  font-weight: 700;
 }
 
 /* Product thumbnails carousel */
@@ -206,4 +275,132 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: row;
   min-width: 100%;
+}
+
+/* Enhanced Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626, #ef4444, #f97316);
+  border-radius: 10px;
+  border: 2px solid #f8fafc;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c, #dc2626, #ea580c);
+  box-shadow: 0 6px 12px rgba(220, 38, 38, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+  background: #f8fafc;
+}
+
+/* Custom scrollbar for filter sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #b91c1c, #dc2626);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #f1f1f1;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #f1f5f9;
+}
+
+/* Improved form elements */
+input,
+select,
+textarea {
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+}
+
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+  font-weight: 400 !important;
+}
+
+/* Better label styling */
+label {
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+}
+
+/* Improved card styling */
+.card,
+[class*="card"] {
+  border-radius: 0.5rem !important;
+  border-width: 2px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Better badge styling */
+.badge,
+[class*="badge"] {
+  font-weight: 600 !important;
+  border-radius: 0.375rem !important;
+}
+
+/* Improved button styling */
+.button,
+[class*="button"] {
+  border-radius: 0.5rem !important;
+  font-weight: 700 !important;
+}
+
+/* Text visibility improvements */
+.text-gray-500 {
+  color: #4b5563 !important;
+}
+
+.text-gray-600 {
+  color: #374151 !important;
+}
+
+.text-gray-700 {
+  color: #1f2937 !important;
+}
+
+.text-gray-800 {
+  color: #1a1a1a !important;
+}
+
+.text-gray-900 {
+  color: #111827 !important;
 }
