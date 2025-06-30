@@ -796,7 +796,7 @@ export default function ProductContent({ slug }) {
                   <div>
                     <div className="font-bold text-gray-900">Trusted Brand</div>
                     <div className="text-gray-600 text-xs">
-                      India's #1 Choice
+                      India&apos;s #1 Choice
                     </div>
                   </div>
                 </div>
