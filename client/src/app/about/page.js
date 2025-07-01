@@ -13,7 +13,7 @@ export default function AboutPage() {
               <Dumbbell className="h-10 w-10 text-white" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About <span className="text-red-200">MuscelX</span>
+              About <span className="text-red-200">MuscleX</span>
             </h1>
             <div className="flex items-center justify-center text-sm text-red-100 mb-6">
               <Link href="/" className="hover:text-white transition-colors">
@@ -37,7 +37,7 @@ export default function AboutPage() {
             <div className="relative h-[400px] rounded-2xl overflow-hidden">
               <Image
                 src="/placeholder.svg?height=400&width=500"
-                alt="MuscelX Story - Premium Gym Supplements"
+                alt="MuscleX Story - Premium Gym Supplements"
                 fill
                 className="object-cover"
               />
@@ -48,7 +48,7 @@ export default function AboutPage() {
               </h2>
               <div className="prose prose-lg max-w-none text-gray-600 space-y-4">
                 <p>
-                  Founded in 2010 by fitness enthusiasts, MuscelX began as a
+                  Founded in 2010 by fitness enthusiasts, MuscleX began as a
                   mission to provide premium quality supplements that actually
                   deliver results. We understood the frustration of investing in
                   products that promised the world but delivered nothing.
@@ -103,7 +103,7 @@ export default function AboutPage() {
         {/* Values Section */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-12 text-center text-gray-800">
-            Why Choose MuscelX?
+            Why Choose MuscleX?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -147,7 +147,7 @@ export default function AboutPage() {
         {/* Stats Section */}
         <div className="bg-red-600 rounded-2xl p-8 md:p-12 text-white mb-16">
           <h2 className="text-3xl font-bold mb-8 text-center">
-            MuscelX by Numbers
+            MuscleX by Numbers
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
@@ -173,7 +173,7 @@ export default function AboutPage() {
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Join thousands of satisfied customers who have achieved their
-            fitness goals with MuscelX supplements.
+            fitness goals with MuscleX supplements.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

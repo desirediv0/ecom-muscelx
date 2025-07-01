@@ -171,9 +171,8 @@ export default function CheckoutPage() {
     toast.success("Order placed successfully!", {
       duration: 4000,
       icon: <PartyPopper className="h-5 w-5 text-green-500" />,
-      description: `Your order #${
-        orderData.orderNumber || ""
-      } has been confirmed.`,
+      description: `Your order #${orderData.orderNumber || ""
+        } has been confirmed.`,
     });
   };
 
@@ -230,7 +229,7 @@ export default function CheckoutPage() {
           key: razorpayKey,
           amount: razorpayOrder.amount,
           currency: razorpayOrder.currency,
-          name: "muscelx - Premium Supplements for Your Fitness Journey",
+          name: "Musclex - Premium Supplements for Your Fitness Journey",
           description: "Get high-quality supplements at the best prices.",
           order_id: razorpayOrder.id,
           prefill: {
@@ -368,9 +367,8 @@ export default function CheckoutPage() {
             <div className="flex justify-center mb-6">
               <div className="h-36 w-36 bg-gray-100 rounded-full flex items-center justify-center animate-bounce">
                 <PartyPopper
-                  className={`h-20 w-20 text-gray-600 ${
-                    confettiCannon ? "animate-pulse" : ""
-                  }`}
+                  className={`h-20 w-20 text-gray-600 ${confettiCannon ? "animate-pulse" : ""
+                    }`}
                 />
               </div>
             </div>
@@ -490,18 +488,16 @@ export default function CheckoutPage() {
                 </div>
               ) : (
                 <div
-                  className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${
-                    showAddressForm ? "mt-6" : ""
-                  }`}
+                  className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${showAddressForm ? "mt-6" : ""
+                    }`}
                 >
                   {addresses.map((address) => (
                     <div
                       key={address.id}
-                      className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-                        selectedAddressId === address.id
+                      className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${selectedAddressId === address.id
                           ? "border-red-500 bg-red-50"
                           : "border-gray-200 hover:border-gray-300"
-                      }`}
+                        }`}
                       onClick={() => handleAddressSelect(address.id)}
                     >
                       <div className="flex justify-between items-start mb-2">
@@ -551,11 +547,10 @@ export default function CheckoutPage() {
 
               <div className="space-y-4">
                 <div
-                  className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-                    paymentMethod === "RAZORPAY"
+                  className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === "RAZORPAY"
                       ? "border-red-500 bg-red-50"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                   onClick={() => handlePaymentMethodSelect("RAZORPAY")}
                 >
                   <div className="flex items-center">

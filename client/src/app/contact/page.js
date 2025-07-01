@@ -82,7 +82,7 @@ export default function ContactPage() {
               <Dumbbell className="h-10 w-10 text-white" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Get In Touch With <span className="text-red-200">MuscelX</span>
+              Get In Touch With <span className="text-red-200">MuscleX</span>
             </h1>
             <div className="flex items-center justify-center text-sm text-red-100 mb-6">
               <Link href="/" className="hover:text-white transition-colors">
@@ -113,7 +113,7 @@ export default function ContactPage() {
             {
               icon: <Mail className="h-6 w-6" />,
               title: "Email Support",
-              info: "support@muscelx.com",
+              info: "support@Musclex.com",
               subInfo: "24/7 Response",
               color: "bg-blue-600",
             },
@@ -307,8 +307,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-800 mb-1">Email Us</h4>
-                    <p className="text-gray-600">support@muscelx.com</p>
-                    <p className="text-gray-600">info@muscelx.com</p>
+                    <p className="text-gray-600">support@Musclex.com</p>
+                    <p className="text-gray-600">info@Musclex.com</p>
                     <p className="text-sm text-gray-500 mt-1">24/7 Support</p>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ export default function ContactPage() {
             <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8 border border-red-200">
               <h3 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                 <Star className="h-5 w-5 text-red-600" />
-                Why Choose MuscelX?
+                Why Choose MuscleX?
               </h3>
               <div className="space-y-4">
                 {[

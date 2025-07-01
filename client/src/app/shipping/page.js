@@ -123,7 +123,7 @@ export default function ShippingPolicyPage() {
                         </h2>
                       </div>
                       <p className="text-gray-600 leading-relaxed">
-                        At muscelx, we strive to deliver your orders as
+                        At Musclex, we strive to deliver your orders as
                         quickly and efficiently as possible. We understand that
                         when you order nutritional supplements, you want them
                         right away. That&apos;s why we&apos;ve partnered with

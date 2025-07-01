@@ -139,7 +139,7 @@ export default function VerifyEmailPage({ params }) {
           setStatus("error");
           setMessage(
             error.message ||
-              "Unable to verify email. The token may be invalid or expired."
+            "Unable to verify email. The token may be invalid or expired."
           );
         }
       }
@@ -185,7 +185,7 @@ export default function VerifyEmailPage({ params }) {
                 <ShoppingBag className="h-6 w-6 text-white" />
               </div>
               <span className="text-2xl font-bold text-gray-800">
-                muscelx
+                Musclex
               </span>
             </div>
           </Link>

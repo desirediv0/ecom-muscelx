@@ -173,10 +173,10 @@ export function Footer() {
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
                 <Mail size={16} className="text-red-600 flex-shrink-0" />
                 <a
-                  href="mailto:support@muscelx.in"
+                  href="mailto:support@Musclex.in"
                   className="text-gray-700 hover:text-red-600 transition-colors"
                 >
-                  support@muscelx.in
+                  support@Musclex.in
                 </a>
               </div>
 
