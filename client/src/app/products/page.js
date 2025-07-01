@@ -438,36 +438,85 @@ function FilterSidebar({
         </button>
         {openSections.category && (
           <div className="p-4 pt-0 space-y-2 max-h-64 overflow-y-auto">
-            <div className="flex items-center p-2 rounded hover:bg-gray-50 group">
-              <Checkbox
-                id="cat-all"
-                checked={!filters.category}
-                onCheckedChange={() => handleFilterChange("category", "")}
-                className="w-4 h-4"
-              />
+            <div className="flex items-center p-3 rounded-lg hover:bg-gray-50 group transition-colors">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  id="cat-all"
+                  checked={!filters.category}
+                  onChange={() => handleFilterChange("category", "")}
+                  className="peer sr-only"
+                />
+                <div
+                  className="h-5 w-5 rounded border-2 border-gray-300 bg-white peer-checked:border-red-500 peer-checked:bg-red-50 transition-all duration-200 flex items-center justify-center cursor-pointer group-hover:border-red-400"
+                  onClick={() => handleFilterChange("category", "")}
+                >
+                  {!filters.category && (
+                    <svg
+                      className="h-3 w-3 text-red-600"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </div>
+              </div>
               <label
                 htmlFor="cat-all"
-                className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
+                className="ml-3 text-sm text-gray-700 cursor-pointer font-medium group-hover:text-gray-900 transition-colors"
               >
-                🌟 All Categories
+                All Categories
               </label>
             </div>
             {categories.map((cat) => (
               <div
                 key={cat.id}
-                className="flex items-center p-2 rounded hover:bg-gray-50 group"
+                className="flex items-center p-3 rounded-lg hover:bg-gray-50 group transition-colors"
               >
-                <Checkbox
-                  id={`cat-${cat.id}`}
-                  checked={filters.category === cat.slug}
-                  onCheckedChange={(checked) =>
-                    handleFilterChange("category", checked ? cat.slug : "")
-                  }
-                  className="w-4 h-4"
-                />
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    id={`cat-${cat.id}`}
+                    checked={filters.category === cat.slug}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      handleFilterChange("category", checked ? cat.slug : "");
+                    }}
+                    className="peer sr-only"
+                  />
+                  <div
+                    className="h-5 w-5 rounded border-2 border-gray-300 bg-white peer-checked:border-red-500 peer-checked:bg-red-50 transition-all duration-200 flex items-center justify-center cursor-pointer group-hover:border-red-400"
+                    onClick={() => {
+                      const isCurrentlySelected = filters.category === cat.slug;
+                      handleFilterChange(
+                        "category",
+                        isCurrentlySelected ? "" : cat.slug
+                      );
+                    }}
+                  >
+                    {filters.category === cat.slug && (
+                      <svg
+                        className="h-3 w-3 text-red-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </div>
                 <label
                   htmlFor={`cat-${cat.id}`}
-                  className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
+                  className="ml-3 text-sm text-gray-700 cursor-pointer font-medium group-hover:text-gray-900 transition-colors"
                 >
                   {cat.name}
                 </label>
@@ -499,22 +548,52 @@ function FilterSidebar({
               {availableFilters.flavors.map((flavor) => (
                 <div
                   key={flavor}
-                  className="flex items-center p-2 rounded hover:bg-gray-50 group"
+                  className="flex items-center p-3 rounded-lg hover:bg-gray-50 group transition-colors"
                 >
-                  <Checkbox
-                    id={`flavor-${flavor}`}
-                    checked={filters.flavors.includes(flavor)}
-                    onCheckedChange={(checked) => {
-                      const newFlavors = checked
-                        ? [...filters.flavors, flavor]
-                        : filters.flavors.filter((f) => f !== flavor);
-                      handleFilterChange("flavors", newFlavors);
-                    }}
-                    className="w-4 h-4"
-                  />
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      id={`flavor-${flavor}`}
+                      checked={filters.flavors.includes(flavor)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        const newFlavors = checked
+                          ? [...filters.flavors, flavor]
+                          : filters.flavors.filter((f) => f !== flavor);
+                        handleFilterChange("flavors", newFlavors);
+                      }}
+                      className="peer sr-only"
+                    />
+                    <div
+                      className="h-5 w-5 rounded border-2 border-gray-300 bg-white peer-checked:border-red-500 peer-checked:bg-red-50 transition-all duration-200 flex items-center justify-center cursor-pointer group-hover:border-red-400"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const isCurrentlySelected =
+                          filters.flavors.includes(flavor);
+                        const newFlavors = isCurrentlySelected
+                          ? filters.flavors.filter((f) => f !== flavor)
+                          : [...filters.flavors, flavor];
+                        handleFilterChange("flavors", newFlavors);
+                      }}
+                    >
+                      {filters.flavors.includes(flavor) && (
+                        <svg
+                          className="h-3 w-3 text-red-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
                   <label
                     htmlFor={`flavor-${flavor}`}
-                    className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
+                    className="ml-3 text-sm text-gray-700 cursor-pointer font-medium group-hover:text-gray-900 transition-colors"
                   >
                     {flavor}
                   </label>
@@ -546,29 +625,71 @@ function FilterSidebar({
             <div className="p-4 pt-0 space-y-2 max-h-64 overflow-y-auto">
               {availableFilters.weights
                 .sort((a, b) => {
-                  const aNum = parseFloat(a);
-                  const bNum = parseFloat(b);
-                  return aNum - bNum;
+                  // Convert weights to grams for proper comparison
+                  const convertToGrams = (weight) => {
+                    const numMatch = weight.match(/[\d.]+/);
+                    const unitMatch = weight.match(/[a-zA-Z]+/);
+                    if (!numMatch || !unitMatch) return 0;
+
+                    const value = parseFloat(numMatch[0]);
+                    const unit = unitMatch[0].toLowerCase();
+
+                    if (unit === "kg") return value * 1000;
+                    if (unit === "g") return value;
+                    return value;
+                  };
+
+                  return convertToGrams(a) - convertToGrams(b);
                 })
                 .map((weight) => (
                   <div
                     key={weight}
-                    className="flex items-center p-2 rounded hover:bg-gray-50 group"
+                    className="flex items-center p-3 rounded-lg hover:bg-gray-50 group transition-colors"
                   >
-                    <Checkbox
-                      id={`weight-${weight}`}
-                      checked={filters.weights.includes(weight)}
-                      onCheckedChange={(checked) => {
-                        const newWeights = checked
-                          ? [...filters.weights, weight]
-                          : filters.weights.filter((w) => w !== weight);
-                        handleFilterChange("weights", newWeights);
-                      }}
-                      className="w-4 h-4"
-                    />
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        id={`weight-${weight}`}
+                        checked={filters.weights.includes(weight)}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          const newWeights = checked
+                            ? [...filters.weights, weight]
+                            : filters.weights.filter((w) => w !== weight);
+                          handleFilterChange("weights", newWeights);
+                        }}
+                        className="peer sr-only"
+                      />
+                      <div
+                        className="h-5 w-5 rounded border-2 border-gray-300 bg-white peer-checked:border-red-500 peer-checked:bg-red-50 transition-all duration-200 flex items-center justify-center cursor-pointer group-hover:border-red-400"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const isCurrentlySelected =
+                            filters.weights.includes(weight);
+                          const newWeights = isCurrentlySelected
+                            ? filters.weights.filter((w) => w !== weight)
+                            : [...filters.weights, weight];
+                          handleFilterChange("weights", newWeights);
+                        }}
+                      >
+                        {filters.weights.includes(weight) && (
+                          <svg
+                            className="h-3 w-3 text-red-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
                     <label
                       htmlFor={`weight-${weight}`}
-                      className="ml-3 text-sm text-gray-700 cursor-pointer font-medium"
+                      className="ml-3 text-sm text-gray-700 cursor-pointer font-medium group-hover:text-gray-900 transition-colors"
                     >
                       {weight}
                     </label>
@@ -735,11 +856,18 @@ function ProductsContent() {
 
         if (filters.category) params.set("category", filters.category);
         if (filters.flavors.length > 0)
-          params.set("flavors", filters.flavors.join(","));
+          params.set("flavor", filters.flavors.join(","));
         if (filters.weights.length > 0)
-          params.set("weights", filters.weights.join(","));
+          params.set("weight", filters.weights.join(","));
         if (filters.inStock) params.set("inStock", "true");
         if (filters.onSale) params.set("onSale", "true");
+
+        console.log("Filters being sent:", {
+          category: filters.category,
+          flavors: filters.flavors,
+          weights: filters.weights,
+          apiUrl: `/public/products?${params.toString()}`,
+        });
 
         const { data } = await fetchApi(
           `/public/products?${params.toString()}`
