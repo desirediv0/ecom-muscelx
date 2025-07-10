@@ -300,6 +300,12 @@ function WeightForm({
     { value: "mg", label: "Milligrams (mg)" },
     { value: "lb", label: "Pounds (lb)" },
     { value: "oz", label: "Ounces (oz)" },
+    { value: "ml", label: "Milliliters (ml)" },
+    { value: "cl", label: "Centiliters (cl)" },
+    { value: "l", label: "Liters (L)" },
+    { value: "pcs", label: "Pieces (pcs)" },
+    { value: "tabs", label: "Tabs (tabs)" },
+    { value: "capsules", label: "Capsules (capsules)" },
   ];
 
   // Fetch weight details if in edit mode

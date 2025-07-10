@@ -266,7 +266,7 @@ export default function Home() {
                     alt="Premium Supplement"
                     width={800}
                     height={600}
-                    className="w-full max-w-md mx-auto drop-shadow-2xl"
+                    className="w-full max-w-sm mx-auto drop-shadow-2xl"
                   />
                 </motion.div>
 
