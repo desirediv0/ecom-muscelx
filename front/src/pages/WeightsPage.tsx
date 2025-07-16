@@ -315,7 +315,6 @@ function WeightForm({
         try {
           setIsFetching(true);
           const response = await weights.getWeightById(weightId);
-          console.log("Weight details response:", response); // Debug logging
 
           if (response.data.success) {
             const weightData = response.data.data?.weight;

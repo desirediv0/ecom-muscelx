@@ -25,7 +25,7 @@ interface ProductQueryParams {
   order?: "asc" | "desc";
 }
 
-interface ProductData {
+export interface ProductData {
   name: string;
   description: string;
   categoryId?: string;
@@ -43,21 +43,63 @@ interface ProductData {
   stock?: number | string;
   quantity?: number | string;
   sku?: string;
+  productType?: string[];
+  isSupplement?: boolean;
+  ingredients?: string;
+  nutritionInfo?: {
+    servingSize?: string;
+    servingsPerContainer?: string;
+    calories?: string;
+    protein?: string;
+    carbs?: string;
+    fat?: string;
+    [key: string]: string | undefined;
+  };
   variants?: Array<ProductVariantData>;
-  [key: string]: any;
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+  images?: Array<{
+    id?: string;
+    url?: string;
+    alt?: string;
+    isPrimary?: boolean;
+    file?: File;
+  }>;
+  primaryImageIndex?: number;
+  removedImageIds?: string[];
 }
 
 interface ProductVariantData {
   id?: string;
   name?: string;
   sku: string;
-  flavorId?: string;
-  weightId?: string;
+  flavorId?: string | null;
+  weightId?: string | null;
   price: number | string;
   salePrice?: number | string | null;
   stock: number | string;
   quantity?: number | string;
-  [key: string]: any;
+  isActive?: boolean;
+  flavor?: {
+    id: string;
+    name: string;
+    image?: string | null;
+  } | null;
+  weight?: {
+    id: string;
+    value: number;
+    unit: string;
+  } | null;
+  images?: Array<{
+    id?: string;
+    url?: string;
+    alt?: string;
+    isPrimary?: boolean;
+    file?: File;
+    isNew?: boolean;
+  }>;
+  removedImageIds?: string[];
 }
 
 interface StoreSettings {
@@ -173,6 +215,9 @@ export const products = {
   },
   getFeaturedProducts: (limit: number = 8) => {
     return api.get(`/api/public/products?featured=true&limit=${limit}`);
+  },
+  getProductsByType: (productType: string, limit: number = 8) => {
+    return api.get(`/api/admin/products/type/${productType}?limit=${limit}`);
   },
   createProduct: (data: ProductData) => {
     // Check if data is already FormData
@@ -504,10 +549,8 @@ export const orders = {
     return api.patch(`/api/admin/orders/${orderId}/status`, data);
   },
   getOrderStats: async () => {
-    console.log("Calling order stats API endpoint");
     try {
       const response = await api.get("/api/admin/orders-stats");
-      console.log("Raw order stats API response:", response);
 
       // Check if data is nested in a success response wrapper
       if (response.data.success && response.data.data) {

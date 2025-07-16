@@ -558,11 +558,10 @@ export default function ProductContent({ slug }) {
               <div className="h-5 w-px bg-gray-300"></div>
               {selectedVariant ? (
                 <span
-                  className={`text-sm font-bold ${
-                    selectedVariant.quantity > 0
+                  className={`text-sm font-bold ${selectedVariant.quantity > 0
                       ? "text-green-600"
                       : "text-red-600"
-                  }`}
+                    }`}
                 >
                   {selectedVariant.quantity > 0 ? "In Stock" : "Out of Stock"}
                 </span>
@@ -603,7 +602,7 @@ export default function ProductContent({ slug }) {
                       Please select{" "}
                       {product.flavorOptions?.length > 0 ? "a flavor" : ""}
                       {product.flavorOptions?.length > 0 &&
-                      product.weightOptions?.length > 0
+                        product.weightOptions?.length > 0
                         ? " and "
                         : ""}
                       {product.weightOptions?.length > 0 ? "a weight" : ""} to
@@ -628,11 +627,10 @@ export default function ProductContent({ slug }) {
                     <button
                       key={flavor.id}
                       onClick={() => handleFlavorChange(flavor)}
-                      className={`px-6 py-3 text-sm font-bold border-2 transition-all duration-200 ${
-                        selectedFlavor?.id === flavor.id
+                      className={`px-6 py-3 text-sm font-bold border-2 transition-all duration-200 ${selectedFlavor?.id === flavor.id
                           ? "border-red-600 bg-red-600 text-white shadow-md"
                           : "border-gray-300 bg-white hover:border-red-500 hover:text-red-600 text-gray-700"
-                      }`}
+                        }`}
                     >
                       {flavor.name}
                     </button>
@@ -659,11 +657,10 @@ export default function ProductContent({ slug }) {
                     <button
                       key={weight.id}
                       onClick={() => handleWeightChange(weight)}
-                      className={`px-6 py-3 text-sm font-bold border-2 transition-all duration-200 ${
-                        selectedWeight?.id === weight.id
+                      className={`px-6 py-3 text-sm font-bold border-2 transition-all duration-200 ${selectedWeight?.id === weight.id
                           ? "border-red-600 bg-red-600 text-white shadow-md"
                           : "border-gray-300 bg-white hover:border-red-500 hover:text-red-600 text-gray-700"
-                      }`}
+                        }`}
                     >
                       {weight.display || `${weight.value}${weight.unit}`}
                     </button>
@@ -686,11 +683,10 @@ export default function ProductContent({ slug }) {
                     <button
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= 1}
-                      className={`px-4 py-3 bg-red-600 text-white hover:bg-red-700 transition-all duration-200 ${
-                        quantity <= 1
+                      className={`px-4 py-3 bg-red-600 text-white hover:bg-red-700 transition-all duration-200 ${quantity <= 1
                           ? "opacity-50 cursor-not-allowed"
                           : "hover:shadow-md"
-                      }`}
+                        }`}
                     >
                       <Minus className="h-4 w-4" />
                     </button>
@@ -702,11 +698,10 @@ export default function ProductContent({ slug }) {
                       disabled={
                         selectedVariant && quantity >= selectedVariant.quantity
                       }
-                      className={`px-4 py-3 bg-red-600 text-white hover:bg-red-700 transition-all duration-200 ${
-                        selectedVariant && quantity >= selectedVariant.quantity
+                      className={`px-4 py-3 bg-red-600 text-white hover:bg-red-700 transition-all duration-200 ${selectedVariant && quantity >= selectedVariant.quantity
                           ? "opacity-50 cursor-not-allowed"
                           : "hover:shadow-md"
-                      }`}
+                        }`}
                     >
                       <Plus className="h-4 w-4" />
                     </button>
@@ -748,11 +743,10 @@ export default function ProductContent({ slug }) {
                   <Button
                     variant="outline"
                     size="lg"
-                    className={`border-2 transition-all duration-200 px-4 ${
-                      isInWishlist
+                    className={`border-2 transition-all duration-200 px-4 ${isInWishlist
                         ? "text-red-600 border-red-600 bg-red-50 hover:bg-red-100"
                         : "text-gray-600 border-gray-300 hover:border-red-600 hover:text-red-600 hover:bg-red-50"
-                    }`}
+                      }`}
                     onClick={handleAddToWishlist}
                     disabled={isAddingToWishlist}
                   >
@@ -760,9 +754,8 @@ export default function ProductContent({ slug }) {
                       <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <Heart
-                        className={`h-5 w-5 ${
-                          isInWishlist ? "fill-current" : ""
-                        }`}
+                        className={`h-5 w-5 ${isInWishlist ? "fill-current" : ""
+                          }`}
                       />
                     )}
                   </Button>
@@ -820,21 +813,19 @@ export default function ProductContent({ slug }) {
             <nav className="-mb-px flex space-x-8 px-8">
               <button
                 onClick={() => setActiveTab("description")}
-                className={`whitespace-nowrap py-5 px-4 border-b-2 font-bold text-lg transition-all duration-300 ${
-                  activeTab === "description"
+                className={`whitespace-nowrap py-5 px-4 border-b-2 font-bold text-lg transition-all duration-300 ${activeTab === "description"
                     ? "border-red-600 text-red-600 bg-white hover:text-white hover:border-red-300"
                     : "border-transparent text-gray-200 hover:text-white hover:border-red-300"
-                }`}
+                  }`}
               >
                 Description
               </button>
               <button
                 onClick={() => setActiveTab("reviews")}
-                className={`whitespace-nowrap py-5 px-4 border-b-2 font-bold text-lg transition-all duration-300 ${
-                  activeTab === "reviews"
+                className={`whitespace-nowrap py-5 px-4 border-b-2 font-bold text-lg transition-all duration-300 ${activeTab === "reviews"
                     ? "border-red-600 text-red-600 bg-white hover:text-white hover:border-red-300"
                     : "border-transparent text-gray-200 hover:text-white hover:border-red-300"
-                }`}
+                  }`}
               >
                 Reviews ({product.reviewCount || 0})
               </button>

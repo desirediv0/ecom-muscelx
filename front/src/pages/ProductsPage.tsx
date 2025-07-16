@@ -84,6 +84,7 @@ export function ProductForm({
     quantity: 0,
     isSupplement: false,
     featured: false,
+    productType: [] as string[],
     isActive: true,
     ingredients: "",
     nutritionInfo: {
@@ -305,31 +306,32 @@ export function ProductForm({
               primaryCategoryId: primaryCategory?.id || "",
               sku:
                 productData.variants?.length === 1 &&
-                !productData.variants[0].flavorId &&
-                !productData.variants[0].weightId
+                  !productData.variants[0].flavorId &&
+                  !productData.variants[0].weightId
                   ? productData.variants[0].sku
                   : "",
               price:
                 productData.variants?.length === 1 &&
-                !productData.variants[0].flavorId &&
-                !productData.variants[0].weightId
+                  !productData.variants[0].flavorId &&
+                  !productData.variants[0].weightId
                   ? productData.variants[0].price.toString()
                   : "",
               salePrice:
                 productData.variants?.length === 1 &&
-                !productData.variants[0].flavorId &&
-                !productData.variants[0].weightId &&
-                productData.variants[0].salePrice
+                  !productData.variants[0].flavorId &&
+                  !productData.variants[0].weightId &&
+                  productData.variants[0].salePrice
                   ? productData.variants[0].salePrice.toString()
                   : "",
               quantity:
                 productData.variants?.length === 1 &&
-                !productData.variants[0].flavorId &&
-                !productData.variants[0].weightId
+                  !productData.variants[0].flavorId &&
+                  !productData.variants[0].weightId
                   ? productData.variants[0].quantity
                   : 0,
               isSupplement: productData.isSupplement || false,
               featured: productData.featured || false,
+              productType: productData.productType || [],
               isActive:
                 productData.isActive !== undefined
                   ? productData.isActive
@@ -391,11 +393,11 @@ export function ProductForm({
                       variant.isActive !== undefined ? variant.isActive : true,
                     images: Array.isArray(variant.images)
                       ? variant.images.map((img: any) => ({
-                          url: img.url,
-                          id: img.id,
-                          isPrimary: img.isPrimary || false,
-                          isNew: false,
-                        }))
+                        url: img.url,
+                        id: img.id,
+                        isPrimary: img.isPrimary || false,
+                        isNew: false,
+                      }))
                       : [],
                   })
                 );
@@ -626,6 +628,7 @@ export function ProductForm({
       formData.append("name", product.name);
       formData.append("description", product.description || "");
       formData.append("featured", String(product.featured));
+      formData.append("productType", JSON.stringify(product.productType));
       formData.append("isActive", String(product.isActive));
       formData.append("hasVariants", String(hasVariants));
       formData.append("isSupplement", String(product.isSupplement));
@@ -1132,6 +1135,92 @@ export function ProductForm({
                 />
               </div>
 
+              {/* Product Settings */}
+              <div className="space-y-4 rounded-lg border p-4 bg-gray-50">
+                <h3 className="text-lg font-semibold">Product Settings</h3>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {/* <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="isSupplement"
+                      name="isSupplement"
+                      checked={product.isSupplement}
+                      onCheckedChange={(checked) =>
+                        setProduct((prev) => ({
+                          ...prev,
+                          isSupplement: !!checked,
+                        }))
+                      }
+                    />
+                    <Label htmlFor="isSupplement">Is Supplement</Label>
+                  </div> */}
+
+                  {/* <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="featured"
+                      name="featured"
+                      checked={product.featured}
+                      onCheckedChange={(checked) =>
+                        setProduct((prev) => ({ ...prev, featured: !!checked }))
+                      }
+                    />
+                    <Label htmlFor="featured">Featured Product</Label>
+                  </div> */}
+
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="isActive"
+                      name="isActive"
+                      checked={product.isActive}
+                      onCheckedChange={(checked) =>
+                        setProduct((prev) => ({ ...prev, isActive: !!checked }))
+                      }
+                    />
+                    <Label htmlFor="isActive">Active</Label>
+                  </div>
+                </div>
+
+                {/* Product Type Selection */}
+                <div className="space-y-2">
+                  <Label>Product Categories</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Select which categories this product belongs to
+                  </p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {[
+                      { key: "featured", label: "Featured", icon: "⭐" },
+                      { key: "bestseller", label: "Bestseller", icon: "📈" },
+                      { key: "trending", label: "Trending", icon: "🔥" },
+                      { key: "new", label: "New Arrivals", icon: "🆕" },
+                    ].map((type) => (
+                      <div key={type.key} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`productType-${type.key}`}
+                          checked={product.productType.includes(type.key)}
+                          onCheckedChange={(checked) => {
+                            setProduct((prev) => ({
+                              ...prev,
+                              productType: checked
+                                ? [...prev.productType, type.key]
+                                : prev.productType.filter(
+                                  (t) => t !== type.key
+                                ),
+                            }));
+                          }}
+                        />
+                        <Label
+                          htmlFor={`productType-${type.key}`}
+                          className="flex items-center gap-1"
+                        >
+                          <span>{type.icon}</span>
+                          {type.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {!hasVariants && (
                 <>
                   {/* Simple product fields */}
@@ -1229,11 +1318,10 @@ export function ProductForm({
                 </div>
                 <div
                   {...getRootProps()}
-                  className={`border-2 border-dashed rounded-md p-8 cursor-pointer transition-colors text-center bg-white ${
-                    isDragActive
+                  className={`border-2 border-dashed rounded-md p-8 cursor-pointer transition-colors text-center bg-white ${isDragActive
                       ? "border-blue-400 bg-blue-50"
                       : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   <input {...getInputProps()} />
                   <ImageIcon className="h-10 w-10 mx-auto mb-2 text-muted-foreground" />
@@ -1786,11 +1874,10 @@ const CategorySelector = ({
               onClick={() => {
                 onSetPrimaryCategory(categoryId);
               }}
-              className={`text-xs px-2 py-1 rounded-full ${
-                isPrimary
+              className={`text-xs px-2 py-1 rounded-full ${isPrimary
                   ? "bg-indigo-100 text-indigo-700"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+                }`}
             >
               {isPrimary ? "Primary" : "Set as Primary"}
             </button>
@@ -1832,11 +1919,10 @@ const CategorySelector = ({
                       onClick={() => {
                         onSetPrimaryCategory(childId);
                       }}
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        isChildPrimary
+                      className={`text-xs px-2 py-1 rounded-full ${isChildPrimary
                           ? "bg-indigo-100 text-indigo-700"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
+                        }`}
                     >
                       {isChildPrimary ? "Primary" : "Set as Primary"}
                     </button>
@@ -2097,7 +2183,7 @@ function ProductsList() {
       console.error("Error marking product as inactive:", error);
       toast.error(
         error.message ||
-          "An error occurred while marking the product as inactive"
+        "An error occurred while marking the product as inactive"
       );
     }
   };
@@ -2135,7 +2221,7 @@ function ProductsList() {
       } else {
         toast.error(
           response.data.message ||
-            `Failed to ${currentStatus ? "deactivate" : "activate"} product`
+          `Failed to ${currentStatus ? "deactivate" : "activate"} product`
         );
       }
     } catch (error: any) {
@@ -2145,7 +2231,7 @@ function ProductsList() {
       );
       toast.error(
         error.message ||
-          `An error occurred while ${currentStatus ? "deactivating" : "activating"} the product`
+        `An error occurred while ${currentStatus ? "deactivating" : "activating"} the product`
       );
     }
   };
@@ -2390,7 +2476,7 @@ function ProductsList() {
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1">
                             {product.categories &&
-                            product.categories.length > 0 ? (
+                              product.categories.length > 0 ? (
                               product.categories.map((category: any) => {
                                 // Check if this is a child category
                                 const isChild = category.parentId !== null;
@@ -2439,11 +2525,10 @@ function ProductsList() {
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <span
-                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                              product.isActive
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${product.isActive
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500"
                                 : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500"
-                            }`}
+                              }`}
                           >
                             {product.isActive ? "Active" : "Inactive"}
                           </span>

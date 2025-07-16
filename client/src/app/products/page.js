@@ -236,11 +236,10 @@ const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <Heart
-                        className={`h-4 w-4 ${
-                          isWishlisted
-                            ? "text-red-500 fill-current"
-                            : "text-gray-800"
-                        }`}
+                        className={`h-4 w-4 ${isWishlisted
+                          ? "text-red-500 fill-current"
+                          : "text-gray-800"
+                          }`}
                       />
                     )}
                   </Button>
@@ -297,9 +296,8 @@ const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <Heart
-                  className={`h-4 w-4 transition-all ${
-                    isWishlisted ? "text-red-500 fill-current" : "text-gray-800"
-                  }`}
+                  className={`h-4 w-4 transition-all ${isWishlisted ? "text-red-500 fill-current" : "text-gray-800"
+                    }`}
                 />
               )}
             </Button>
@@ -928,7 +926,7 @@ function ProductsContent() {
       value: "grid",
       icon: Grid3X3,
       label: "Grid View",
-      cols: "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3",
+      cols: "grid-cols-2 xl:grid-cols-4",
     },
     {
       value: "large-grid",
@@ -1008,11 +1006,10 @@ function ProductsContent() {
                     <button
                       key={mode.value}
                       onClick={() => setViewMode(mode.value)}
-                      className={`p-2 rounded-md transition-all ${
-                        viewMode === mode.value
-                          ? "bg-white shadow-sm text-red-600 hover:bg-red-50"
-                          : "text-white hover:text-gray-300"
-                      }`}
+                      className={`p-2 rounded-md transition-all ${viewMode === mode.value
+                        ? "bg-white shadow-sm text-red-600 hover:bg-red-50"
+                        : "text-white hover:text-gray-300"
+                        }`}
                       title={mode.label}
                     >
                       <mode.icon className="h-4 w-4" />
@@ -1047,10 +1044,9 @@ function ProductsContent() {
             {/* Products Grid */}
             {loading ? (
               <div
-                className={`grid gap-6 ${
-                  gridModes.find((m) => m.value === viewMode)?.cols ||
-                  "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                }`}
+                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                  "grid-cols-2 xl:grid-cols-4"
+                  }`}
               >
                 {[...Array(9)].map((_, i) => (
                   <ProductCardSkeleton key={i} />
@@ -1082,10 +1078,9 @@ function ProductsContent() {
               </div>
             ) : (
               <div
-                className={`grid gap-6 ${
-                  gridModes.find((m) => m.value === viewMode)?.cols ||
-                  "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                }`}
+                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                  "grid-cols-2 lg:grid-cols-4"
+                  }`}
               >
                 {products.map((product) => (
                   <ProductCard
