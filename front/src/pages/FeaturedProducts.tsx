@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { products } from "@/api/adminService";
-import type { ProductData } from "@/api/adminService";
 import {
   Loader2,
   ArrowUpRight,
@@ -44,37 +43,13 @@ interface Product {
   isActive?: boolean;
   featured?: boolean;
   productType?: string[];
-  categories?: Array<{
-    id: string;
-    name: string;
-    description?: string;
-    image?: string;
-    slug: string;
-    isPrimary?: boolean;
-    parentId?: string | null;
-  }>;
+  categories?: any[];
   category?: {
     id: string;
     name: string;
     slug: string;
   };
-  variants?: Array<{
-    id: string;
-    sku: string;
-    price: number;
-    salePrice?: number | null;
-    quantity: number;
-    isActive?: boolean;
-    flavorId?: string | null;
-    weightId?: string | null;
-    flavor?: { id: string; name: string } | null;
-    weight?: { id: string; value: number; unit: string } | null;
-    images?: Array<{
-      id: string;
-      url: string;
-      isPrimary?: boolean;
-    }>;
-  }>;
+  variants?: any[];
   hasVariants?: boolean;
   flavors?: number;
   hasSale?: boolean;
@@ -166,8 +141,8 @@ export default function FeaturedProductsPage() {
         return;
       }
 
-      // Get current product types and ensure it's an array
-      const currentTypes = Array.isArray(product.productType) ? product.productType : [];
+      // Get current product types
+      const currentTypes = product.productType || [];
       let newTypes: string[];
 
       if (isAdding) {
@@ -184,8 +159,8 @@ export default function FeaturedProductsPage() {
       const formData = new FormData();
       formData.append("productType", JSON.stringify(newTypes));
 
-      // Update product with properly typed data
-      const response = await products.updateProduct(productId, formData as unknown as ProductData);
+      // Update product
+      const response = await products.updateProduct(productId, formData as any);
 
       if (response.data.success) {
         toast.success(
@@ -222,7 +197,7 @@ export default function FeaturedProductsPage() {
       );
       if (variantWithImages && variantWithImages.images) {
         const primaryImage = variantWithImages.images.find(
-          (img: { isPrimary?: boolean }) => img.isPrimary
+          (img: any) => img.isPrimary
         );
         return primaryImage
           ? primaryImage.url
@@ -286,7 +261,7 @@ export default function FeaturedProductsPage() {
   };
 
   const hasProductType = (product: Product, type: string) => {
-    return Array.isArray(product.productType) && product.productType.includes(type);
+    return product.productType?.includes(type) || false;
   };
 
   if (loading) {

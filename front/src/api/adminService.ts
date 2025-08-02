@@ -25,7 +25,7 @@ interface ProductQueryParams {
   order?: "asc" | "desc";
 }
 
-export interface ProductData {
+interface ProductData {
   name: string;
   description: string;
   categoryId?: string;
@@ -43,63 +43,21 @@ export interface ProductData {
   stock?: number | string;
   quantity?: number | string;
   sku?: string;
-  productType?: string[];
-  isSupplement?: boolean;
-  ingredients?: string;
-  nutritionInfo?: {
-    servingSize?: string;
-    servingsPerContainer?: string;
-    calories?: string;
-    protein?: string;
-    carbs?: string;
-    fat?: string;
-    [key: string]: string | undefined;
-  };
   variants?: Array<ProductVariantData>;
-  metaTitle?: string;
-  metaDescription?: string;
-  keywords?: string;
-  images?: Array<{
-    id?: string;
-    url?: string;
-    alt?: string;
-    isPrimary?: boolean;
-    file?: File;
-  }>;
-  primaryImageIndex?: number;
-  removedImageIds?: string[];
+  [key: string]: any;
 }
 
 interface ProductVariantData {
   id?: string;
   name?: string;
   sku: string;
-  flavorId?: string | null;
-  weightId?: string | null;
+  flavorId?: string;
+  weightId?: string;
   price: number | string;
   salePrice?: number | string | null;
   stock: number | string;
   quantity?: number | string;
-  isActive?: boolean;
-  flavor?: {
-    id: string;
-    name: string;
-    image?: string | null;
-  } | null;
-  weight?: {
-    id: string;
-    value: number;
-    unit: string;
-  } | null;
-  images?: Array<{
-    id?: string;
-    url?: string;
-    alt?: string;
-    isPrimary?: boolean;
-    file?: File;
-    isNew?: boolean;
-  }>;
-  removedImageIds?: string[];
+  [key: string]: any;
 }
 
 interface StoreSettings {
@@ -366,8 +324,8 @@ export const products = {
 
 // Flavors Management
 export const flavors = {
-  getFlavors: () => {
-    return api.get("/api/admin/flavors");
+  getFlavors: (params = {}) => {
+    return api.get("/api/admin/flavors", { params });
   },
   getFlavorById: (flavorId: string) => {
     return api.get(`/api/admin/flavors/${flavorId}`);
@@ -474,8 +432,8 @@ export const inventory = {
 
 // Weights Management
 export const weights = {
-  getWeights: () => {
-    return api.get("/api/admin/weights");
+  getWeights: (params = {}) => {
+    return api.get("/api/admin/weights", { params });
   },
   getWeightById: (weightId: string) => {
     return api.get(`/api/admin/weights/${weightId}`);
@@ -741,5 +699,39 @@ export const settings = {
         message: "Settings updated successfully",
       },
     });
+  },
+};
+
+// Brands Management
+export const brands = {
+  getBrands: (params: any = {}) => {
+    return api.get("/api/admin/brands", { params });
+  },
+  createBrand: (data: { name: string; image: File; tags?: string[] }) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("image", data.image);
+    if (data.tags) data.tags.forEach((tag) => formData.append("tags", tag));
+    return api.post("/api/admin/brands", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+  updateBrand: (
+    brandId: string,
+    data: { name?: string; image?: File; tags?: string[] }
+  ) => {
+    const formData = new FormData();
+    if (data.name) formData.append("name", data.name);
+    if (data.image) formData.append("image", data.image);
+    if (data.tags) data.tags.forEach((tag) => formData.append("tags", tag));
+    return api.patch(`/api/admin/brands/${brandId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+  deleteBrand: (brandId: string) => {
+    return api.delete(`/api/admin/brands/${brandId}`);
+  },
+  removeProductFromBrand: (brandId: string, productId: string) => {
+    return api.delete(`/api/admin/brands/${brandId}/products/${productId}`);
   },
 };

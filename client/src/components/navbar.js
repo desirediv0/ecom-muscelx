@@ -12,6 +12,7 @@ import {
   Heart,
   Search,
   ShoppingCart,
+  Package,
 } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
@@ -21,6 +22,7 @@ import { fetchApi } from "@/lib/utils";
 import { ClientOnly } from "./client-only";
 import { toast, Toaster } from "sonner";
 import { Input } from "./ui/input";
+import { logo } from "@/assets";
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -646,6 +648,168 @@ const Header = () => {
           )}
         </AnimatePresence>
       </motion.nav>
+
+      {/* Enhanced Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/98 backdrop-blur-xl border-t border-gray-200/60 z-50 shadow-[0_-10px_50px_-12px_rgba(0,0,0,0.25)]">
+        {/* Gradient overlay for better visual appeal */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-white/90 pointer-events-none" />
+
+        <div className="relative grid grid-cols-5 gap-2 px-4 py-4">
+          {/* Home */}
+          <Link
+            href="/"
+            className={`flex flex-col items-center justify-center py-3 px-2 rounded-2xl transition-all duration-300 group relative ${
+              pathname === "/"
+                ? "text-red-600 bg-gradient-to-b from-red-50 to-red-100/50 shadow-lg shadow-red-500/20"
+                : "text-gray-600 hover:text-red-600 hover:bg-red-50/80"
+            }`}
+          >
+            <div
+              className={`relative ${
+                pathname === "/" ? "scale-110" : "group-hover:scale-110"
+              } transition-transform duration-300`}
+            >
+              <svg
+                className="h-6 w-6"
+                viewBox="0 0 24 24"
+                fill={pathname === "/" ? "currentColor" : "none"}
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              {pathname === "/" && (
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg" />
+              )}
+            </div>
+            <span
+              className={`text-xs mt-1.5 font-semibold ${
+                pathname === "/" ? "text-red-600" : "text-gray-600"
+              }`}
+            >
+              Home
+            </span>
+          </Link>
+
+          {/* Products */}
+          <Link
+            href="/products"
+            className={`flex flex-col items-center justify-center py-3 px-2 rounded-2xl transition-all duration-300 group relative ${
+              pathname === "/products"
+                ? "text-red-600 bg-gradient-to-b from-red-50 to-red-100/50 shadow-lg shadow-red-500/20"
+                : "text-gray-600 hover:text-red-600 hover:bg-red-50/80"
+            }`}
+          >
+            <div
+              className={`relative ${
+                pathname === "/products" ? "scale-110" : "group-hover:scale-110"
+              } transition-transform duration-300`}
+            >
+              <Package className="h-6 w-6" />
+              {pathname === "/products" && (
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg" />
+              )}
+            </div>
+            <span
+              className={`text-xs mt-1.5 font-semibold ${
+                pathname === "/products" ? "text-red-600" : "text-gray-600"
+              }`}
+            >
+              Products
+            </span>
+          </Link>
+
+          {/* Cart with badge */}
+          <Link
+            href="/cart"
+            className={`flex flex-col items-center justify-center py-3 px-2 rounded-2xl transition-all duration-300 group relative ${
+              pathname === "/cart"
+                ? "text-red-600 bg-gradient-to-b from-red-50 to-red-100/50 shadow-lg shadow-red-500/20"
+                : "text-gray-600 hover:text-red-600 hover:bg-red-50/80"
+            }`}
+          >
+            <div
+              className={`relative ${
+                pathname === "/cart" ? "scale-110" : "group-hover:scale-110"
+              } transition-transform duration-300`}
+            >
+              <ShoppingCart className="h-6 w-6" />
+              {cart && cart.items?.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold animate-bounce shadow-lg border-2 border-white">
+                  {cart.items.reduce((acc, item) => acc + item.quantity, 0)}
+                </span>
+              )}
+              {pathname === "/cart" && (
+                <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg" />
+              )}
+            </div>
+            <span
+              className={`text-xs mt-1.5 font-semibold ${
+                pathname === "/cart" ? "text-red-600" : "text-gray-600"
+              }`}
+            >
+              Cart
+            </span>
+          </Link>
+
+          {/* Account */}
+          <Link
+            href={isAuthenticated ? "/account" : "/login"}
+            className={`flex flex-col items-center justify-center py-3 px-2 rounded-2xl transition-all duration-300 group relative ${
+              pathname.includes("/account") || pathname === "/login"
+                ? "text-red-600 bg-gradient-to-b from-red-50 to-red-100/50 shadow-lg shadow-red-500/20"
+                : "text-gray-600 hover:text-red-600 hover:bg-red-50/80"
+            }`}
+          >
+            <div
+              className={`relative ${
+                pathname.includes("/account") || pathname === "/login"
+                  ? "scale-110"
+                  : "group-hover:scale-110"
+              } transition-transform duration-300`}
+            >
+              {isAuthenticated ? (
+                <User className="h-6 w-6" />
+              ) : (
+                <LogIn className="h-6 w-6" />
+              )}
+              {(pathname.includes("/account") || pathname === "/login") && (
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg" />
+              )}
+            </div>
+            <span
+              className={`text-xs mt-1.5 font-semibold ${
+                pathname.includes("/account") || pathname === "/login"
+                  ? "text-red-600"
+                  : "text-gray-600"
+              }`}
+            >
+              {isAuthenticated ? "Account" : "Login"}
+            </span>
+          </Link>
+
+          {/* Logo - Main Site Link */}
+          <a
+            href="https://genuinenutrition.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex  items-center justify-center"
+          >
+            <div className="relative">
+              <Image
+                src={logo}
+                alt="Genuine Nutrition"
+                width={100}
+                height={100}
+                className="h-16 w-16 object-contain"
+              />
+            </div>
+          </a>
+        </div>
+
+        {/* Bottom safe area for devices with home indicator */}
+        <div className="h-2 bg-gradient-to-r from-red-500/10 via-red-400/5 to-red-500/10" />
+      </div>
     </>
   );
 };
