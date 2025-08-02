@@ -479,12 +479,14 @@ const Header = () => {
                   <div className="flex items-center space-x-3">
                     <Image
                       src="/logo.png"
-                      alt="MuselX Logo"
+                      alt="MuscleX Logo"
                       width={32}
                       height={32}
                       className="rounded-lg"
                     />
-                    <span className="text-xl font-bold text-white">MuselX</span>
+                    <span className="text-xl font-bold text-white">
+                      MuscleX
+                    </span>
                   </div>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}

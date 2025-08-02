@@ -38,13 +38,13 @@ export function Footer() {
     <footer className="bg-white text-gray-900 border-t border-gray-100 mt-12">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* About MuselX */}
+          {/* About MuscleX */}
           <div className="lg:col-span-1">
             <div className="mb-6">
               <div className="flex items-center space-x-3">
                 <Image
                   src="/logo.png"
-                  alt="MuselX Logo"
+                  alt="MuscleX Logo"
                   width={220}
                   height={220}
                   className="rounded"
@@ -199,7 +199,7 @@ export function Footer() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-4 text-sm text-gray-600">
-              <span>© MuselX 2025 | All Rights Reserved</span>
+              <span>© MuscleX 2025 | All Rights Reserved</span>
               <span className="hidden md:inline">•</span>
               <span className="hidden md:inline">Made in India with ❤️</span>
             </div>

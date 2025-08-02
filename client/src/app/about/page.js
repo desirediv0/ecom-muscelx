@@ -144,28 +144,6 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="bg-red-600 rounded-2xl p-8 md:p-12 text-white mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">
-            MuscleX by Numbers
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "100,000+", label: "Happy Customers" },
-              { number: "50+", label: "Premium Products" },
-              { number: "13+", label: "Years of Excellence" },
-              { number: "500+", label: "Cities Served" },
-            ].map((stat, index) => (
-              <div key={index} className="space-y-2">
-                <div className="text-3xl md:text-4xl font-bold">
-                  {stat.number}
-                </div>
-                <div className="text-red-100 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* CTA Section */}
         <div className="text-center bg-gray-50 rounded-2xl p-8 md:p-12">
           <h2 className="text-3xl font-bold mb-4 text-gray-800">

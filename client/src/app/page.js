@@ -238,27 +238,6 @@ export default function Home() {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
-
-              {/* Stats */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="grid grid-cols-3 gap-6"
-              >
-                {[
-                  { number: "50K+", label: "Happy Customers" },
-                  { number: "100+", label: "Premium Products" },
-                  { number: "99%", label: "Satisfaction Rate" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl font-bold text-red-500">
-                      {stat.number}
-                    </div>
-                    <div className="text-sm text-gray-300">{stat.label}</div>
-                  </div>
-                ))}
-              </motion.div>
             </motion.div>
 
             {/* Right Content - Product Showcase */}

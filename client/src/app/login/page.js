@@ -79,7 +79,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-center space-x-3 mb-8">
                 <Image
                   src="/logo.png"
-                  alt="MuselX Logo"
+                  alt="MuscleX Logo"
                   width={300}
                   height={300}
                   className="rounded-lg"
@@ -93,7 +93,7 @@ export default function LoginPage() {
                     Transform Your Body
                   </h2>
                   <p className="text-red-100 leading-relaxed">
-                    Join thousands of fitness enthusiasts who trust MuselX for
+                    Join thousands of fitness enthusiasts who trust MuscleX for
                     their transformation journey.
                   </p>
                 </div>
@@ -123,7 +123,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-center space-x-3 my-14 lg:hidden">
                 <Image
                   src="/logo.png"
-                  alt="MuselX Logo"
+                  alt="MuscleX Logo"
                   width={300}
                   height={300}
                   className="rounded-lg"
@@ -231,7 +231,7 @@ export default function LoginPage() {
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-4 bg-white text-gray-500">
-                      New to MuselX?
+                      New to MuscleX?
                     </span>
                   </div>
                 </div>

@@ -123,7 +123,7 @@ export default function RegisterPage() {
               <div className="flex items-center justify-center space-x-3 my-14 lg:hidden">
                 <Image
                   src="/logo.png"
-                  alt="MuselX Logo"
+                  alt="MuscleX Logo"
                   width={300}
                   height={300}
                   className="rounded-lg"
@@ -132,7 +132,7 @@ export default function RegisterPage() {
 
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                  Join MuselX
+                  Join MuscleX
                 </h2>
                 <p className="text-gray-600">
                   Start your fitness transformation today
@@ -363,7 +363,7 @@ export default function RegisterPage() {
               <div className="flex items-center justify-center space-x-3 mb-8">
                 <Image
                   src="/logo.png"
-                  alt="MuselX Logo"
+                  alt="MuscleX Logo"
                   width={300}
                   height={300}
                   className="rounded-lg"
