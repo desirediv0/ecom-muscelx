@@ -76,10 +76,22 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const timestamp = Date.now();
-        const [featuredRes, bestSellerRes, trendingRes, newProductsRes, categoriesRes] = await Promise.all([
-          fetchApi(`/api/public/products/type/featured?limit=8&_t=${timestamp}`),
-          fetchApi(`/api/public/products/type/bestseller?limit=8&_t=${timestamp}`),
-          fetchApi(`/api/public/products/type/trending?limit=8&_t=${timestamp}`),
+        const [
+          featuredRes,
+          bestSellerRes,
+          trendingRes,
+          newProductsRes,
+          categoriesRes,
+        ] = await Promise.all([
+          fetchApi(
+            `/api/public/products/type/featured?limit=8&_t=${timestamp}`
+          ),
+          fetchApi(
+            `/api/public/products/type/bestseller?limit=8&_t=${timestamp}`
+          ),
+          fetchApi(
+            `/api/public/products/type/trending?limit=8&_t=${timestamp}`
+          ),
           fetchApi(`/api/public/products/type/new?limit=8&_t=${timestamp}`),
           fetchApi("/public/categories"),
         ]);
@@ -118,8 +130,6 @@ export default function Home() {
 
     fetchData();
   }, []);
-
-
 
   if (loading) {
     return (
@@ -439,8 +449,6 @@ export default function Home() {
         products={trendingProducts}
       />
 
-
-
       {/* Features Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
@@ -468,7 +476,8 @@ export default function Home() {
               {
                 icon: <Truck className="h-8 w-8" />,
                 title: "Lightning Fast Delivery",
-                description: "Free shipping on orders over ₹999",
+                description:
+                  "Unlock your scratch card on purchases over ₹999 – something special inside!",
                 subtitle: "Same day dispatch available",
               },
               {

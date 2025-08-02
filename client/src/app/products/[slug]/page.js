@@ -5,7 +5,7 @@ export async function generateMetadata({ params }) {
   const { slug } = params;
   let title = "Product Details | muscle-x";
   let description =
-    "Premium quality fitness supplements with lab-tested ingredients for maximum effectiveness. Free shipping on orders over ₹999.";
+    "Premium quality fitness supplements with lab-tested ingredients for maximum effectiveness. Unlock your scratch card on purchases over ₹999 – something special inside!.";
   let image = null;
 
   try {

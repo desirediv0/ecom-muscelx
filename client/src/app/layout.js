@@ -25,7 +25,7 @@ const poppinsFont = localFont({
 export const metadata = {
   title: "Musclex - Premium Supplements for Your Fitness Journey",
   description:
-    "Get high-quality supplements at the best prices. Free shipping on orders over ₹999.",
+    "Get high-quality supplements at the best prices. Unlock your scratch card on purchases over ₹999 – something special inside!.",
 };
 
 export default function RootLayout({ children }) {
