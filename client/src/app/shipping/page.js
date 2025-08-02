@@ -123,12 +123,12 @@ export default function ShippingPolicyPage() {
                         </h2>
                       </div>
                       <p className="text-gray-600 leading-relaxed">
-                        At Musclex, we strive to deliver your orders as
-                        quickly and efficiently as possible. We understand that
-                        when you order nutritional supplements, you want them
-                        right away. That&apos;s why we&apos;ve partnered with
-                        reliable courier services to ensure your products reach
-                        you in perfect condition.
+                        At Musclex, we strive to deliver your orders as quickly
+                        and efficiently as possible. We understand that when you
+                        order nutritional supplements, you want them right away.
+                        That&apos;s why we&apos;ve partnered with reliable
+                        courier services to ensure your products reach you in
+                        perfect condition.
                       </p>
                     </section>
 
@@ -322,7 +322,7 @@ export default function ShippingPolicyPage() {
                               For any shipping-related queries, contact us at:
                             </p>
                             <p className="text-red-700">
-                              Email: support@powerfitness.com | Phone: +91 98765
+                              Email: support@musclex.com | Phone: +91 98765
                               43210
                             </p>
                           </div>

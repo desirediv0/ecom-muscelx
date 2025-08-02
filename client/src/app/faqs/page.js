@@ -261,7 +261,7 @@ export default function FAQsPage() {
                     Contact Us
                   </Button>
                 </a>
-                <a href="mailto:support@powerfitness.com">
+                <a href="mailto:support@musclex.com">
                   <Button
                     variant="outline"
                     className="border-2 border-white text-white hover:bg-white hover:text-red-600 px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105"
