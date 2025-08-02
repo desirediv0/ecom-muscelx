@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponsive } from "../utils/ApiResponsive.js";
 import { prisma } from "../config/db.js";
 import { getFileUrl } from "../utils/deleteFromS3.js";
+import sendEmail from "../utils/sendEmail.js";
+import { getContactFormTemplate } from "../email/temp/EmailTemplate.js";
 
 /**
  * Get blog posts with pagination
@@ -206,9 +208,9 @@ const getAboutPageContent = asyncHandler(async (req, res) => {
       new ApiResponsive(200, {
         title: "About Us",
         content:
-          "<h2>Our Story</h2><p>Founded in 2015, GenuineNutrition started with a simple mission: to provide high-quality nutritional supplements that actually work, backed by science and free from harmful additives.</p><p>Our founder, Rahul Sharma, was frustrated with the lack of transparency in the supplements industry. After struggling to find products he could trust, he decided to create his own solution.</p><p>Today, we've grown into one of India's most trusted supplement brands, with a commitment to quality, transparency, and customer satisfaction that remains as strong as ever.</p>",
-        metaTitle: "About Us | GenuineNutrition",
-        metaDescription: "Learn more about GenuineNutrition and our mission.",
+          "<h2>Our Story</h2><p>Founded in 2015, Muscle X started with a simple mission: to provide high-quality nutritional supplements that actually work, backed by science and free from harmful additives.</p><p>Our founder, Rahul Sharma, was frustrated with the lack of transparency in the supplements industry. After struggling to find products he could trust, he decided to create his own solution.</p><p>Today, we've grown into one of India's most trusted supplement brands, with a commitment to quality, transparency, and customer satisfaction that remains as strong as ever.</p>",
+        metaTitle: "About Us | Muscle X",
+        metaDescription: "Learn more about Muscle X and our mission.",
       })
     );
   } catch (error) {
@@ -236,8 +238,8 @@ const getShippingPolicy = asyncHandler(async (req, res) => {
       new ApiResponsive(200, {
         title: "Shipping Policy",
         content:
-          "<h2>Delivery Information</h2><p>At GenuineNutrition, we strive to deliver your orders as quickly and efficiently as possible. We understand that when you order nutritional supplements, you want them right away. That's why we've partnered with reliable courier services to ensure your products reach you in perfect condition.</p><h2>Shipping Fees</h2><ul><li><strong>Free Shipping:</strong> On all orders above ₹999</li><li><strong>Standard Shipping:</strong> ₹99 for orders below ₹999</li><li><strong>Express Shipping:</strong> ₹199 (delivery within 24-48 hours in select metro cities)</li></ul>",
-        metaTitle: "Shipping Policy | GenuineNutrition",
+          "<h2>Delivery Information</h2><p>At Muscle X, we strive to deliver your orders as quickly and efficiently as possible. We understand that when you order nutritional supplements, you want them right away. That's why we've partnered with reliable courier services to ensure your products reach you in perfect condition.</p><h2>Shipping Fees</h2><ul><li><strong>Free Shipping:</strong> On all orders above ₹999</li><li><strong>Standard Shipping:</strong> ₹99 for orders below ₹999</li><li><strong>Express Shipping:</strong> ₹199 (delivery within 24-48 hours in select metro cities)</li></ul>",
+        metaTitle: "Shipping Policy | Muscle X",
         metaDescription: "Our shipping policies and delivery information.",
       })
     );
@@ -262,7 +264,7 @@ const getFaqs = asyncHandler(async (req, res) => {
       return res.status(200).json(
         new ApiResponsive(200, {
           faqs,
-          metaTitle: "Frequently Asked Questions | GenuineNutrition",
+          metaTitle: "Frequently Asked Questions | Muscle X",
           metaDescription:
             "Find answers to common questions about our products and services.",
         })
@@ -301,7 +303,7 @@ const getFaqs = asyncHandler(async (req, res) => {
             isPublished: true,
           },
         ],
-        metaTitle: "Frequently Asked Questions | GenuineNutrition",
+        metaTitle: "Frequently Asked Questions | Muscle X",
         metaDescription:
           "Find answers to common questions about our products and services.",
       })
@@ -336,6 +338,26 @@ const submitContactForm = asyncHandler(async (req, res) => {
       },
     });
 
+    // Send email notification to admin
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || "admin@musclex.com";
+      await sendEmail({
+        email: adminEmail,
+        subject: "New Contact Form Submission - Muscle X",
+        html: getContactFormTemplate({
+          name,
+          email,
+          phone: phone || "Not provided",
+          subject: subject || "General Inquiry",
+          message,
+        }),
+      });
+      console.log("Contact form notification sent to admin");
+    } catch (emailError) {
+      console.error("Error sending contact form notification:", emailError);
+      // Don't throw error, continue with response
+    }
+
     return res.status(201).json(
       new ApiResponsive(201, {
         message:
@@ -368,9 +390,9 @@ const getContactInfo = asyncHandler(async (req, res) => {
           lng: 72.8777,
         },
         socialLinks: {
-          facebook: "https://facebook.com/GenuineNutrition",
-          instagram: "https://instagram.com/GenuineNutrition",
-          twitter: "https://twitter.com/GenuineNutrition",
+          facebook: "https://facebook.com/MuscleX",
+          instagram: "https://instagram.com/MuscleX",
+          twitter: "https://twitter.com/MuscleX",
         },
       };
 
@@ -381,18 +403,18 @@ const getContactInfo = asyncHandler(async (req, res) => {
     const contactInfo = {
       address: "89/2 Sector 39, Gurugram, Haryana",
       phone: "+91 8053210008",
-      email: "support@genuinenutrition",
+      email: "support@musclex.com",
       hours: "Monday - Saturday: 10:00 AM - 7:00 PM",
       mapCoordinates: {
         lat: 19.076,
         lng: 72.8777,
       },
       socialLinks: {
-        facebook: "https://facebook.com/GenuineNutrition",
-        instagram: "https://instagram.com/GenuineNutrition",
-        twitter: "https://twitter.com/GenuineNutrition",
+        facebook: "https://facebook.com/MuscleX",
+        instagram: "https://instagram.com/MuscleX",
+        twitter: "https://twitter.com/MuscleX",
       },
-      metaTitle: "Contact Us | GenuineNutrition",
+      metaTitle: "Contact Us | Muscle X",
       metaDescription:
         "Get in touch with our customer support team. We're here to help!",
     };

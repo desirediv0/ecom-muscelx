@@ -4,7 +4,7 @@ export const getVerificationTemplate = (verificationLink) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Your Email - GenuineNutrition</title>
+    <title>Verify Your Email - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -23,7 +23,7 @@ export const getVerificationTemplate = (verificationLink) => `
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #ffffff;
             text-align: center;
             padding: 40px;
@@ -54,7 +54,7 @@ export const getVerificationTemplate = (verificationLink) => `
         .button {
             display: inline-block;
             padding: 15px 35px;
-            background-color: #2563eb;
+            background-color: #ff0000;
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 50px;
@@ -79,7 +79,7 @@ export const getVerificationTemplate = (verificationLink) => `
             content: '✓';
             position: absolute;
             left: 0;
-            color: #2563eb;
+            color: #ff0000;
             font-weight: bold;
         }
         .footer {
@@ -94,17 +94,17 @@ export const getVerificationTemplate = (verificationLink) => `
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to GenuineNutrition</h1>
+            <h1>Welcome to Muscle X</h1>
         </div>
         <div class="content">
             <h2>Verify Your Email</h2>
             <p>Dear Valued Customer,</p>
-            <p>Welcome to GenuineNutrition - your trusted source for premium quality supplements. Please verify your email address to access your account:</p>
+            <p>Welcome to Muscle X - your trusted source for premium quality supplements. Please verify your email address to access your account:</p>
             <div class="button-container">
                 <a href="${verificationLink}" class="button">Verify Email Now</a>
             </div>
             <p>If you can't click the button, copy and paste this link in your browser: <br>${verificationLink}</p>
-            <p>If you didn't create an account with GenuineNutrition, please disregard this email.</p>
+            <p>If you didn't create an account with Muscle X, please disregard this email.</p>
             
             <div class="features">
                 <h3>What you can do after verification:</h3>
@@ -115,7 +115,7 @@ export const getVerificationTemplate = (verificationLink) => `
             </div>
         </div>
         <div class="footer">
-            © ${new Date().getFullYear()} GenuineNutrition | Premium Health Supplements<br>
+            © ${new Date().getFullYear()} Muscle X | Premium Health Supplements<br>
             This is an automated message. Please do not reply to this email.
         </div>
     </div>
@@ -129,7 +129,7 @@ export const getDeleteTemplate = (deletionLink) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Deletion Request - Bansuri Vidya Mandir</title>
+    <title>Account Deletion Request - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -229,33 +229,33 @@ export const getDeleteTemplate = (deletionLink) => `
 <body>
     <div class="container">
         <div class="header">
-            <h1>We Value Your Musical Journey</h1>
+            <h1>We Value Your Fitness Journey</h1>
         </div>
         <div class="content">
             <h2>Account Deletion Request</h2>
-            <p>Dear Valued Student,</p>
-            <p>We've received a request to delete your Bansuri Vidya Mandir account. Before proceeding, we want to ensure this is your intended action, as it will affect your access to classes, learning materials, and progress records.</p>
+            <p>Dear Valued Customer,</p>
+            <p>We've received a request to delete your Muscle X account. Before proceeding, we want to ensure this is your intended action, as it will affect your access to supplements, order history, and fitness progress tracking.</p>
             <p>If you're certain about deleting your account, please click the button below:</p>
             <a href="${deletionLink}" class="button">Confirm Account Deletion</a>
             <div class="warning">
-                <strong>Warning:</strong> This action is irreversible. Once deleted, all your learning history, course progress, and personal data will be permanently removed from our systems.
+                <strong>Warning:</strong> This action is irreversible. Once deleted, all your order history, supplement preferences, and personal data will be permanently removed from our systems.
             </div>
             <div class="alternatives">
                 <h3>Consider these alternatives:</h3>
                 <div class="alternative-item">
-                    Temporarily pause your learning journey
+                    Temporarily pause your supplement orders
                 </div>
                 <div class="alternative-item">
-                    Discuss options with your Guru or instructor
+                    Update your preferences or subscription
                 </div>
                 <div class="alternative-item">
                     Contact our support team for assistance
                 </div>
             </div>
-            <p>If you didn't request this deletion, please contact our support team immediately at bansurividya@gmail.com.</p>
+            <p>If you didn't request this deletion, please contact our support team immediately at support@musclex.com.</p>
         </div>
         <div class="footer">
-            © ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute<br>
+            © ${new Date().getFullYear()} Muscle X | Premium Health Supplements<br>
             This is an automated message. Please do not reply to this email.
         </div>
     </div>
@@ -269,7 +269,7 @@ export const getResetTemplate = (resetLink) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Your Password - GenuineNutrition</title>
+    <title>Reset Your Password - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -288,7 +288,7 @@ export const getResetTemplate = (resetLink) => `
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #ffffff;
             text-align: center;
             padding: 40px;
@@ -315,7 +315,7 @@ export const getResetTemplate = (resetLink) => `
         .button {
             display: inline-block;
             padding: 15px 35px;
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #ffffff;
             text-decoration: none;
             border-radius: 50px;
@@ -346,252 +346,14 @@ export const getResetTemplate = (resetLink) => `
         <div class="content">
             <h2>Password Reset Request</h2>
             <p>Dear Valued Customer,</p>
-            <p>We received a request to reset the password for your GenuineNutrition account. Click the button below to create a new password:</p>
+            <p>We received a request to reset the password for your Muscle X account. Click the button below to create a new password:</p>
             <a href="${resetLink}" class="button">Reset Password</a>
-            <p>If you didn't request this password reset, please contact our support team immediately at support@genuinenutrition</p>
+            <p>If you didn't request this password reset, please contact our support team immediately at support@musclex.com</p>
             <p>This link will expire in 15 minutes for security reasons.</p>
         </div>
         <div class="footer">
-            © ${new Date().getFullYear()} GenuineNutrition | Premium Health Supplements<br>
+            © ${new Date().getFullYear()} Muscle X | Premium Health Supplements<br>
             This is an automated message. Please do not reply to this email.
-        </div>
-    </div>
-</body>
-</html>
-`;
-
-export const getFeeReceiptTemplate = (data) => `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fee Payment Receipt - Bansuri Vidya Mandir</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-align: center;
-            padding: 40px;
-        }
-        .content {
-            padding: 40px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #1a1a1a;
-            font-size: 24px;
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #333333;
-        }
-        .button {
-            display: inline-block;
-            padding: 15px 35px;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-        }
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            color: #666666;
-            background-color: #f8f8f8;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Payment Confirmation</h1>
-        </div>
-        <div class="content">
-            <h2>Fee Payment Receipt</h2>
-            <p>Dear ${data.userName},</p>
-            <p>Thank you for your payment. Your transaction for music education fees was successful.</p>
-            <div class="payment-details">
-                <p><strong>Amount Paid:</strong> ₹${data.amount}</p>
-                <p><strong>Payment ID:</strong> ${data.paymentId}</p>
-                <p><strong>Date:</strong> ${new Date(
-                  data.date
-                ).toLocaleDateString()}</p>
-            </div>
-            <p>Please find your receipt attached to this email. We look forward to continuing your musical journey with us.</p>
-        </div>
-        <div class="footer">
-            © ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute<br>
-            This is an automated message. Please do not reply.
-        </div>
-    </div>
-</body>
-</html>
-`;
-
-export const getFeeNotificationTemplate = (data) => `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Fee Assignment - Bansuri Vidya Mandir</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-align: center;
-            padding: 30px;
-            border-radius: 10px 10px 0 0;
-        }
-        .content {
-            padding: 30px;
-        }
-        .fee-details {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .fee-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .important {
-            color: #cc0000;
-            font-weight: bold;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #f8f8f8;
-            border-radius: 0 0 10px 10px;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>New Fee Assignment</h1>
-        </div>
-        <div class="content">
-            <h2>Fee Details</h2>
-            <div class="fee-details">
-                <div class="fee-item">
-                    <strong>Title:</strong>
-                    <span>${data.title}</span>
-                </div>
-                <div class="fee-item">
-                    <strong>Amount:</strong>
-                    <span class="important">₹${data.amount}</span>
-                </div>
-                <div class="fee-item">
-                    <strong>Due Date:</strong>
-                    <span class="important">${new Date(
-                      data.dueDate
-                    ).toLocaleDateString()}</span>
-                </div>
-                ${
-                  data.description
-                    ? `
-                <div class="fee-item">
-                    <strong>Description:</strong>
-                    <span>${data.description}</span>
-                </div>
-                `
-                    : ""
-                }
-                ${
-                  data.lateFeeDate
-                    ? `
-                <div class="fee-item">
-                    <strong>Late Fee After:</strong>
-                    <span class="important">${new Date(
-                      data.lateFeeDate
-                    ).toLocaleDateString()}</span>
-                </div>
-                `
-                    : ""
-                }
-                ${
-                  data.lateFeeAmount
-                    ? `
-                <div class="fee-item">
-                    <strong>Late Fee Amount:</strong>
-                    <span class="important">₹${data.lateFeeAmount}</span>
-                </div>
-                `
-                    : ""
-                }
-            </div>
-            <p>Please ensure timely payment to continue your uninterrupted musical education with us.</p>
-            <a href="${
-              process.env.FRONTEND_URL
-            }/dashboard/fees" class="btn">View Fee Details</a>
-        </div>
-        <div class="footer">
-            <p>© ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute</p>
-            <p>This is an automated message. Please do not reply to this email.</p>
         </div>
     </div>
 </body>
@@ -604,7 +366,7 @@ export const getPaymentSuccessTemplate = (data) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Successful - Bansuri Vidya Mandir</title>
+    <title>Payment Successful - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -673,7 +435,7 @@ export const getPaymentSuccessTemplate = (data) => `
         </div>
         <div class="content">
             <p>Dear ${data.userName},</p>
-            <p>Your payment for music education fees has been successfully processed. Here are your transaction details:</p>
+            <p>Your payment for supplements has been successfully processed. Here are your transaction details:</p>
             
             <div class="payment-details">
                 <div class="detail-row">
@@ -699,17 +461,17 @@ export const getPaymentSuccessTemplate = (data) => `
                     })}</span>
                 </div>
                 <div class="detail-row">
-                    <strong>Fee Type:</strong>
-                    <span>${data.feeTitle}</span>
+                    <strong>Order Type:</strong>
+                    <span>${data.feeTitle || "Supplement Purchase"}</span>
                 </div>
             </div>
 
             <p>Your payment receipt has been attached to this email for your records.</p>
-            <p>Thank you for your prompt payment! We look forward to continuing our musical journey together.</p>
+            <p>Thank you for your purchase! We look forward to supporting your fitness journey.</p>
         </div>
         <div class="footer">
-            <p>© ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute</p>
-            <p>For any queries, please contact our support team at bansurividya@gmail.com</p>
+            <p>© ${new Date().getFullYear()} Muscle X | Premium Health Supplements</p>
+            <p>For any queries, please contact our support team at support@musclex.com</p>
         </div>
     </div>
 </body>
@@ -722,7 +484,7 @@ export const getPaymentFailureTemplate = (data) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Failed - Bansuri Vidya Mandir</title>
+    <title>Payment Failed - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -786,7 +548,7 @@ export const getPaymentFailureTemplate = (data) => `
         </div>
         <div class="content">
             <p>Dear ${data.userName},</p>
-            <p>We're sorry, but your recent payment attempt for music education fees was unsuccessful.</p>
+            <p>We're sorry, but your recent payment attempt for supplements was unsuccessful.</p>
             
             <div class="error-box">
                 <h3>Transaction Details:</h3>
@@ -794,7 +556,9 @@ export const getPaymentFailureTemplate = (data) => `
                 <p><strong>Date:</strong> ${new Date(data.date).toLocaleString(
                   "en-IN"
                 )}</p>
-                <p><strong>Fee Type:</strong> ${data.feeTitle}</p>
+                <p><strong>Order Type:</strong> ${
+                  data.feeTitle || "Supplement Purchase"
+                }</p>
                 <p><strong>Error:</strong> ${
                   data.error || "Transaction could not be completed"
                 }</p>
@@ -810,190 +574,13 @@ export const getPaymentFailureTemplate = (data) => `
 
             <p>Please try again or contact your bank if the issue persists.</p>
             
-            <a href="${
-              process.env.FRONTEND_URL
-            }/dashboard/fees" class="retry-button">
+            <a href="${process.env.FRONTEND_URL}/cart" class="retry-button">
                 Retry Payment
             </a>
         </div>
         <div class="footer">
-            <p>© ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute</p>
-            <p>Need help? Contact our support team at bansurividya@gmail.com</p>
-        </div>
-    </div>
-</body>
-</html>
-`;
-
-export const getFeeUpdateTemplate = ({
-  name,
-  feeTitle,
-  oldAmount,
-  newAmount,
-  oldDate,
-  newDate,
-  reason,
-}) => `
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #EF4444; color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; background: #f9fafb; }
-        .footer { text-align: center; padding: 20px; color: #666; }
-        .amount { font-size: 18px; font-weight: bold; color: #EF4444; }
-        .details { margin: 20px 0; padding: 15px; background: white; border-radius: 5px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h2>Fee Update Notification</h2>
-        </div>
-        <div class="content">
-            <p>Dear ${name},</p>
-            <p>This is to inform you that there has been an update to your music education fee: <strong>${feeTitle}</strong></p>
-            
-            <div class="details">
-                <h3>Update Details:</h3>
-                <p><strong>Amount:</strong> ₹${oldAmount} → ₹${newAmount}</p>
-                <p><strong>Due Date:</strong> ${oldDate} → ${newDate}</p>
-                <p><strong>Reason:</strong> ${reason}</p>
-            </div>
-
-            <p>If you have any questions about this update, please contact our support team.</p>
-        </div>
-        <div class="footer">
-            <p>Bansuri Vidya Mandir | Indian Classical Music Institute</p>
-            <small>This is an automated message, please do not reply.</small>
-        </div>
-    </div>
-</body>
-</html>
-`;
-
-export const getCertificateGeneratedTemplate = (data) => `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generated - Bansuri Vidya Mandir</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-align: center;
-            padding: 40px;
-        }
-        .content {
-            padding: 40px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #1a1a1a;
-            font-size: 24px;
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #333333;
-        }
-        .certificate-info {
-            background-color: #f8f9fa;
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 30px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-        }
-        .certificate-id {
-            font-family: monospace;
-            background: #f0f0f0;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .button {
-            display: inline-block;
-            padding: 15px 35px;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-            margin: 20px 0;
-        }
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            color: #666666;
-            background-color: #f8f8f8;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Congratulations!</h1>
-        </div>
-        <div class="content">
-            <h2>Musical Achievement Accomplished</h2>
-            <p>Dear ${data.userName},</p>
-            <p>We are delighted to inform you that you have successfully completed the course:</p>
-            <h3 style="color: #cc0000;">${data.courseName}</h3>
-            
-            <div class="certificate-info">
-                <p><strong>Your certificate of musical excellence has been generated!</strong></p>
-                <p>Certificate ID: <span class="certificate-id">${
-                  data.certificateId
-                }</span></p>
-                <p>You can now access and download your certificate from your profile. This marks an important milestone in your musical journey with us.</p>
-            </div>
-
-            <center>
-                <a href="${
-                  process.env.FRONTEND_URL
-                }/user-profile" class="button">View Certificate</a>
-            </center>
-
-            <p>This certificate validates your dedication to Indian classical music and your commitment to learning. Continue on the path of musical excellence!</p>
-        </div>
-        <div class="footer">
-            © ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute<br>
-            This is an automated message. Please do not reply to this email.
+            <p>© ${new Date().getFullYear()} Muscle X | Premium Health Supplements</p>
+            <p>Need help? Contact our support team at support@musclex.com</p>
         </div>
     </div>
 </body>
@@ -1006,7 +593,7 @@ export const getContactFormTemplate = (data) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Contact Form Submission - Bansuri Vidya Mandir</title>
+    <title>New Contact Form Submission - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -1076,10 +663,10 @@ export const getContactFormTemplate = (data) => `
 <body>
     <div class="container">
         <div class="header">
-            <h1>New Music Inquiry</h1>
+            <h1>New Customer Inquiry</h1>
         </div>
         <div class="content">
-            <h2>${data.subject || "Inquiry About Music Education"}</h2>
+            <h2>${data.subject || "Inquiry About Supplements"}</h2>
             
             <div class="message-box">
                 <p>${data.message}</p>
@@ -1100,10 +687,10 @@ export const getContactFormTemplate = (data) => `
                 </div>
             </div>
             
-            <p>Please respond to this inquiry about our music programs at your earliest convenience.</p>
+            <p>Please respond to this inquiry about our supplements at your earliest convenience.</p>
         </div>
         <div class="footer">
-            © ${new Date().getFullYear()} Bansuri Vidya Mandir | Indian Classical Music Institute<br>
+            © ${new Date().getFullYear()} Muscle X | Premium Health Supplements<br>
             This is an automated message from your website contact form.
         </div>
     </div>
@@ -1117,7 +704,7 @@ export const getOrderConfirmationTemplate = (data) => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation - GenuineNutrition</title>
+    <title>Order Confirmation - Muscle X</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -1136,7 +723,7 @@ export const getOrderConfirmationTemplate = (data) => `
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #ffffff;
             text-align: center;
             padding: 30px;
@@ -1207,7 +794,7 @@ export const getOrderConfirmationTemplate = (data) => `
         .button {
             display: inline-block;
             padding: 12px 25px;
-            background-color: #2563eb;
+            background-color: #ff0000;
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 5px;
@@ -1305,8 +892,8 @@ export const getOrderConfirmationTemplate = (data) => `
             }/account/orders</p>
         </div>
         <div class="footer">
-            © ${new Date().getFullYear()} GenuineNutrition | Premium Health Supplements<br>
-            Questions? Contact our customer support at support@genuinenutrition
+            © ${new Date().getFullYear()} Muscle X | Premium Health Supplements<br>
+            Questions? Contact our customer support at support@musclex.com
         </div>
     </div>
 </body>
