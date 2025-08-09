@@ -11,31 +11,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Star, AlertCircle, Zap, Shield, Award } from "lucide-react";
+import {
+  Star,
+  Minus,
+  Plus,
+  ShoppingCart,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { useAddVariantToCart } from "@/lib/cart-utils";
 
-// Helper function to normalize image URLs for Next.js Image component
-const normalizeImageUrl = (url) => {
-  if (!url) return "/placeholder.jpg";
-
-  // If it's already an absolute URL, return as is
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  // If it's a relative path that doesn't start with "/", add it
-  if (!url.startsWith("/")) {
-    return `/${url}`;
-  }
-
-  return url;
+// Helper function to format image URLs correctly
+const getImageUrl = (image) => {
+  if (!image) return "/product-placeholder.jpg";
+  if (image.startsWith("http")) return image;
+  return `https://desirediv-storage.blr1.digitaloceanspaces.com/${image}`;
 };
 
-export default function ProductQuickView({ product, isOpen, onClose }) {
+export default function ProductQuickView({ product, open, onOpenChange }) {
   const [selectedFlavor, setSelectedFlavor] = useState(null);
   const [selectedWeight, setSelectedWeight] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const { addVariantToCart } = useAddVariantToCart();
   const [productDetails, setProductDetails] = useState(null);
   const [imgSrc, setImgSrc] = useState("");
   const [availableCombinations, setAvailableCombinations] = useState([]);
@@ -43,99 +45,54 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
 
   // Reset states when product changes or dialog closes
   useEffect(() => {
-    if (!isOpen) {
+    if (!open) {
+      // Reset everything when dialog closes
       setSelectedFlavor(null);
       setSelectedWeight(null);
       setSelectedVariant(null);
+      setQuantity(1);
       setError(null);
+      setSuccess(false);
       setProductDetails(null);
-      setImgSrc("/placeholder.jpg");
+      setImgSrc("");
       setAvailableCombinations([]);
       setInitialLoading(true);
       return;
     }
 
     if (product) {
-      // Use product as initial data - don't modify it here, let the API call handle the complete data
-      setProductDetails(product);
-
-      // Set initial image from product or first variant
-      if (product.variants && product.variants.length > 0) {
-        const firstActiveVariant = product.variants.find(
-          (v) => v.isActive && v.images && v.images.length > 0
-        );
-        if (firstActiveVariant) {
-          const primaryImage = firstActiveVariant.images.find(
-            (img) => img.isPrimary
-          );
-          setImgSrc(
-            normalizeImageUrl(
-              primaryImage ? primaryImage.url : firstActiveVariant.images[0].url
-            )
-          );
-        } else if (product.images && product.images.length > 0) {
-          setImgSrc(normalizeImageUrl(product.images[0].url));
-        } else {
-          setImgSrc(normalizeImageUrl(product.image));
-        }
-      } else if (product.images && product.images.length > 0) {
-        setImgSrc(normalizeImageUrl(product.images[0].url));
-      } else {
-        setImgSrc(normalizeImageUrl(product.image));
-      }
-
-      setInitialLoading(false);
+      // Set initial image when product changes
+      setImgSrc(product.image || "/product-placeholder.jpg");
     }
-  }, [product, isOpen]);
+  }, [product, open]);
 
   // Fetch product details when product changes
   useEffect(() => {
     const fetchProductDetails = async () => {
-      if (!product || !isOpen) return;
+      if (!product || !open) return;
 
       setLoading(true);
       setInitialLoading(true);
-      setError(null);
       try {
-        console.log("Fetching details for product:", product.name);
+        // Fetch detailed product info
         const response = await fetchApi(`/public/products/${product.slug}`);
-
         if (response.data && response.data.product) {
           const productData = response.data.product;
-          console.log("Product data loaded:", productData);
           setProductDetails(productData);
 
-          // Set initial image - prioritize variant images over product images
-          if (productData.variants && productData.variants.length > 0) {
-            const firstActiveVariant = productData.variants.find(
-              (v) => v.isActive && v.images && v.images.length > 0
+          // Update image if available
+          if (productData.images && productData.images.length > 0) {
+            setImgSrc(
+              getImageUrl(productData.images[0].url) ||
+                getImageUrl(productData.image) ||
+                "/product-placeholder.jpg"
             );
-            if (firstActiveVariant) {
-              const primaryImage = firstActiveVariant.images.find(
-                (img) => img.isPrimary
-              );
-              setImgSrc(
-                normalizeImageUrl(
-                  primaryImage
-                    ? primaryImage.url
-                    : firstActiveVariant.images[0].url
-                )
-              );
-            } else if (productData.images && productData.images.length > 0) {
-              setImgSrc(normalizeImageUrl(productData.images[0].url));
-            } else {
-              setImgSrc(normalizeImageUrl(productData.image));
-            }
-          } else if (productData.images && productData.images.length > 0) {
-            setImgSrc(normalizeImageUrl(productData.images[0].url));
-          } else {
-            setImgSrc(normalizeImageUrl(productData.image));
           }
 
-          // Set up available combinations from active variants
+          // Extract all available combinations from variants
           if (productData.variants && productData.variants.length > 0) {
             const combinations = productData.variants
-              .filter((v) => v.isActive)
+              .filter((v) => v.isActive && v.quantity > 0)
               .map((variant) => ({
                 flavorId: variant.flavorId,
                 weightId: variant.weightId,
@@ -143,58 +100,47 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
               }));
 
             setAvailableCombinations(combinations);
-            console.log("Available combinations:", combinations);
 
-            // Auto-select first available options
+            // Set default selections
             if (productData.flavorOptions?.length > 0) {
               const firstFlavor = productData.flavorOptions[0];
-              const availableVariantsForFlavor = combinations.filter(
-                (combo) =>
-                  combo.flavorId === firstFlavor.id &&
-                  combo.variant.quantity > 0
+              setSelectedFlavor(firstFlavor);
+
+              // Find matching weights for this flavor
+              const matchingVariant = combinations.find(
+                (combo) => combo.flavorId === firstFlavor.id
               );
 
-              if (availableVariantsForFlavor.length > 0) {
-                setSelectedFlavor(firstFlavor);
+              if (matchingVariant && productData.weightOptions) {
+                const matchingWeight = productData.weightOptions.find(
+                  (weight) => weight.id === matchingVariant.weightId
+                );
 
-                if (productData.weightOptions?.length > 0) {
-                  // Select the first available weight for this flavor
-                  const firstAvailableVariant = availableVariantsForFlavor[0];
-                  const matchingWeight = productData.weightOptions.find(
-                    (weight) => weight.id === firstAvailableVariant.weightId
-                  );
-
-                  if (matchingWeight) {
-                    setSelectedWeight(matchingWeight);
-                    setSelectedVariant(firstAvailableVariant.variant);
-                  }
-                } else {
-                  // No weight options, just set the variant
-                  setSelectedVariant(availableVariantsForFlavor[0].variant);
+                if (matchingWeight) {
+                  setSelectedWeight(matchingWeight);
+                  setSelectedVariant(matchingVariant.variant);
                 }
               }
-            } else if (productData.weightOptions?.length > 0) {
+            } else if (
+              productData.weightOptions?.length > 0 &&
+              combinations.length > 0
+            ) {
+              // No flavors, but weights and variants exist
               const firstWeight = productData.weightOptions[0];
+              setSelectedWeight(firstWeight);
+              // Find the variant for this weight
               const matchingVariant = combinations.find(
-                (combo) =>
-                  combo.weightId === firstWeight.id &&
-                  combo.variant.quantity > 0
+                (combo) => combo.weightId === firstWeight.id
               );
-
               if (matchingVariant) {
-                setSelectedWeight(firstWeight);
                 setSelectedVariant(matchingVariant.variant);
               }
-            } else {
-              // If no flavor/weight options, just select first available variant
-              const firstActiveVariant = productData.variants.find(
-                (v) => v.isActive && v.quantity > 0
-              );
-              setSelectedVariant(firstActiveVariant || productData.variants[0]);
+            } else if (productData.variants.length > 0) {
+              // Fallback: just pick the first variant
+              setSelectedVariant(productData.variants[0]);
             }
           }
         } else {
-          console.error("No product data in response");
           setError("Product details not available");
         }
       } catch (err) {
@@ -207,32 +153,9 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
     };
 
     fetchProductDetails();
-  }, [product, isOpen]);
+  }, [product, open]);
 
-  // Update image when selected variant changes
-  useEffect(() => {
-    if (
-      selectedVariant &&
-      selectedVariant.images &&
-      selectedVariant.images.length > 0
-    ) {
-      // Sort images so primary is first
-      const sortedImages = [...selectedVariant.images].sort((a, b) => {
-        if (a.isPrimary && !b.isPrimary) return -1;
-        if (!a.isPrimary && b.isPrimary) return 1;
-        return 0;
-      });
-      setImgSrc(normalizeImageUrl(sortedImages[0].url));
-    } else if (productDetails) {
-      // Fallback to product images or default
-      if (productDetails.images && productDetails.images.length > 0) {
-        setImgSrc(normalizeImageUrl(productDetails.images[0].url));
-      } else {
-        setImgSrc(normalizeImageUrl(productDetails.image));
-      }
-    }
-  }, [selectedVariant, productDetails]);
-
+  // Get available weights for a specific flavor
   const getAvailableWeightsForFlavor = (flavorId) => {
     const availableWeights = availableCombinations
       .filter((combo) => combo.flavorId === flavorId)
@@ -241,6 +164,7 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
     return availableWeights;
   };
 
+  // Get available flavors for a specific weight
   const getAvailableFlavorsForWeight = (weightId) => {
     const availableFlavors = availableCombinations
       .filter((combo) => combo.weightId === weightId)
@@ -249,16 +173,27 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
     return availableFlavors;
   };
 
+  // Check if a combination is available
+  const isCombinationAvailable = (flavorId, weightId) => {
+    return availableCombinations.some(
+      (combo) => combo.flavorId === flavorId && combo.weightId === weightId
+    );
+  };
+
+  // Handle flavor change
   const handleFlavorChange = (flavor) => {
     setSelectedFlavor(flavor);
 
+    // Find available weights for this flavor
     const availableWeightIds = getAvailableWeightsForFlavor(flavor.id);
 
     if (
       productDetails?.weightOptions?.length > 0 &&
       availableWeightIds.length > 0
     ) {
+      // Use currently selected weight if it's compatible with the new flavor
       if (selectedWeight && availableWeightIds.includes(selectedWeight.id)) {
+        // Current weight is compatible, keep it selected
         const matchingVariant = availableCombinations.find(
           (combo) =>
             combo.flavorId === flavor.id && combo.weightId === selectedWeight.id
@@ -268,6 +203,7 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
           setSelectedVariant(matchingVariant.variant);
         }
       } else {
+        // Current weight is not compatible, switch to first available
         const firstAvailableWeight = productDetails.weightOptions.find(
           (weight) => availableWeightIds.includes(weight.id)
         );
@@ -275,6 +211,7 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
         if (firstAvailableWeight) {
           setSelectedWeight(firstAvailableWeight);
 
+          // Find the corresponding variant
           const matchingVariant = availableCombinations.find(
             (combo) =>
               combo.flavorId === flavor.id &&
@@ -292,390 +229,480 @@ export default function ProductQuickView({ product, isOpen, onClose }) {
     }
   };
 
+  // Handle weight change
   const handleWeightChange = (weight) => {
     setSelectedWeight(weight);
 
-    const availableFlavorIds = getAvailableFlavorsForWeight(weight.id);
-
-    if (
-      productDetails?.flavorOptions?.length > 0 &&
-      availableFlavorIds.length > 0
-    ) {
+    if (productDetails?.flavorOptions?.length > 0) {
+      // Find available flavors for this weight
+      const availableFlavorIds = getAvailableFlavorsForWeight(weight.id);
+      // Use currently selected flavor if it's compatible with the new weight
       if (selectedFlavor && availableFlavorIds.includes(selectedFlavor.id)) {
+        // Current flavor is compatible, keep it selected
         const matchingVariant = availableCombinations.find(
           (combo) =>
             combo.weightId === weight.id && combo.flavorId === selectedFlavor.id
         );
-
         if (matchingVariant) {
           setSelectedVariant(matchingVariant.variant);
         }
       } else {
+        // Current flavor is not compatible, switch to first available
         const firstAvailableFlavor = productDetails.flavorOptions.find(
           (flavor) => availableFlavorIds.includes(flavor.id)
         );
-
         if (firstAvailableFlavor) {
           setSelectedFlavor(firstAvailableFlavor);
-
+          // Find the corresponding variant
           const matchingVariant = availableCombinations.find(
             (combo) =>
               combo.weightId === weight.id &&
               combo.flavorId === firstAvailableFlavor.id
           );
-
           if (matchingVariant) {
             setSelectedVariant(matchingVariant.variant);
           }
         }
       }
     } else {
-      setSelectedFlavor(null);
-      setSelectedVariant(null);
+      // No flavors, just pick the variant for this weight
+      const matchingVariant = availableCombinations.find(
+        (combo) => combo.weightId === weight.id
+      );
+      if (matchingVariant) {
+        setSelectedVariant(matchingVariant.variant);
+      }
     }
   };
 
+  // Handle quantity change
+  const handleQuantityChange = (change) => {
+    const newQuantity = quantity + change;
+    if (newQuantity < 1) return;
+    if (
+      selectedVariant &&
+      selectedVariant.quantity > 0 &&
+      newQuantity > selectedVariant.quantity
+    )
+      return;
+    setQuantity(newQuantity);
+  };
+
+  // Handle add to cart
+  const handleAddToCart = async () => {
+    setAddingToCart(true);
+    setError(null);
+    setSuccess(false);
+
+    // If no variant is selected but product has variants, use the first one
+    let variantToAdd = selectedVariant;
+
+    if (!variantToAdd && productDetails?.variants?.length > 0) {
+      variantToAdd = productDetails.variants[0];
+    }
+
+    if (!variantToAdd) {
+      setError("No product variant available");
+      setAddingToCart(false);
+      return;
+    }
+
+    try {
+      const result = await addVariantToCart(
+        variantToAdd,
+        quantity,
+        productDetails?.name || product?.name
+      );
+      if (result.success) {
+        setSuccess(true);
+        // Auto close after success notification
+        setTimeout(() => {
+          onOpenChange(false);
+        }, 2000);
+      } else {
+        setError("Failed to add to cart. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      setError("Failed to add to cart. Please try again.");
+    } finally {
+      setAddingToCart(false);
+    }
+  };
+
+  // Get the appropriate image to display (variant image or product image)
+  const getDisplayImage = () => {
+    // Priority 1: Selected variant images
+    if (
+      selectedVariant &&
+      selectedVariant.images &&
+      selectedVariant.images.length > 0
+    ) {
+      const primaryImage = selectedVariant.images.find((img) => img.isPrimary);
+      const imageUrl = primaryImage
+        ? primaryImage.url
+        : selectedVariant.images[0]?.url;
+
+      return getImageUrl(imageUrl);
+    }
+
+    // Priority 2: Product images
+    if (displayProduct?.images && displayProduct.images.length > 0) {
+      const primaryImage = displayProduct.images.find((img) => img.isPrimary);
+      const imageUrl = primaryImage
+        ? primaryImage.url
+        : displayProduct.images[0]?.url;
+
+      return getImageUrl(imageUrl);
+    }
+
+    // Priority 3: Any variant images from any variant
+    if (displayProduct?.variants && displayProduct.variants.length > 0) {
+      const variantWithImages = displayProduct.variants.find(
+        (variant) => variant.images && variant.images.length > 0
+      );
+      if (variantWithImages) {
+        const primaryImage = variantWithImages.images.find(
+          (img) => img.isPrimary
+        );
+        const imageUrl = primaryImage
+          ? primaryImage.url
+          : variantWithImages.images[0]?.url;
+
+        return getImageUrl(imageUrl);
+      }
+    }
+
+    // Priority 4: Check product.image property (from API response)
+    if (displayProduct?.image) {
+      return getImageUrl(displayProduct.image);
+    }
+
+    // Final fallback
+    return imgSrc || "/placeholder.jpg";
+  };
+
+  // Format price display
   const getPriceDisplay = () => {
+    // Show loading state while initial data is being fetched
     if (initialLoading || loading) {
       return <div className="h-8 w-32 bg-gray-200 animate-pulse rounded"></div>;
     }
 
+    // If we have a selected variant, show its price
     if (selectedVariant) {
-      const salePrice = selectedVariant.salePrice
-        ? parseFloat(selectedVariant.salePrice)
-        : null;
-      const regularPrice = parseFloat(selectedVariant.price);
-
-      if (salePrice && salePrice > 0) {
+      if (selectedVariant.salePrice && selectedVariant.salePrice > 0) {
         return (
-          <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-red-600">
-              {formatCurrency(salePrice)}
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-primary">
+              {formatCurrency(selectedVariant.salePrice)}
             </span>
-            <span className="text-xl text-gray-500 line-through">
-              {formatCurrency(regularPrice)}
+            <span className="text-lg text-gray-500 line-through">
+              {formatCurrency(selectedVariant.price)}
             </span>
           </div>
         );
       }
       return (
-        <span className="text-3xl font-bold text-red-600">
-          {formatCurrency(regularPrice || 0)}
+        <span className="text-2xl font-bold">
+          {formatCurrency(selectedVariant.price || 0)}
         </span>
       );
     }
 
+    // If no variant but product details available, show base price
     if (productDetails) {
       if (productDetails.hasSale && productDetails.basePrice > 0) {
         return (
-          <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-red-600">
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-primary">
               {formatCurrency(productDetails.basePrice)}
             </span>
-            <span className="text-xl text-gray-500 line-through">
+            <span className="text-lg text-gray-500 line-through">
               {formatCurrency(productDetails.regularPrice || 0)}
             </span>
           </div>
         );
       }
       return (
-        <span className="text-3xl font-bold text-red-600">
+        <span className="text-2xl font-bold">
           {formatCurrency(productDetails.basePrice || 0)}
         </span>
       );
     }
 
+    // Fallback to product from props if no details fetched yet
     if (product) {
       if (product.hasSale && product.basePrice > 0) {
         return (
-          <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-red-600">
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-primary">
               {formatCurrency(product.basePrice)}
             </span>
-            <span className="text-xl text-gray-500 line-through">
+            <span className="text-lg text-gray-500 line-through">
               {formatCurrency(product.regularPrice || 0)}
             </span>
           </div>
         );
       }
       return (
-        <span className="text-3xl font-bold text-red-600">
+        <span className="text-2xl font-bold">
           {formatCurrency(product.basePrice || 0)}
         </span>
       );
     }
 
-    return (
-      <span className="text-3xl font-bold text-red-600">
-        {formatCurrency(0)}
-      </span>
-    );
+    return null;
   };
 
   if (!product) return null;
 
+  // Use the detailed product info if available, otherwise fall back to the basic product
   const displayProduct = productDetails || product;
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-2 border-gray-300 rounded-lg shadow-xl">
-        <DialogHeader className="border-b-2 border-gray-200 pb-4">
-          <DialogTitle className="text-2xl font-bold text-gray-900 pr-8">
-            {productDetails?.name || "Product Details"}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-white border border-red-300 rounded-xl shadow-2xl">
+        <DialogHeader className="pb-2 border-b border-red-100">
+          <DialogTitle className="text-xl text-primary">
+            {displayProduct.name}
           </DialogTitle>
         </DialogHeader>
 
-        {initialLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-          </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <p className="text-gray-900 font-medium">{error}</p>
-          </div>
-        ) : !productDetails ? (
-          <div className="text-center py-12">
-            <p className="text-gray-700 font-medium">Product not found.</p>
+        {loading && !productDetails ? (
+          <div className="py-8 flex justify-center">
+            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
-            {/* Left - Product Image */}
-            <div className="space-y-4">
-              <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-300">
-                <Image
-                  src={imgSrc}
-                  alt={productDetails.name}
-                  fill
-                  className="object-contain p-4"
-                  onError={(e) => {
-                    e.target.src = "/product-placeholder.jpg";
-                  }}
-                />
-                {productDetails.hasSale && (
-                  <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-md">
-                    SALE
-                  </div>
-                )}
-              </div>
-
-              {/* Additional Images */}
-              {productDetails.variants &&
-                productDetails.variants.some((v) => v.images?.length > 1) && (
-                  <div className="flex gap-2 overflow-x-auto">
-                    {productDetails.variants
-                      .filter((v) => v.images?.length > 0)
-                      .slice(0, 1)[0]
-                      ?.images?.slice(0, 4)
-                      .map((img, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setImgSrc(normalizeImageUrl(img.url))}
-                          className="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-lg border-2 border-gray-300 overflow-hidden hover:border-red-500 transition-colors"
-                        >
-                          <Image
-                            src={normalizeImageUrl(img.url)}
-                            alt={`Product ${idx + 1}`}
-                            width={80}
-                            height={80}
-                            className="w-full h-full object-contain p-1"
-                            onError={(e) => {
-                              e.target.src = "/product-placeholder.jpg";
-                            }}
-                          />
-                        </button>
-                      ))}
-                  </div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+            {/* Product Image */}
+            <div className="relative h-72 md:h-full rounded-lg overflow-hidden bg-white border border-red-100 shadow-sm">
+              <Image
+                src={getDisplayImage()}
+                alt={displayProduct.name}
+                fill
+                className="object-contain p-2"
+                sizes="(max-width: 768px) 100vw, 400px"
+                onError={() => setImgSrc("/product-placeholder.jpg")}
+              />
+              {displayProduct.hasSale && (
+                <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                  SALE
+                </div>
+              )}
             </div>
 
-            {/* Right - Product Details */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  {productDetails.name}
-                </h2>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
+            {/* Product Info */}
+            <div className="flex flex-col">
+              {/* Success Message */}
+              {success && (
+                <div className="mb-4 p-3 bg-green-50 text-green-600 text-sm rounded flex items-center">
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Item added to cart successfully
+                </div>
+              )}
+
+              {/* Error message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded flex items-center">
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  {error}
+                </div>
+              )}
+
+              {/* Price */}
+              <div className="mb-4">{getPriceDisplay()}</div>
+
+              {/* Rating */}
+              {displayProduct.avgRating > 0 && (
+                <div className="flex items-center mb-4">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <Star
-                        key={i}
-                        className="h-4 w-4"
-                        fill={
-                          i < Math.round(productDetails.avgRating || 0)
-                            ? "#ef4444"
-                            : "none"
-                        }
-                        stroke="#ef4444"
+                        key={star}
+                        className={`h-4 w-4 ${
+                          star <= Math.round(displayProduct.avgRating || 0)
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300"
+                        }`}
                       />
                     ))}
-                    <span className="ml-2 text-sm text-gray-700 font-medium">
-                      ({productDetails.reviewCount || 0} reviews)
-                    </span>
                   </div>
-                </div>
-
-                <div className="flex items-baseline space-x-3 mb-4">
-                  {getPriceDisplay()}
-                </div>
-              </div>
-
-              {/* Product Description */}
-              {productDetails.shortDescription && (
-                <div className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-gray-800 leading-relaxed font-medium">
-                    {productDetails.shortDescription}
-                  </p>
+                  <span className="text-sm text-gray-600 ml-2">
+                    ({displayProduct.reviewCount || 0} reviews)
+                  </span>
                 </div>
               )}
 
-              {/* Flavor Selection */}
-              {productDetails.flavorOptions?.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">
-                    Available Flavors
-                    {selectedFlavor && (
-                      <span className="ml-2 text-red-600 font-black">
-                        ({selectedFlavor.name})
-                      </span>
-                    )}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {productDetails.flavorOptions.map((flavor) => {
-                      const isAvailable =
-                        getAvailableWeightsForFlavor(flavor.id).length > 0;
-                      return (
-                        <button
-                          key={flavor.id}
-                          onClick={() =>
-                            isAvailable && handleFlavorChange(flavor)
-                          }
-                          disabled={!isAvailable}
-                          className={`px-4 py-2 text-sm font-bold border-2 rounded-lg transition-all duration-200 ${
-                            selectedFlavor?.id === flavor.id
-                              ? "border-red-600 bg-red-600 text-white shadow-lg"
-                              : isAvailable
-                              ? "border-gray-400 bg-white text-gray-800 hover:border-red-500 hover:text-red-600 hover:bg-red-50"
-                              : "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
-                          }`}
-                        >
-                          {flavor.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+              {/* Description */}
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                {displayProduct.description || "No description available"}
+              </p>
 
-              {/* Weight Selection */}
-              {productDetails.weightOptions?.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">
-                    Available Weights
-                    {selectedWeight && (
-                      <span className="ml-2 text-red-600 font-black">
-                        (
-                        {selectedWeight.display ||
-                          `${selectedWeight.value}${selectedWeight.unit}`}
-                        )
-                      </span>
-                    )}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {productDetails.weightOptions
-                      .filter((weight) => {
-                        if (!selectedFlavor) return true;
-                        return availableCombinations.some(
-                          (combo) =>
-                            combo.flavorId === selectedFlavor.id &&
-                            combo.weightId === weight.id &&
-                            combo.variant.quantity > 0
+              {/* Flavor selection */}
+              {productDetails?.flavorOptions &&
+                productDetails.flavorOptions.length > 0 && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-800 mb-2">
+                      Flavor
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {productDetails.flavorOptions.map((flavor) => {
+                        const availableWeightIds = getAvailableWeightsForFlavor(
+                          flavor.id
                         );
-                      })
-                      .map((weight) => {
+                        const isAvailable = availableWeightIds.length > 0;
+
+                        return (
+                          <button
+                            key={flavor.id}
+                            type="button"
+                            onClick={() => handleFlavorChange(flavor)}
+                            disabled={!isAvailable}
+                            className={`px-3 py-2 rounded-md border text-sm transition-all hover:text-white ${
+                              selectedFlavor?.id === flavor.id
+                                ? "border-primary bg-primary/10 text-primary font-medium"
+                                : isAvailable
+                                ? "border-red-200 hover:border-red-300"
+                                : "border-gray-200 text-gray-400 cursor-not-allowed"
+                            }`}
+                          >
+                            {flavor.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+              {/* Weight selection */}
+              {productDetails?.weightOptions &&
+                productDetails.weightOptions.length > 0 && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-800 mb-2">
+                      Weight
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {productDetails.weightOptions.map((weight) => {
+                        const availableFlavorIds = getAvailableFlavorsForWeight(
+                          weight.id
+                        );
                         const isAvailable = selectedFlavor
                           ? availableCombinations.some(
                               (combo) =>
                                 combo.flavorId === selectedFlavor.id &&
-                                combo.weightId === weight.id &&
-                                combo.variant.quantity > 0
+                                combo.weightId === weight.id
                             )
-                          : availableCombinations.some(
-                              (combo) =>
-                                combo.weightId === weight.id &&
-                                combo.variant.quantity > 0
-                            );
+                          : availableFlavorIds.length > 0;
+
                         return (
                           <button
                             key={weight.id}
-                            onClick={() =>
-                              isAvailable && handleWeightChange(weight)
-                            }
+                            type="button"
+                            onClick={() => handleWeightChange(weight)}
                             disabled={!isAvailable}
-                            className={`px-4 py-2 text-sm font-bold border-2 rounded-lg transition-all duration-200 ${
+                            className={`px-3 py-2 rounded-md border text-sm transition-all hover:text-white ${
                               selectedWeight?.id === weight.id
-                                ? "border-red-600 bg-red-600 text-white shadow-lg"
+                                ? "border-primary bg-primary/10 text-primary font-medium"
                                 : isAvailable
-                                ? "border-gray-400 bg-white text-gray-800 hover:border-red-500 hover:text-red-600 hover:bg-red-50"
-                                : "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                ? "border-red-200 hover:border-red-300"
+                                : "border-gray-200 text-gray-400 cursor-not-allowed"
                             }`}
                           >
-                            {weight.display || `${weight.value}${weight.unit}`}
+                            {weight.value} {weight.unit}
                           </button>
                         );
                       })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Stock Information */}
+              {/* Stock Availability */}
               {selectedVariant && (
-                <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    Stock Information
-                  </h3>
-                  <div className="text-sm text-gray-700 font-medium">
-                    <span className="font-bold">Available:</span>{" "}
-                    <span className="text-green-600 font-bold">
-                      {selectedVariant.quantity} in stock
-                    </span>
-                  </div>
+                <div className="mb-4">
+                  <span
+                    className={`text-sm ${
+                      selectedVariant.quantity > 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {selectedVariant.quantity > 0
+                      ? `In Stock (${selectedVariant.quantity} available)`
+                      : "Out of Stock"}
+                  </span>
                 </div>
               )}
 
-              {/* Product Features */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-green-50 border-2 border-green-200 rounded-lg">
-                  <Shield className="h-6 w-6 text-green-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-green-800">
-                    100% Authentic
-                  </div>
-                </div>
-                <div className="text-center p-3 bg-blue-50 border-2 border-blue-200 rounded-lg">
-                  <Zap className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-blue-800">
-                    Fast Delivery
-                  </div>
-                </div>
-                <div className="text-center p-3 bg-yellow-50 border-2 border-yellow-200 rounded-lg">
-                  <Award className="h-6 w-6 text-yellow-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-yellow-800">
-                    Trusted Brand
-                  </div>
+              {/* Quantity */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-800 mb-2">
+                  Quantity
+                </label>
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleQuantityChange(-1)}
+                    className="p-2.5 rounded-l border border-red-200 bg-red-500 hover:bg-red-700 transition-colors disabled:opacity-50 hover:text-white"
+                    disabled={quantity <= 1 || loading}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="px-6 py-2.5 border-t border-b border-red-500 bg-white min-w-[3rem] text-center">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => handleQuantityChange(1)}
+                    className="p-2.5 rounded-r border border-red-200 bg-red-500 hover:bg-red-700 transition-colors disabled:opacity-50 hover:text-white"
+                    disabled={
+                      loading ||
+                      (selectedVariant &&
+                        selectedVariant.quantity > 0 &&
+                        quantity >= selectedVariant.quantity)
+                    }
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
 
-              {/* View Full Details Link */}
-              <div className="pt-4 border-t-2 border-gray-200">
+              {/* Actions */}
+              <div className="flex space-x-2 mt-auto">
                 <Button
-                  asChild
-                  variant="outline"
-                  className="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold rounded-lg py-3 text-base transition-all duration-200"
+                  onClick={handleAddToCart}
+                  className="flex-1 py-6 bg-primary hover:bg-primary/90"
+                  disabled={
+                    loading ||
+                    addingToCart ||
+                    (!selectedVariant &&
+                      (!productDetails?.variants ||
+                        productDetails.variants.length === 0)) ||
+                    (selectedVariant && selectedVariant.quantity < 1)
+                  }
                 >
-                  <Link href={`/products/${productDetails.slug}`}>
-                    View Full Details & Purchase
-                  </Link>
+                  {addingToCart ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Add to Cart
+                    </>
+                  )}
                 </Button>
+
+                <Link
+                  href={`/products/${displayProduct.slug}`}
+                  className="flex-1"
+                >
+                  <Button
+                    variant="outline"
+                    className="w-full py-6 border-red-300 text-red-600 hover:bg-red-50 hover:text-red-600"
+                  >
+                    View Details
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

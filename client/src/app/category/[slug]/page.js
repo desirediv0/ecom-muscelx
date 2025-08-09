@@ -6,19 +6,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchApi, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import ProductCard from "@/components/ProductCard";
 import {
-  Star,
   AlertCircle,
   ChevronDown,
   ChevronUp,
-  Eye,
-  Heart,
   Filter,
   Grid3X3,
   List,
   ShoppingBag,
 } from "lucide-react";
-import ProductQuickView from "@/components/ProductQuickView";
 
 // Helper function to format image URLs correctly
 const getImageUrl = (image) => {
@@ -46,8 +43,6 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortOption, setSortOption] = useState("newest");
-  const [quickViewProduct, setQuickViewProduct] = useState(null);
-  const [quickViewOpen, setQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
   const [pagination, setPagination] = useState({
@@ -128,11 +123,7 @@ export default function CategoryPage() {
     setSortOption(e.target.value);
   };
 
-  // Handle quick view
-  const handleQuickView = (product) => {
-    setQuickViewProduct(product);
-    setQuickViewOpen(true);
-  };
+  // Quick view handled by shared ProductCard
 
   // Loading state
   if (loading && !category) {
@@ -316,220 +307,16 @@ export default function CategoryPage() {
               </Button>
             </Link>
           </div>
-        ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white border border-gray-200 rounded-lg hover:border-red-400/70 transition-all duration-300 group shadow-sm hover:shadow-lg overflow-hidden flex flex-col h-full relative"
-              >
-                <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                  <Button
-                    variant="outline"
-                    className="bg-white/90 backdrop-blur-sm rounded-full text-black h-8 w-8 p-0 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200"
-                  >
-                    <Heart className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="bg-white/90 backdrop-blur-sm rounded-full text-black h-8 w-8 p-0 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleQuickView(product);
-                    }}
-                  >
-                    <Eye className="h-3 w-3" />
-                  </Button>
-                </div>
-
-                <div className="relative p-3 flex-grow">
-                  <div className="relative mb-3 overflow-hidden rounded-lg bg-gray-50 aspect-square">
-                    <Image
-                      src={
-                        getImageUrl(product.image) || "/product-placeholder.jpg"
-                      }
-                      alt={product.name}
-                      fill
-                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
-                      onError={(e) => {
-                        e.target.src = "/product-placeholder.jpg";
-                      }}
-                    />
-                    {product.hasSale && (
-                      <div className="absolute top-2 left-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
-                        SALE
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-gray-800 group-hover:text-red-600 transition-colors line-clamp-2 h-10">
-                      {product.name}
-                    </h3>
-
-                    <div className="flex items-center justify-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          className={
-                            i < Math.round(product.avgRating || 0)
-                              ? "fill-red-400 text-red-400"
-                              : "text-gray-300"
-                          }
-                        />
-                      ))}
-                      <span className="ml-1 text-xs text-gray-500">
-                        ({product.reviewCount || 0})
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col items-center space-y-1">
-                      <span className="text-lg font-bold text-red-600">
-                        {product.basePrice
-                          ? formatCurrency(product.basePrice)
-                          : ""}
-                      </span>
-                      {product.hasSale && product.regularPrice && (
-                        <span className="text-sm text-gray-400 line-through">
-                          {formatCurrency(product.regularPrice)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3 pt-0 mt-auto">
-                  <Button
-                    className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 text-sm transition-all duration-300"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleQuickView(product);
-                    }}
-                  >
-                    <Eye className="h-3 w-3 mr-1" />
-                    Quick View
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
         ) : (
-          <div className="space-y-6">
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                : "space-y-6"
+            }
+          >
             {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white border border-gray-200/80 rounded-2xl hover:border-red-400/70 transition-all duration-300 group shadow-md hover:shadow-xl hover:shadow-red-500/10 overflow-hidden"
-              >
-                <div className="flex flex-col md:flex-row">
-                  <div className="relative w-full md:w-64 h-64 md:h-auto bg-gray-50 overflow-hidden">
-                    <Link href={`/products/${product.slug}`}>
-                      <Image
-                        src={
-                          getImageUrl(product.image) ||
-                          "/product-placeholder.jpg"
-                        }
-                        alt={product.name}
-                        fill
-                        className="object-cover p-4 transition-transform group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 256px"
-                        onError={(e) => {
-                          e.target.src = "/product-placeholder.jpg";
-                        }}
-                      />
-                    </Link>
-
-                    {product.hasSale && (
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                        SALE
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex-1 p-6">
-                    <div className="flex flex-col h-full">
-                      <div className="flex-1">
-                        <div className="flex items-center mb-3">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              size={16}
-                              className={
-                                i < Math.round(product.avgRating || 0)
-                                  ? "fill-red-400 text-red-400"
-                                  : "text-gray-300"
-                              }
-                            />
-                          ))}
-                          <span className="ml-2 text-sm text-gray-500">
-                            ({product.reviewCount || 0})
-                          </span>
-                        </div>
-
-                        <Link
-                          href={`/products/${product.slug}`}
-                          className="block hover:text-red-600 transition-colors"
-                        >
-                          <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-red-600">
-                            {product.name}
-                          </h3>
-                        </Link>
-
-                        <p className="text-gray-600 mb-4 line-clamp-2">
-                          {product.shortDescription ||
-                            product.description ||
-                            "Premium quality product designed for your fitness goals."}
-                        </p>
-
-                        {product.flavors > 1 && (
-                          <p className="text-sm text-gray-500 mb-4">
-                            {product.flavors} variants available
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-baseline space-x-2">
-                          <span className="text-2xl font-black text-red-600">
-                            {product.basePrice
-                              ? formatCurrency(product.basePrice)
-                              : ""}
-                          </span>
-                          {product.hasSale && product.regularPrice && (
-                            <span className="text-base text-gray-400 line-through">
-                              {formatCurrency(product.regularPrice)}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center space-x-3">
-                          <Button
-                            variant="outline"
-                            className="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold transition-all duration-200"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleQuickView(product);
-                            }}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            Quick View
-                          </Button>
-                          <Button
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold transition-all duration-200"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleQuickView(product);
-                            }}
-                          >
-                            <ShoppingBag className="h-4 w-4 mr-2" />
-                            View Details
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
@@ -597,12 +384,7 @@ export default function CategoryPage() {
           </div>
         )}
 
-        {/* Quick View Dialog */}
-        <ProductQuickView
-          product={quickViewProduct}
-          isOpen={quickViewOpen}
-          onClose={() => setQuickViewOpen(false)}
-        />
+        {/* Quick view handled inside ProductCard */}
       </div>
     </div>
   );

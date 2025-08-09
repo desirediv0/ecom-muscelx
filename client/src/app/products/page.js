@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { fetchApi, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Star,
   Filter,
@@ -14,16 +13,14 @@ import {
   Loader2,
   AlertCircle,
   Heart,
-  X,
   SlidersHorizontal,
   Grid3X3,
   Grid2X2,
   List,
   ChevronUp,
 } from "lucide-react";
-import ProductQuickView from "@/components/ProductQuickView";
+import ProductCard from "@/components/ProductCard";
 import { toast } from "sonner";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {
@@ -45,327 +42,7 @@ const ProductCardSkeleton = () => (
   </div>
 );
 
-const ProductCard = ({ product, onQuickView, viewMode = "grid" }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [wishlistLoading, setWishlistLoading] = useState(false);
-
-  const handleWishlistToggle = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setWishlistLoading(true);
-    try {
-      if (isWishlisted) {
-        await fetchApi(`/users/wishlist/${product.id}`, {
-          credentials: "include",
-          method: "DELETE",
-        });
-        toast.success("Removed from wishlist!");
-        setIsWishlisted(false);
-      } else {
-        await fetchApi("/users/wishlist", {
-          credentials: "include",
-          method: "POST",
-          body: JSON.stringify({ productId: product.id }),
-        });
-        toast.success("Added to wishlist!");
-        setIsWishlisted(true);
-      }
-    } catch (error) {
-      toast.error("Please log in to manage your wishlist.");
-    } finally {
-      setWishlistLoading(false);
-    }
-  };
-
-  const handleQuickViewClick = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    console.log("QuickView clicked for product:", product.name);
-    onQuickView(product);
-  };
-
-  const getProductImage = () => {
-    if (product.image && product.image !== "/product-placeholder.jpg") {
-      return product.image;
-    }
-    if (product.variants && product.variants.length > 0) {
-      const variantWithPrimaryImage = product.variants.find(
-        (v) => v.images && v.images.some((img) => img.isPrimary)
-      );
-      if (variantWithPrimaryImage) {
-        const primaryImage = variantWithPrimaryImage.images.find(
-          (img) => img.isPrimary
-        );
-        if (primaryImage) return primaryImage.url;
-      }
-      const variantWithImage = product.variants.find(
-        (v) => v.images && v.images.length > 0
-      );
-      if (variantWithImage) return variantWithImage.images[0].url;
-    }
-    return "/product-placeholder.jpg";
-  };
-
-  // Get available flavors
-  const getAvailableFlavors = () => {
-    const flavors = product.variants
-      ?.filter((v) => v.flavor && v.isActive)
-      .map((v) => v.flavor.name)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    return flavors || [];
-  };
-
-  // Get available weights
-  const getAvailableWeights = () => {
-    const weights = product.variants
-      ?.filter((v) => v.weight && v.isActive)
-      .map((v) => `${v.weight.value}${v.weight.unit}`)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    return weights || [];
-  };
-
-  // Check if product is in stock
-  const isInStock =
-    product.variants?.some((v) => v.quantity > 0 && v.isActive) || false;
-
-  if (viewMode === "list") {
-    return (
-      <div className="bg-white border border-gray-200 hover:border-red-500 rounded-2xl overflow-hidden transition-all duration-300 group shadow-sm hover:shadow-xl">
-        <Link href={`/products/${product.slug}`} className="block">
-          <div className="flex p-6 gap-6">
-            <div className="relative h-32 w-32 bg-gray-50 overflow-hidden rounded-xl flex-shrink-0">
-              <Image
-                src={getProductImage()}
-                alt={product.name}
-                fill
-                className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
-                sizes="128px"
-                onError={(e) => {
-                  e.target.src = "/product-placeholder.jpg";
-                }}
-              />
-              {product.hasSale && (
-                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                  SALE
-                </div>
-              )}
-              {!isInStock && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">
-                    OUT OF STOCK
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center mb-2">
-                    <div className="flex text-red-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4"
-                          fill={
-                            i < Math.round(product.avgRating || 0)
-                              ? "currentColor"
-                              : "none"
-                          }
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-500 ml-2">
-                      ({product.reviewCount || 0} reviews)
-                    </span>
-                  </div>
-
-                  <h3 className="font-bold text-lg text-gray-800 mb-2 group-hover:text-red-600 transition-colors">
-                    {product.name}
-                  </h3>
-
-                  <p className="text-gray-300 text-sm mb-4 line-clamp-2">
-                    {product.description ||
-                      "Premium quality supplement for your fitness journey."}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {getAvailableFlavors()
-                      .slice(0, 3)
-                      .map((flavor, idx) => (
-                        <Badge
-                          key={idx}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {flavor}
-                        </Badge>
-                      ))}
-                    {getAvailableWeights()
-                      .slice(0, 3)
-                      .map((weight, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs">
-                          {weight}
-                        </Badge>
-                      ))}
-                  </div>
-
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-black text-2xl text-red-600">
-                      {formatCurrency(product.basePrice)}
-                    </span>
-                    {product.hasSale && (
-                      <span className="text-gray-400 line-through text-lg">
-                        {formatCurrency(product.regularPrice)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 ml-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleWishlistToggle}
-                    disabled={wishlistLoading}
-                    className="bg-white/80 backdrop-blur-sm hover:bg-white"
-                  >
-                    {wishlistLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Heart
-                        className={`h-4 w-4 ${isWishlisted
-                          ? "text-red-500 fill-current"
-                          : "text-gray-800"
-                          }`}
-                      />
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleQuickViewClick}
-                    className="bg-white/80 backdrop-blur-sm hover:bg-white"
-                  >
-                    <Eye className="h-4 w-4 text-gray-800" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-white border border-gray-200 hover:border-red-500 rounded-2xl overflow-hidden transition-all duration-300 group shadow-sm hover:shadow-xl hover:-translate-y-1">
-      <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
-          <Image
-            src={getProductImage()}
-            alt={product.name}
-            fill
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-            onError={(e) => {
-              e.target.src = "/product-placeholder.jpg";
-            }}
-          />
-          {product.hasSale && (
-            <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-              SALE
-            </div>
-          )}
-          {!isInStock && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="text-white font-bold">OUT OF STOCK</span>
-            </div>
-          )}
-          <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleWishlistToggle}
-              disabled={wishlistLoading}
-              className="bg-white/80 backdrop-blur-sm rounded-full h-10 w-10 shadow-md hover:bg-white"
-            >
-              {wishlistLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Heart
-                  className={`h-4 w-4 transition-all ${isWishlisted ? "text-red-500 fill-current" : "text-gray-800"
-                    }`}
-                />
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleQuickViewClick}
-              className="bg-white/80 backdrop-blur-sm rounded-full h-10 w-10 shadow-md hover:bg-white"
-            >
-              <Eye className="h-4 w-4 text-gray-800" />
-            </Button>
-          </div>
-        </div>
-        <div className="p-5 text-left">
-          <div className="flex items-center mb-2">
-            <div className="flex text-red-400">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-4 w-4"
-                  fill={
-                    i < Math.round(product.avgRating || 0)
-                      ? "currentColor"
-                      : "none"
-                  }
-                />
-              ))}
-            </div>
-            <span className="text-xs text-gray-500 ml-2">
-              ({product.reviewCount || 0})
-            </span>
-          </div>
-          <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 h-12 group-hover:text-red-600 transition-colors text-base">
-            {product.name}
-          </h3>
-
-          <div className="flex flex-wrap gap-1 mb-3">
-            {getAvailableFlavors()
-              .slice(0, 2)
-              .map((flavor, idx) => (
-                <Badge key={idx} variant="secondary" className="text-xs">
-                  {flavor}
-                </Badge>
-              ))}
-            {getAvailableWeights()
-              .slice(0, 2)
-              .map((weight, idx) => (
-                <Badge key={idx} variant="outline" className="text-xs">
-                  {weight}
-                </Badge>
-              ))}
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="font-black text-2xl text-red-600">
-              {formatCurrency(product.basePrice)}
-            </span>
-            {product.hasSale && (
-              <span className="text-gray-400 line-through text-md">
-                {formatCurrency(product.regularPrice)}
-              </span>
-            )}
-          </div>
-        </div>
-      </Link>
-    </div>
-  );
-};
+// Using shared ProductCard component instead of inline definitions
 
 function FilterSidebar({
   categories,
@@ -758,8 +435,6 @@ function ProductsContent() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quickViewProduct, setQuickViewProduct] = useState(null);
-  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
   const [filters, setFilters] = useState({
@@ -903,10 +578,7 @@ function ProductsContent() {
     updateURL(clearedFilters, 1);
   };
 
-  const handleQuickView = (product) => {
-    setQuickViewProduct(product);
-    setIsQuickViewOpen(true);
-  };
+  // Quick view handled within shared ProductCard
 
   const handlePageChange = (newPage) => {
     setPagination((p) => ({ ...p, page: newPage }));
@@ -1006,10 +678,11 @@ function ProductsContent() {
                     <button
                       key={mode.value}
                       onClick={() => setViewMode(mode.value)}
-                      className={`p-2 rounded-md transition-all ${viewMode === mode.value
-                        ? "bg-white shadow-sm text-red-600 hover:bg-red-50"
-                        : "text-white hover:text-gray-300"
-                        }`}
+                      className={`p-2 rounded-md transition-all ${
+                        viewMode === mode.value
+                          ? "bg-white shadow-sm text-red-600 hover:bg-red-50"
+                          : "text-white hover:text-gray-300"
+                      }`}
                       title={mode.label}
                     >
                       <mode.icon className="h-4 w-4" />
@@ -1044,9 +717,10 @@ function ProductsContent() {
             {/* Products Grid */}
             {loading ? (
               <div
-                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                className={`grid gap-6 ${
+                  gridModes.find((m) => m.value === viewMode)?.cols ||
                   "grid-cols-2 xl:grid-cols-4"
-                  }`}
+                }`}
               >
                 {[...Array(9)].map((_, i) => (
                   <ProductCardSkeleton key={i} />
@@ -1078,17 +752,13 @@ function ProductsContent() {
               </div>
             ) : (
               <div
-                className={`grid gap-6 ${gridModes.find((m) => m.value === viewMode)?.cols ||
+                className={`grid gap-6 ${
+                  gridModes.find((m) => m.value === viewMode)?.cols ||
                   "grid-cols-2 lg:grid-cols-4"
-                  }`}
+                }`}
               >
                 {products.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onQuickView={handleQuickView}
-                    viewMode={viewMode}
-                  />
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}
@@ -1154,11 +824,7 @@ function ProductsContent() {
         </div>
       </div>
 
-      <ProductQuickView
-        product={quickViewProduct}
-        isOpen={isQuickViewOpen}
-        onClose={() => setIsQuickViewOpen(false)}
-      />
+      {/* Quick view handled inside ProductCard */}
     </div>
   );
 }

@@ -26,7 +26,7 @@ import { logo } from "@/assets";
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
-  const { cart } = useCart();
+  const { cart, getCartItemCount } = useCart();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -392,9 +392,9 @@ const Header = () => {
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span className="text-sm">Cart</span>
-                {cart?.totalQuantity > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                    {cart.totalQuantity}
+                {getCartItemCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {getCartItemCount()}
                   </span>
                 )}
               </Link>
@@ -629,9 +629,9 @@ const Header = () => {
                         >
                           <ShoppingCart className="h-5 w-5" />
                           <span>Cart</span>
-                          {cart?.totalQuantity > 0 && (
+                          {getCartItemCount() > 0 && (
                             <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                              {cart.totalQuantity}
+                              {getCartItemCount()}
                             </span>
                           )}
                         </Link>
@@ -769,9 +769,9 @@ const Header = () => {
               } transition-transform duration-300`}
             >
               <ShoppingCart className="h-6 w-6" />
-              {cart && cart.items?.length > 0 && (
+              {getCartItemCount() > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold animate-bounce shadow-lg border-2 border-white">
-                  {cart.items.reduce((acc, item) => acc + item.quantity, 0)}
+                  {getCartItemCount()}
                 </span>
               )}
               {pathname === "/cart" && (
