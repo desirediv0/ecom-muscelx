@@ -2,19 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
   Truck,
   Shield,
   RefreshCw,
   ChevronRight,
   Dumbbell,
   Award,
-  Zap,
   Target,
-  CheckCircle,
-  Flame,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
